@@ -135,17 +135,17 @@ class FilePresenter extends BasePresenter
         
         
         if( !file_exists( $fullpath ) ){
-            $this->flashMessage( 'Soubor nebo složka kterou hledáte neexistuje.' );            
+            $this->flashMessage( 'The file or folder you are trying to delete was not found' );            
         }else{
             
             if( is_file( $fullpath ) ){
                 unlink( $fullpath );
-                $this->flashMessage( 'Soubor odstraněn.' );
+                $this->flashMessage( 'File deleted' );
             }elseif( is_dir( $fullpath ) ){
                 rmdir( $fullpath );
-                $this->flashMessage( 'Složka odstraněna.' );
+                $this->flashMessage( 'Folder deleted' );
             }else{
-                $this->flashMessage( 'Došlo k nějaké nevysvětlitelné chybě. Zkuste prosím znova.' );
+                $this->flashMessage( 'Something strange happened, please try again.' );
             }
             
         }
@@ -160,7 +160,7 @@ class FilePresenter extends BasePresenter
         $fullpath = $this->getFullPath($path);
 
         if( !is_file( $fullpath ) ){
-            $this->flashMessage( 'Soubor který hledáte neexistuje.' );
+            $this->flashMessage( 'The file you are trying to delete was not found' );
             $this->redirect("default");
         }
 
@@ -184,9 +184,9 @@ class FilePresenter extends BasePresenter
         $form->getElementPrototype()->class( 'html5upload' );
         
         //$form->addUpload('file', 'Soubor');
-        $form->addMultipleUpload("files","Soubor(y)");
+        $form->addMultipleUpload("files","File(s)");
         
-        $form->addSubmit( 'send', 'Nahraj' );
+        $form->addSubmit( 'send', 'Upload' );
         $form['send']->getControlPrototype()->class('big');
         
         $form->onSuccess[] = array($this,'fileUploadFormSubmit');
@@ -214,9 +214,9 @@ class FilePresenter extends BasePresenter
     {
         $form = new \App\Form($this,$name);
         
-        $form->addText( 'folder', 'Název složky' );
+        $form->addText( 'folder', 'Folder name' );
         
-        $form->addSubmit( 'send', 'Vytvoř' );
+        $form->addSubmit( 'send', 'Create' );
         $form['send']->getControlPrototype()->class('big');
         
         $form->onSuccess[] = array($this,'folderCreationFormSubmit');
@@ -241,12 +241,12 @@ class FilePresenter extends BasePresenter
         $form = new \App\Form($this,$name);
         $form->getElementPrototype()->class('ajax');
         
-        $form->addText( 'new_name', 'Název' );
+        $form->addText( 'new_name', 'Name' );
             $form['new_name']->getControlPrototype()->class('low');
             
         $form->addHidden( 'old_name' );
         
-        $form->addImage('send', $this->template->themePath.'/icons/accept.png', 'Uložit');
+        $form->addImage('send', $this->template->themePath.'/icons/accept.png', 'Save');
             $form['send']->getControlPrototype()->class('low');
             
         $form->onSuccess[] = array( $this, 'renameFormSubmit' );
@@ -267,9 +267,7 @@ class FilePresenter extends BasePresenter
         
         $form['new_name'] = $this->getFullPath( $form['new_name'] );
         $form['old_name'] = $this->getFullPath( $form['old_name'] );
-        
-        //var_dump( $form );
-        
+                
         if( file_exists($form['old_name']) )
             rename( $form['old_name'], $form['new_name'] );
         
@@ -285,7 +283,7 @@ class FilePresenter extends BasePresenter
         $form = new \App\Form($this,$name);
         $form->getElementPrototype()->class('ajax onchange');
         
-        $form->addText( 'q', 'Hledání' );
+        $form->addText( 'q', 'Search' );
         $form['q']->getControlPrototype()->addAttributes( array( 'autocomplete' => 'off') );
                         
         $form->onSuccess[] = array( $this, 'searchFormSubmit' );
