@@ -27,15 +27,15 @@ class PagePresenter extends BasePresenter
         $page = $pages->find( array( 'id' => $id ) )->fetch();
         
         if( !$page ){            
-            $this->flashMessage( 'Stránka nebyla nalezena :o(' );
+            $this->flashMessage( 'Page not found' );
             $this->redirect( 'default' );
         }
         
         try{
             $pages->remove( array( 'id' => $id ) );
-            $this->flashMessage('Stránka odstraněna.');
+            $this->flashMessage('Page deleted');
         }catch( Exception $e ){
-            $this->flashMessage('Něco se pokazilo. Zkuste prosím provést akci znova');
+            $this->flashMessage('Something went wrong, please try again');
         }
         $this->redirect( 'default' );
     }    
@@ -54,7 +54,7 @@ class PagePresenter extends BasePresenter
 	
 
         if( !$page ){
-            $this->flashMessage( 'Požadovaná stránka nebyla nelezena. ' );
+            $this->flashMessage( 'Requested page was not found' );
             $this->redirect( 'default' );
         }
 
@@ -77,7 +77,7 @@ class PagePresenter extends BasePresenter
 
         $form->addHidden('id');
         
-	$form->addText( 'name_webalized', 'Tvar v URL' );
+	$form->addText( 'name_webalized', 'Name in URL' );
         
 	$form->addText( 'name', 'Název' );
 	$form['name']->getControlPrototype()->class( 'ribbon' );
@@ -85,7 +85,7 @@ class PagePresenter extends BasePresenter
 	$form->addTextarea( 'text', 'Text', 60, 30 );
         $form['text']->getControlPrototype()->class( 'wysiwyg' );
 
-        $form->addText( 'template', 'Šablona' );
+        $form->addText( 'template', 'Template' );
         
 	$form->addSubmit( 'save', 'Uložit' );
 
@@ -107,9 +107,9 @@ class PagePresenter extends BasePresenter
 
 	try{
 	    $pages->save( $page, 'id' );
-	    $this->flashMessage( 'Stránka uložena.' );
+	    $this->flashMessage( 'Page saved' );
 	}catch( Exception $e ){
-	    $this->flashMessage( 'Stránku se bohužel nepodařilo uložit. Zkuste to ještě jednou. Když to nepomůže, kontaktujte administrátora' );
+	    $this->flashMessage( 'Article was not saved. Please try again and then contact the administrator' );
 	}
 
 	$this->redirect( 'default' );

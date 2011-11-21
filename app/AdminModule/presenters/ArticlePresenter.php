@@ -22,20 +22,20 @@ class ArticlePresenter extends BasePresenter
     
     public function actionDelete( $id )
     {
-        $pages = $this->repositories->Page;
+        $articles = $this->repositories->Article;
         
-        $page = $pages->find( array( 'id' => $id ) )->fetch();
+        $article = $articles->find( array( 'id' => $id ) )->fetch();
         
-        if( !$page ){            
-            $this->flashMessage( 'Stránka nebyla nalezena :o(' );
+        if( !$article ){            
+            $this->flashMessage( 'Article not found' );
             $this->redirect( 'default' );
         }
         
         try{
-            $pages->remove( array( 'id' => $id ) );
-            $this->flashMessage('Stránka odstraněna.');
+            $articles->remove( array( 'id' => $id ) );
+            $this->flashMessage('Article deleted');
         }catch( Exception $e ){
-            $this->flashMessage('Něco se pokazilo. Zkuste prosím provést akci znova');
+            $this->flashMessage('Something went wrong, please try again');
         }
         $this->redirect( 'default' );
     }    
@@ -54,7 +54,7 @@ class ArticlePresenter extends BasePresenter
 	
 
         if( !$page ){
-            $this->flashMessage( 'Požadovaná stránka nebyla nelezena. ' );
+            $this->flashMessage( 'Requested article was not found' );
             $this->redirect( 'default' );
         }
 
@@ -77,7 +77,7 @@ class ArticlePresenter extends BasePresenter
 
         $form->addHidden('id');
         
-	$form->addText( 'name_webalized', 'Tvar v URL' );
+	$form->addText( 'name_webalized', 'Name in URL' );
         
 	$form->addText( 'name', 'Název' );
 	$form['name']->getControlPrototype()->class( 'ribbon' );
@@ -109,7 +109,7 @@ class ArticlePresenter extends BasePresenter
 	    $articles->save( $article, 'id' );
 	    $this->flashMessage( 'Article saved.' );
 	}catch( Exception $e ){
-	    $this->flashMessage( 'Article was not saved. Please try again and then contact the administrator.');
+	    $this->flashMessage( 'Article was not saved. Please try again and then contact the administrator');
 	}
 
 	$this->redirect( 'default' );
