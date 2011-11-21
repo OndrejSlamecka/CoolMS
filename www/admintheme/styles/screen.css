@@ -471,33 +471,33 @@ p.flash{
   }
 
 /* Page Form */
-#pageForm{
+.textFormatForm{
     
 }
-    #pageForm input.large, #pageForm textarea{
+    .textFormatForm input.large, .textFormatForm textarea{
       width: 100%;
     }
 
-    #pageForm input[type="text"], #pageForm textarea{
+    .textFormatForm input[type="text"], .textFormatForm textarea{
         border: 1px solid #999;
         padding: 3px 5px;
     }
     
-        #pageForm input[type="text"]:hover, #pageForm textarea:hover{
+        .textFormatForm input[type="text"]:hover, .textFormatForm textarea:hover{
             border: 1px solid #888;
         }
-    #pageForm textarea{
+    .textFormatForm textarea{
         padding: 5px;
     }
 
-    #pageForm input[name="name"]{
+    .textFormatForm input[name="name"]{
         min-height: 24px;
         font-size: 18px;
         font-weight: bold;
         margin-bottom: 0.5em;
     }
     
-    #pageForm textarea[name="text"], #pageForm input[name="name"]{
+    .textFormatForm textarea[name="text"], .textFormatForm input[name="name"]{
       width: 470px;
     }
 

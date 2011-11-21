@@ -73,7 +73,7 @@ class PagePresenter extends BasePresenter
     public function createComponentPageForm($name)
     {
 	$form = new \App\Form($this, $name);
-	$form->getElementPrototype()->id( 'pageForm' );
+	$form->getElementPrototype()->class( 'textFormatForm' );
 
         $form->addHidden('id');
         

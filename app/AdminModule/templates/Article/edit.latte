@@ -1,6 +1,6 @@
-    {block #title}Úprava "{$page->name}"{/block}
+    {block #title}Editing "{$article->name}"{/block}
     {block #content}
     
-    {? $header = "Úprava stránky"}
+    {? $header = "Editing article"}
 
-    {include 'pageForm.latte' "header" => $header}
+    {include 'articleForm.latte' "header" => $header}

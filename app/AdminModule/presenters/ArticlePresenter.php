@@ -48,19 +48,19 @@ class ArticlePresenter extends BasePresenter
     
     public function renderEdit( $id )
     {
-        $pages = $this->repositories->Page;
+        $articles = $this->repositories->Article;
 
-        $this->template->page = $page = $pages->find( array( 'name_webalized' => $id ) )->fetch();
+        $this->template->article = $article = $articles->find( array( 'id' => $id ) )->fetch();
 	
 
-        if( !$page ){
+        if( !$article ){
             $this->flashMessage( 'Requested article was not found' );
             $this->redirect( 'default' );
         }
 
-        $arr = $page->toArray();
+        $arr = $article->toArray();
 
-        $this[ 'pageForm' ]->setDefaults( $arr );
+        $this[ 'articleForm' ]->setDefaults( $arr );
 
     }
 
@@ -73,13 +73,13 @@ class ArticlePresenter extends BasePresenter
     public function createComponentArticleForm($name)
     {
 	$form = new \App\Form($this, $name);
-	$form->getElementPrototype()->id( 'pageForm' );
+	$form->getElementPrototype()->class( 'textFormatForm' );
 
         $form->addHidden('id');
         
 	$form->addText( 'name_webalized', 'Name in URL' );
         
-	$form->addText( 'name', 'Název' );
+	$form->addText( 'name', 'Name' );
 	$form['name']->getControlPrototype()->class( 'ribbon' );
 
 	$form->addTextarea( 'text', 'Text', 60, 30 );
