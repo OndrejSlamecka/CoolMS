@@ -106,6 +106,7 @@ class Menuitem extends \NDBF\Repository
         $this->recursiveOrderFixer( $mis );
     }
     
+    // TODO: Needs rewriting after rewriting orderUpdate... hell
     private function recursiveOrderFixer($mis)
     {
         $i=1;
