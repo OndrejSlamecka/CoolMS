@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <meta charset=UTF-8 >
+
+    <link rel=stylesheet href="{$basePath}/css/reset.css" >
+    <link rel=stylesheet href="{$basePath}/css/screen.css" media="screen,projection" >
+
+    {block #head}{/block}
+
+    <title>{block #title}Home{/block} &ndash; Your Web</title>
+</head>
+<body>
+
+    <div id="panel">
+    
+        <header>
+
+            <h1><a href="{$basePath}/" id="logo">Default CoolMS web</a></h1>
+
+            <nav>
+            <ul id="menu" class="cf">
+                {foreach $topMenu as $mi}
+                    <li id="{isMenulinkCurrent $mi}nav-active{/isMenulinkCurrent}"><a href="{menulink $mi}">{$mi['name']}</a></li>			
+                {/foreach}  
+            </ul>
+            </nav>
+
+        </header>
+
+        <div id="content">
+
+            {snippet flash}
+                {foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}
+            {/snippet}
+
+            {include #content}
+
+        </div> <!-- #content -->
+
+    </div> <!-- #panel -->
+        
+    <footer>
+        Powered by <a href="http://coolms.slamecka.cz">CoolMS</a> <br>
+        <a href="{$basePath}/admin">Administration</a>
+    </footer>
+
+</body>
+</html>

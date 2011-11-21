@@ -1,0 +1,41 @@
+Notes:
+======
+* Default login (change ASAP after first login): 
+    * Email: admin@example.com
+    * Passw: admin
+* AuthenticationPresenter and UserPresenter both works with User entity, 
+  but Authentication works with unauthorized users,
+  while UserPresenter is responsible for work with users' profiles.
+* Modules are basically presenters with proper annotation
+
+Known issues:
+=============
+
+
+TODO:
+=====
+
+Major:
+    * Admin:Page: Add page previews
+    * Write tests
+    * Improve default front functions (create archive and paginator for articles, add print style to default theme)
+    * Add possibility to revert removal action
+    * Improve texts in menu designer form
+    * Check security (http://php.vrana.cz/common-mistakes-in-securing-web-applications.php)
+Minor:
+    * Add user the possibility to change his email (remember that email is used when hashing password)
+    * Remove injecting of whole container (see app/Configurator.php) where possible. (Is it possible somewhere else than in authenticator?)
+    * Rewrite Admin:Menu:menudesignerSubmit (use transactions probably)   
+    * Create webalized name dynamically (using AJAX) on page creation form instead of hint "Empty fills itself"
+    * Improve page creation form (some design cleanup)
+    * Refactor Front\RouteManager
+
+Far future:
+    * Add support for multiple languages
+    * Add alternative menu designer with support for more "depth" (and probably without this jquery based tool)                
+    
+Ideas:
+======
+* Modules should load their own stylesheet… (improve general module independance)
+    * In base presenter when loading modules, try if file <module>/_layoutHeader.latte exists, if so, make array of them        
+    * Then print/call this array in layout

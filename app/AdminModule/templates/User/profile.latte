@@ -1,0 +1,55 @@
+{block #title}User {$user['email']}{/block}
+{block content}
+
+<div class="floatingContentContainer">
+    <h2 class="asidebutton">User {$user['email']}</h2>
+    {if $loggedUser->isInRole('admin') && $loggedUser->getIdentity()->getId() != $user['id']}
+        <div class="asideheader"><a href="{link makeAdmin, $user['email']}" class="button">Give supreme administrator role</a></div>
+    {/if}
+</div>
+
+
+{form userForm}
+    <ul class="errors" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+
+    <table>
+        
+        {*** Base parameters - email, password ***}
+        
+        <tr>
+            <th>{label email /}</th>
+            <td>
+                <div class="padlikeinput">{$user['email']}</div>
+            </td>
+        </tr>
+        
+        {if $hasEditingRight}
+        <tr>
+            <th>{label password /}</th>
+            <td>{input password}</td>
+        </tr>
+        {/if}
+        
+        {*** Usual parameters ***}
+        
+        <tr>
+            <th>{label name /}</th>
+            <td>{if $hasEditingRight}   {input name}
+                {else}                  <div class="padlikeinput">{$user['name']}</div>{/if}
+            </td>
+        </tr>       
+        
+        {*** Submit button ***}
+
+        {if $hasEditingRight}        
+        <tr>
+            <th>&nbsp;</th>
+            <td>{input save}</td>
+        </tr>
+        {/if}
+        
+    </table>
+
+{/form userForm}

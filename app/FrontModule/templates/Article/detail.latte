@@ -1,0 +1,20 @@
+{block #title}{$article['name']}{/block}
+{block content}
+
+{if $article}
+    <article>
+        <h2 class="article"><a href="{link detail, name=> $article['name_webalized']}">{$article['name']}</a></h2>
+
+        <div class="text">
+            {!$article['text']}
+        </div>
+
+        <ul class="postmeta double">
+            <li>Published: {$article->date|date:'%d. %m. %Y'}</li>            
+            <li>Author: {$article->ref('user')->name}</li>
+        </ul>
+
+    </article>
+{else}
+    <p>We're sorry, but the article you're looking for isn't here.</p>
+{/if}

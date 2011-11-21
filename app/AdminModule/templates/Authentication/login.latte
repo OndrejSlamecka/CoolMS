@@ -1,0 +1,37 @@
+{block #title}Log in{/block}
+{block #head}
+<script type="text/javascript" n:syntax="off">
+    $(document).ready(function(){        
+        $("#requestNewPasswordToggleButton").click(function(){                        
+            $("#snippet--requestNewPassword").toggle( 'fast' );            
+            $("#frmrequestNewPasswordForm-email").val( $("#frmloginForm-email").val() );            
+            return false;
+        });
+    });
+</script>
+{/block}
+{block #content}
+    {control loginForm}
+
+    <p><a href="{link Authentication:requestPasswordReset}" id="requestNewPasswordToggleButton">I forgot my password</a></p>
+    
+    {snippet requestNewPassword}        
+        {if isset($confirmationEmailSent)}
+            {if $confirmationEmailSent}
+                <p class="flash msg">Please confirm the action in your inbox.</p>
+            {else}
+                <p>Email wasn't sent.
+                {if $userExists}
+                    Oops, sorry, problem is on our side, please contact the administrator.
+                {else} 
+                    I think you haven't entered your email right. Is your adress really {$givenEmail}?
+                {/if}
+                </p>
+            {/if}
+        {else}
+            {control requestNewPasswordForm}
+        {/if}
+    {/snippet}
+    
+
+{/block}

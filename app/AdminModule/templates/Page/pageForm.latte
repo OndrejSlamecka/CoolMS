@@ -1,0 +1,52 @@
+    {form pageForm begin}
+
+    <div id="inner-content">
+
+        <h2>{$header}</h2>
+
+            {control pageForm errors}
+
+                <table>
+
+                    <tr class="required">
+                        <th class="hidden">{!$presenter["pageForm"]["name"]->label}</th>
+                        <td>{!$presenter["pageForm"]["name"]->control}</td>
+                    </tr>
+
+                    <tr>
+                        <th class="hidden">{!$presenter["pageForm"]["text"]->label}</th>
+                        <td>{!$presenter["pageForm"]["text"]->control}</td>
+                    </tr>
+
+                </table>
+
+
+    </div> <!-- #inner-content -->
+
+    <div id="inner-sidebar">
+
+        <h3>Možnosti</h3>
+        <div class="box">
+	    <p>
+                {!$presenter["pageForm"]["save"]->control}                                        
+            </p>
+
+            <p>
+                {!$presenter["pageForm"]["name_webalized"]->label}
+                {!$presenter["pageForm"]["name_webalized"]->control}
+                <br>
+                <small>Prázdné se doplní automaticky.</small>
+            </p>
+            
+            <p>
+                {!$presenter["pageForm"]["template"]->label}
+                {!$presenter["pageForm"]["template"]->control}
+            </p>            
+
+        </div>
+
+    </div> <!-- #inner-sidebar -->
+
+
+    <div class="clear"><hr /></div>
+    {/form pageForm}

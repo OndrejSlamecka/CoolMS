@@ -1,0 +1,20 @@
+{block content}
+
+{if $newUser}
+<h2>Welcome new user</h2>
+<p>We recommend you to set your personal informations in
+    <a href="{link User:profile, id => $loggedUser->getIdentity->getId()}">your profile</a></p>
+{/if}
+
+<h2>Site overview</h2>
+
+<h3>Pages</h3>
+<ul>
+    <li>Number of pages: {$nPages}</li>
+</ul>
+
+<h3>Articles</h3>
+<ul>
+    <li>Number of articles: {$nArticles}</li>
+    {if $lastArticle}<li>Last article: <a href="#">{$lastArticle['name']}</a> (<a href="#" class="nopad">upravit</a>)</li>{/if}
+</ul>

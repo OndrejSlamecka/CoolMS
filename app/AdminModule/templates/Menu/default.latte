@@ -1,0 +1,146 @@
+{block #title}Menu designer{/block}
+{block #head}
+<script type="text/javascript" src="{$themePath}/js/menucontrol.js"></script>
+{/block}
+{block content}
+
+<h2>Order menu</h2>
+{if count( $menuitems ) < 1}
+<p>There aren't any items in the menu yet.</p>
+{else}
+<p><small>You can drag&amp;drop menu items using your mouse.</small></p>
+
+{snippet MenuDesignerControl}
+<ul id="menu-designer-control">
+    {foreach $menuitems as $tmi}
+	<li id="mi-{$tmi['id']}">
+	    <div class="tmi-handler">
+		<h3>  
+                    {if $tmi['type'] === \App\Entity\Menuitem::TYPE_SUBMENU}
+                        <img src="{$themePath}/icons/table_link.png" alt="Submenu" title="Submenu" >                  
+                    {else}
+                        {*<a href="{link :Front:".$tmi['module_name'].":".$tmi['module_view']."}">*}
+                            <img src="{$themePath}/icons/link.png" alt="Link" title="Link" >
+                        {*</a>*}
+                    {/if}                          
+                        
+                    {$tmi['name']}                
+                        
+		</h3>
+                
+                <div class="menuitemOptions">
+                    {if $tmi['type'] !== \App\Entity\Menuitem::TYPE_SUBMENU}
+                    <table> 
+                        <tr>
+                            <td>{$tmi['module_name_verbalname']} &rarr;&nbsp;</td>
+                            <td>{$tmi['module_view_verbalname']}</td>                    
+                        </tr>
+                    </table>
+                    {/if}
+                    <span>
+                        <a href="{link edit! id => $tmi['id']}" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
+                        <a href="{link delete id => $tmi['id']}" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a
+                    </span>                                       
+                </div>
+	    </div>
+	    {if $tmi['type'] === \App\Entity\Menuitem::TYPE_SUBMENU}
+		<ul>
+		{if count($tmi['children'])}
+		{foreach $tmi['children'] as $mi}
+		    <li id="mi-{$mi['id']}">
+                        <div class="mi-container">
+                            <h4>                                    
+                                {$mi['name']}                                                       
+                            </h4>
+                            <span>
+                                <a href="{link edit! id => $mi->id}" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
+                                <a href="{link delete id => $mi->id}" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
+                            </span>     
+                        </div>
+                    </li>
+		{/foreach}		    
+		{/if}
+		    <li><!-- Drop here --></li>
+		</ul>
+	    {/if}
+	</li>
+    {/foreach}
+</ul>
+{/snippet}
+
+{control menuDesignerControlForm begin}
+{control menuDesignerControlForm errors}
+{$presenter['menuDesignerControlForm']['structure']->control}
+<p>{$presenter['menuDesignerControlForm']['save']->control}</p>
+{control menuDesignerControlForm end}
+
+{/if}
+
+<hr>
+
+{* FORM *}
+
+{snippet MenuitemFormSnippet}
+<h2>{if $editing}Edit{else}Add{/if} item to menu</h2>
+{control menuitemForm begin}
+{control menuitemForm errors}
+<table>
+
+    {? $nStep = 1}
+
+    <tr>
+        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['type']->label}</th>
+        <td class="radioinput">{$presenter['menuitemForm']['type']->control}</td>
+    </tr>
+
+
+    {* ModuleLink *}
+    {if $menuitemtype === 'modulelink'}
+    <tr class="option">
+        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_name']->label}</th>
+        <td>{$presenter['menuitemForm']['module_name']->control}</td>
+    </tr>
+
+    <tr class="option"> <!-- style="display: none;" -->
+        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_view']->label}</th>
+        <td>{$presenter['menuitemForm']['module_view']->control}</td>
+    </tr>           
+
+    {if !($presenter['menuitemForm']['module_view_param'] instanceof  Nette\Forms\Controls\HiddenField)}
+    <tr class="option"> <!-- style="display: none;" -->
+        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_view_param']->label}</th>
+        <td>{$presenter['menuitemForm']['module_view_param']->control}</td>
+    </tr>
+    {/if}
+    
+    
+    <tr class="option">
+        <th><h3><span class="stepnumber">{$nStep++}</span>)</h3> {$presenter['menuitemForm']['parent']->label}</th>
+        <td>{$presenter['menuitemForm']['parent']->control}</td>
+    </tr>                   
+
+    <tr class="option"> <!-- style="display: none;" -->
+        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_caption']->label}</th>
+        <td>{$presenter['menuitemForm']['module_caption']->control}</td>
+    </tr>           
+    {/if}            
+
+    {* SubmenuLink *}
+    {if $menuitemtype === 'submenu'}
+        <tr class="option"> <!-- style="display: none;" -->
+            <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['submenu_caption']->label}</th>
+            <td>{$presenter['menuitemForm']['submenu_caption']->control}</td>
+        </tr>
+    {/if}            
+
+    {* * *}
+
+    <tr>
+        <th><h3><span class="stepnumber">{$nStep++}</span>)</h3> {$presenter['menuitemForm']['save']->label}</th>
+        <td class="radioinput">{$presenter['menuitemForm']['save']->control}</td>
+    </tr>
+
+</table>
+{control menuitemForm end}
+{/snippet}
+    

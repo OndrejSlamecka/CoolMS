@@ -1,0 +1,47 @@
+    {form articleForm begin}
+
+    <div id="inner-content">
+
+        <h2>{$header}</h2>
+
+            {control articleForm errors}
+
+                <table>
+
+                    <tr class="required">
+                        <th class="hidden">{label name /}</th>
+                        <td>{input name}</td>
+                    </tr>
+
+                    <tr>
+                        <th class="hidden">{label text /}</th>
+                        <td>{input text}</td>
+                    </tr>
+
+                </table>
+
+
+    </div> <!-- #inner-content -->
+
+    <div id="inner-sidebar">
+
+        <h3>Možnosti</h3>
+        <div class="box">
+	    <p>
+                {input save}                                      
+            </p>
+
+            <p>
+                {label name_webalized /}
+                {input name_webalized}
+                <br>
+                <small>Prázdné se doplní automaticky.</small>
+            </p>
+            
+        </div>
+
+    </div> <!-- #inner-sidebar -->
+
+
+    <div class="clear"><hr /></div>
+    {/form articleForm}

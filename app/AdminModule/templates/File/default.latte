@@ -1,0 +1,136 @@
+{block #title}File manager{/block}
+{block #head}
+<script type="text/javascript" src="/admintheme/js/jquery.sexypost.js"></script>
+<script type="text/javascript" src="/admintheme/js/html5fileupload.js"></script>
+<script type="text/javascript" src="/admintheme/js/jquery.focusEnd.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){    
+        $(".delete.confirm").confirmdialog({ actionText : 'Delete', cancelText : 'Cancel' });
+        $( "#frm-searchForm input").focus();
+    });
+</script>
+{/block}
+{block content}
+
+<h2>File manager</h2>
+
+{snippet FileList}
+{if !file_exists( $fullpath )} 
+    <p>Requested folder does not exist. Try to find it <a href="{link default}">among all files</a>.</p> {* TODO: Correct english? *}
+{else}
+
+    {* Preparation *}
+    {? if (!isset( $editingItem )) $editingItem = null;}
+    
+    {* Are there some files? *}
+    {if (iterator_count($items->getIterator()) < 1 && $path === '/' && $mode !== $presenter::MODE_SEARCH )}
+        <p>There aren't any files yet.</p> 
+    {else}   
+        
+        
+    {* Print path and search form *}
+    <div class="floatingContentContainer">
+        {if $mode !== $presenter::MODE_SEARCH }
+        <span class="flleft" id="breadcrumbs">Path:             
+            {foreach $breadcrumbs as $addr => $piece}
+            {block |trim}
+                {? if($iterator->isFirst()) $addr = substr( $addr, 1 ); }
+                <a href="{link default path => $addr}">{$piece}</a>{if !$iterator->isFirst()}{sep}/{/sep}{/if}
+            {/block}
+            {/foreach}            
+        </span>
+        {/if}
+        
+        <span class="flright">{control searchForm}</span>
+    </div>
+        
+    {if iterator_count($items->getIterator()) < 1 && $mode === $presenter::MODE_SEARCH}
+        <p>Sorry, no files were found.</p> 
+    {/if}        
+            
+    {* Table of files *}
+    <table class="data files">
+        <thead class="hidden">
+            <th>Type</th>
+            <th class="name">Name</th>
+        </thead>
+        <tbody>
+        {? $oddOrEven = 0}
+            
+        {if $path !== '/'}
+            {? $oddOrEven = 1}
+            <tr>
+                <td><img src="{$themePath}/icons/folder_go.png" alt="Nadřazený adresář"></td>
+                <td class="folderabove name"><a href="{link default path => $folder_above}">..</a></td>
+            </tr>
+        {/if}
+            
+        {* FILE LIST *}    
+        {foreach $items as $key => $item}
+            
+            {* Preparation *}
+            {? $editingThis = false;}
+            {? $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();}
+            {? if($editingItem === $fullFilename) $editingThis = true;}
+            
+            <tr n:class="$iterator->getCounter() % 2 === $oddOrEven ? even"> {* isOdd because of the <tr> above *}
+                
+                {* Icon *}
+                <td>
+                    {if $item->isDir()}
+                        <img src="{$themePath}/icons/folder.png" alt="Adresář {$item->getFileName()}">
+                    {else}
+                        {*<img src="{$themePath}/icons/{$item->getFileName()|extension}.png" alt="{$item->getFileName()|extension}">*}
+                        {$item->getFileName()|extension}
+                    {/if}
+                </td>
+                
+                {* Name / rename form *}
+                <td class="name{if $editingThis} editing{/if}">   
+                    {if !$editingThis}
+                        {if $item->isDir()}
+                            <a href="{link default path => $fullFilename}">
+                        {else}
+                            <a href="{$baseUri}{$presenter->getRelativePath($fullFilename)}">
+                        {/if}
+                                {if $mode === $presenter::MODE_SEARCH}
+                                    {$item->getPathname()|remove:$fullpath|replace:'\\':'/'}   
+                                {else}
+                                    {$item->getFileName()}
+                                {/if}
+                            </a>
+                    {else}
+                        {form renameForm}                        
+                            {label new_name class => 'hidden' /}
+                            {input new_name value => $item->getFileName()}
+                            
+                            {input send}
+                        {/form renameForm}                            
+                    {/if}
+                </td>
+                
+                {* Edit, delete *}
+                <td><a href="{link edit! path => $fullFilename}" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Rename" title="Rename"></a></td>
+                <td><a href="{link delete path => $fullFilename}" class="delete img confirm"><img src="{$themePath}/icons/delete.png" alt="Delete" title="Delete"></a></td>
+            </tr>
+            
+        {/foreach}
+        </tbody>
+    </table>           
+    {/if}    
+{/if} {* if path exists *}
+{/snippet}
+        
+<hr />    
+    
+<h2>Upload file</h2>    
+
+{control fileUploadForm}   
+<div id="status" class="meter"><span></span></div>   
+<p><small>You can select multiple files by holding Ctrl key and clicking.<br />All files can be selected by using key combination Ctrl-A.</small></p>
+
+<hr />    
+    
+<h2>Create folder</h2>    
+
+{control folderCreationForm}    

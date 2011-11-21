@@ -1,0 +1,782 @@
+/**
+ * Whole stylesheet is divided by parts:
+ * Generic 
+ * Text & Typography
+ * Main elements 
+ * Footer 
+ * 
+ * jQuery PLUGINS  
+ */ 
+
+/* Generic
+ * ========
+-----------*/
+
+hr{
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7 );
+  border-width: 1px medium;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1 );
+  margin: 2em 0 1.6em;                         
+}
+
+html.gecko hr{ height: 2px; }
+
+.hidden{
+  position: absolute;
+  height:1px;
+  width:1px;
+  top: -9999px;
+  left: -9999px;
+}
+
+
+/* Floating objects */
+.flleft{float:left;}
+.flright{float:right;}      
+.clear{	clear: both; margin: -1px 0 0 0; padding: 0; height: 0; border: none; visibility: hidden; }
+div.clear hr{ display: none; } 
+.floatingContentContainer{ width:100%; overflow:hidden; }
+                                                                 
+.nopad{
+    padding: 0;    
+}
+
+/* Text & Typography
+ * =================
+--------------------*/
+body{
+  font-family: Calibri, GillSans, "Trebuchet MS", sans-serif;
+  line-height: 1.3;
+  font-size: 16px;
+}
+
+h1{
+  color: #FFF;
+  font-size: 28px;
+  text-shadow: 2px 1px 4px #000;
+  letter-spacing: 1px;
+  /* Layout -> Main elements */
+}
+
+h2{
+  font-size: 28px;
+  margin: 0 0 0.4em;
+  text-shadow: 1px 1px 0 rgba( 0, 0, 0, 0.2 ); /* Very subtle but nice :o) */
+}
+
+h3{
+  font-size: 22px;
+  margin: 0 0 0.2em;
+  text-shadow: 1px 1px 0 rgba( 0, 0, 0, 0.2 ); /* Very subtle but nice :o) */    
+}
+
+p{
+  margin: 0.5em 0 2em;
+}
+
+body.authentication p{
+  margin: 1em 0 -1em;
+}
+
+    body.authentication p.flash{
+        margin: 0 0 0.5em;
+    }
+
+body.authentication #snippet--requestNewPassword{
+  margin: 1em 0 -1em;
+  display: none;
+}
+  
+/* Lists */
+ul{
+  margin: 0.5em 0 1.5em 2em;
+  list-style-type: disc;
+  list-style-position: inside;
+}  
+  
+
+/* Links */
+a{
+  padding: 0 0.15em;
+  text-decoration: underline;
+  color: #0000ef;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+
+a:active{
+  position: relative;
+  top: 1px;
+}
+
+a:visited{
+  color: #0000d2;
+}
+
+a.img{
+  padding: 5px 0.25em 0;
+  margin: 0 0 0 -4px; 
+}
+
+table a.img{
+  margin: 0 0 0 -2px; 
+  padding: 0 3px 2px;
+}
+  
+a.delete:hover{
+  background-color: #cd1818;
+  color: #FFF;
+}
+
+a.edit.img:hover{
+  background-color: #FFF;
+}
+  
+/* Button links, aside header links */
+a.button{
+  background-color: #284a89;
+  color: #FFF;
+  padding: 4px 9px;
+  border: 1px solid #284a89;
+
+  text-shadow: #000 1px 1px 1px;
+     -moz-border-radius: 4px; /* FF1+ */
+  -webkit-border-radius: 4px; /* Saf3+, Chrome */
+          border-radius: 4px; /* Opera 10.5, IE 9 */
+     -moz-box-shadow: 1px 1px 1px #777; /* FF3.5+ */
+  -webkit-box-shadow: 1px 1px 1px #777; /* Saf3.0+, Chrome */
+          box-shadow: 1px 1px 1px #777; /* Opera 10.5, IE 9.0 */
+}     
+
+  a.button:hover{
+    border: 1px solid #536fb3;
+  }
+  
+.asideheader{
+  margin-top: 9px;
+}
+
+  .asideheader a{
+    margin: 0 0 0 12px;
+  }
+
+    .asideheader.small{
+      margin-top: 15px;
+    }
+
+        .asideheader.small a.button{
+            padding: 2px 9px;
+        }
+  
+.asidebutton{
+  float: left;
+}
+  
+  
+
+/* Emphasis */
+strong{
+  font-weight: bold;
+}
+  
+em{
+  font-style: italic;
+}
+
+small{
+  color: #616161;
+  font-size: 85%;
+}  
+
+abbr, span.explain{
+  border-bottom: 1px #595959 dotted;
+  cursor: help;
+}
+
+
+/* Tables */
+
+/* Data tables */
+table.data{
+    margin: 0.5em 0 1.5em;
+}
+
+    table.data tr:hover{
+        background-color: #F8F8F8 !important;
+    }
+
+    table.data td{
+        padding: 6px 18px 5px;
+        padding: 0.2em 0.5em;
+        border: 1px #e3e3e3 solid;
+    }
+
+      table.data td.padded{
+        padding: 0.2em 1em;
+      } 
+
+      table.data td.name{
+          padding: 5px 10px 6px;
+          min-width: 200px;
+      }
+        
+        table.data td.name.editing{
+          padding-bottom: 5px;
+        }
+  
+          table.data td.name small{
+              margin-top: 2px;
+              float: right;
+          }
+          
+    table.data a.edit, table.data a.delete{
+        text-decoration: none;
+    }
+
+    table.data a.edit:hover, table.data a.delete:hover{
+        text-decoration: underline;
+    }          
+
+    table.data th{
+      padding: 0.3em 0.6em;
+      border: 1px #e3e3e3 solid;
+      background-color: #454545;
+      color: white;
+    }
+
+    table.data tr.even{
+      background-color: #FBFBFB;
+    }
+    
+table.files{
+
+}    
+
+  table.files .name{
+    width: 100%;
+  }
+  
+  table.files img{
+    vertical-align: middle;
+  }
+  
+  td.folderabove{
+    height: 31px;
+  }
+  
+
+table.data+p{
+    margin: 0 0 -1em 0;
+    text-indent: 0;
+}
+
+/* Forms */
+th{
+  text-align: right;
+  vertical-align: top;
+  padding: .4em .5em 0 0;
+}
+
+  .flright td input{
+    margin-top: 0;
+  }
+
+  .flright th{
+    padding-top: 0;
+  }
+
+
+/* TODO: All forms made in tables should have class .form - this would solve all those ambiguous selectors */
+td input, .padlikeinput{
+  margin: .4em 0 0;
+}
+
+  td input.low{
+    margin: 0;
+  }
+  
+  td input[type="image"].low{
+    vertical-align: top;
+    padding: 3px;
+  }
+
+    td input[type="image"]:hover{    
+      background-color: #FFF;
+    }
+    
+    td.radioinput{
+      padding: .4em 0 0;
+    }    
+
+input[type="radio"]{
+    margin: -0.2em 0.2em 0 0;
+    vertical-align: middle;
+}
+
+input[type="submit"].big{
+    padding: 6px 10px;
+}
+
+
+input[type="image"]{
+    vertical-align: middle;
+    margin: 0 0 0 .3em;
+}
+
+
+h3 form, h3 form div, h4 form, h4 form div{
+    display: inline;    
+}
+
+h3 input[type="text"], h4 input[type="text"]{
+    /*height: 13px;*/ /* 1em = 13px */
+    height: 1em;
+}
+
+  
+
+/* Main elements
+ * ==============
+-----------------*/  
+html{
+  height:101%; /* Force scrollbars 100% of the time */
+}
+
+body{
+  width: 1040px;
+  margin: 0 auto;
+  background: #4a92c0 url(body-bg.png) repeat-x;
+}
+
+  body.authentication{
+    width: 339px;
+  }
+  
+  .authentication input[type="text"], .authentication input[type="password"]{
+    width: 160px;
+  }
+
+#header{
+  margin: 1em 0 0;
+}
+
+h1{
+  /* Typo -> Text and typography */
+  margin: 0 0 20px 20px;
+  float: left;
+}
+
+#header .actionbar{
+  float: right;
+  margin: 5px 10px 0 0;
+  padding: 4px 10px;
+  color: #000;
+  background: #FFF;
+  text-shadow: 1px 1px 1px rgba( 0, 0, 0, 0.2 );
+}
+
+  .gecko #header .actionbar{
+    padding: 3px 10px 5px;
+  }
+  
+  #header .actionbar:first-of-type{
+    margin-right: 20px;
+  }
+
+  #header .actionbar a{
+    color: #000;
+  }
+
+#panel{
+  margin: 0;
+  background: #FFF;
+  box-shadow: 0 0 5px rgba( 0,0,0, 0.75 );
+  background: #FFF url(panel-bg.png) repeat-y left;
+}
+
+  body.authentication #panel{
+    background-image: none;
+  }
+
+#menu{
+  margin: 0;
+  float: left;
+  background: #284a89;
+  padding: 20px;
+  list-style: none;
+  width: 160px;   
+}
+                                  
+  #menu li{
+    border-bottom: 1px rgba( 0,0,0, 0.2 ) solid;    
+  }                            
+    
+    #menu li:last-of-type{
+      border: 0;
+    }
+  
+  #menu a{
+    color: #FFF;
+    display: block;
+    padding: 0.4em 1em;
+  }
+  
+    #menu a.active{
+      font-weight: bold;
+      text-decoration: none;
+    }
+     
+    #menu a:hover:after{
+      float: right;
+      content: '»';
+    }
+  
+    #menu a:hover{
+      background: #204584;
+    }
+
+#content{
+  margin: 0 0 0 200px;
+  padding: 1em 3em 2em 3em;    
+}
+
+  body.authentication #content{
+    margin: 0;
+  }
+  
+  body#createpassword #content{
+    padding: 1em 2em 2em 1.5em;
+  }
+
+/* Flash messages */
+p.flash{
+  margin: 0 0 0.5em;
+  /*border: 4px solid #6082B6;*/
+  padding: 0.3em 0.6em;
+  background: #eef6fc;
+}
+
+#frm-languageChooseForm{
+  float: right;  
+  margin: -10px 20px 10px 0;
+}
+
+  #frm-languageChooseForm th{
+    padding-top: 0;
+  }
+
+/* Page Form */
+#pageForm{
+    
+}
+    #pageForm input.large, #pageForm textarea{
+      width: 100%;
+    }
+
+    #pageForm input[type="text"], #pageForm textarea{
+        border: 1px solid #999;
+        padding: 3px 5px;
+    }
+    
+        #pageForm input[type="text"]:hover, #pageForm textarea:hover{
+            border: 1px solid #888;
+        }
+    #pageForm textarea{
+        padding: 5px;
+    }
+
+    #pageForm input[name="name"]{
+        min-height: 24px;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
+    
+    #pageForm textarea[name="text"], #pageForm input[name="name"]{
+      width: 470px;
+    }
+
+    
+    /* Page divison */
+    #inner-content{
+        float: left;
+        width: 470px;
+    }
+    
+      #inner-content h2{
+        margin: 0;
+      }
+    
+    #inner-sidebar{
+        width: 240px;
+        margin: 0 0 0 520px;
+        padding-top: 10px;
+    }
+    
+        #inner-sidebar h3{
+            background: url(../img/sidebar-header-bg.png) repeat-x 0px 0px;
+            padding: 0.2em 15px;
+            letter-spacing: 0.02em;
+            font-size: 110%;
+            background-color: #284a89;          
+            margin-bottom: 0;
+            
+            border: 1px solid #AAA;
+            color: #FFF;
+            font-weight: bold;
+    
+     -moz-box-shadow: 0 0 1px #999; /* FF3.5+ */
+  -webkit-box-shadow: 0 0 1px #999; /* Saf3.0+, Chrome */
+          box-shadow: 0 0 1px #999; /* Opera 10.5, IE 9.0 */
+              filter:  progid:DXImageTransform.Microsoft.dropshadow(OffX=0px, OffY=0px, Color='#999999'); /* IE6,IE7 */
+          -ms-filter: "progid:DXImageTransform.Microsoft.dropshadow(OffX=0px, OffY=0px, Color='#999999')"; /* IE8 */
+        }
+        
+        
+        #inner-sidebar .box{
+            border: 1px solid #AAA;
+            border-top: 0;
+            padding: 10px;
+            margin: 0 0 16px 0;
+        }
+
+        #inner-sidebar .box input[type="submit"], input[type="submit"].emphasized{
+            padding: 6px 12px;
+        }
+        
+        .submitButtonRow, .submitButtonRow td{
+          border: 0;
+        }
+        
+/* Menuitem Form */
+#frm-menuitemForm{
+  
+}
+
+#frm-menuitemForm h3{
+  display: inline;
+  font-weight: bold;
+  font-size: 100%;
+}        
+
+#frm-menuitemForm tr{
+  border-bottom: 1px solid #CCC;
+}
+  
+    html.gecko #frm-menuitemForm tr.optionSubmenu th, html.gecko #frm-menuitemForm tr.optionSubmenu td{
+      padding-top: 0.65em;
+    }
+  
+  #frm-menuitemForm td, #frm-menuitemForm th{
+    padding-bottom: 0.6em;
+    padding-top: 0.7em;
+    text-align: left;
+  }
+  
+  #frm-menuitemForm td input[type="submit"], #frm-menuitemForm td input[type="text"]{
+    margin: 0;
+  }
+
+  #frm-menuitemForm tr:last-of-type{
+    border-bottom: none;
+  }
+  
+/* Menu designer control
+ * =====================
+------------------------*/ 
+#menu-designer-control{
+  margin: 1em 0;
+}
+   
+  /* Top menu */
+  #menu-designer-control li{
+    list-style: none;    
+    color: #FFF;
+    font-weight: bold;
+    width: 450px;
+    margin: 0 0 1em;    
+  } 
+  
+  #menu-designer-control .tmi-handler{
+    border: 3px #163672 solid;
+    background: #284a89;
+    margin: 0 0 0.5em;
+    padding: 0.5em;
+    cursor: move;   
+  }
+  
+    #menu-designer-control h3, #menu-designer-control h4{
+      display: inline;
+      font-size: inherit;
+    }
+    
+    #menu-designer-control h3 img, #menu-designer-control h4 img{
+      vertical-align: middle;
+      padding: 0 0.5em;
+    }
+  
+    #menu-designer-control div.menuitemOptions{
+      float: right;
+      display: inline;
+    }
+    
+      #menu-designer-control span{
+        margin: .15em 0 0 .3em;
+        float: right;
+        display: block;
+      }         
+    
+      #menu-designer-control table{
+        display: inline;
+      }  
+             
+  
+  .ui-state-highlight-top{
+    height: 40px;
+    background-color:#aabeff;
+    border: 2px blue dashed;
+  }    
+  
+  /* Sub menus */                               
+  #menu-designer-control ul{
+    margin: 0.5em 0;
+    min-height:1.5em;
+  }                     
+                                 
+    #menu-designer-control li li{
+      width: 400px;
+      margin: 0.25em 0 0 50px;
+    }
+    
+    #menu-designer-control .mi-container{
+      background-color:#00154b;
+      font-size: 90%;
+      padding: 0.5em 0.5em 0.5em 1em;
+      border: 3px solid #163672;
+      color:#FFF;
+      cursor: move;
+    }
+    
+    .ui-state-highlight{  
+      height: 29px;
+      background-color:#AFA;
+      border:2px green dashed;
+    }
+        
+  
+  
+/**/  
+#frm-menuDesignerControlForm{
+  margin: 4em 0 2em;  
+}  
+  
+  #frm-menuDesignerControlForm input{
+    padding: 6px 12px;
+  }  
+
+/* File manager
+ * ============
+---------------*/ 
+#breadcrumbs a{
+    padding: 0 .05em;
+}
+  
+/* Footer
+ * ======
+---------*/
+#footer{
+  text-indent:0;
+  margin: 0.5em 20px 0.75em;
+  text-align: right;
+  color: #EEE;
+}  
+
+  #footer a{
+    color: #EEE;
+  }
+  
+
+/* jQuery Plugins
+ * ==============
+-----------------*/
+#confirmDialog{
+  position: absolute;
+  background: #fafafa;
+  padding: 0.1em 0.2em;
+  border: 1px solid #90adc5;
+}
+
+/* HTML5 file upload progress bar - @author http://css-tricks.com/8518-css3-progress-bars/ Thanks! */
+
+.meter { 
+        display: none;
+        width: 50%;
+        height: 1.4em;  /* Can be anything */
+        position: relative;
+        margin: 1em 0;
+        
+        -moz-border-radius: 25px;
+        -webkit-border-radius: 25px;
+        border-radius: 25px;
+        border: 2px solid #777;
+}
+.meter > span {
+        text-align: center;
+        text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    
+        display: block;
+        height: 100%;
+        -webkit-border-radius: 20px;
+           -moz-border-radius: 20px;
+                border-radius: 20px;
+        background-color: rgb(43,194,83);
+        
+        -webkit-box-shadow: 
+          inset 0 2px 9px  rgba(255,255,255,0.3),
+          inset 0 -2px 6px rgba(0,0,0,0.4);
+        -moz-box-shadow: 
+          inset 0 2px 9px  rgba(255,255,255,0.3),
+          inset 0 -2px 6px rgba(0,0,0,0.4);
+        box-shadow: 
+          inset 0 2px 9px  rgba(255,255,255,0.3),
+          inset 0 -2px 6px rgba(0,0,0,0.4);
+        position: relative;
+        overflow: hidden;
+}
+.meter > span:after, .animate > span > span {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;        
+        z-index: 1;
+        -webkit-background-size: 50px 50px;
+        -moz-background-size: 50px 50px;
+        -webkit-animation: move 2s linear infinite;
+        -webkit-border-radius: 20px;
+           -moz-border-radius: 20px;
+                border-radius: 20px;
+        overflow: hidden;
+}
+
+.animate > span:after {
+        display: none;
+}
+
+@-webkit-keyframes move {
+    0% {
+       background-position: 0 0;
+    }
+    100% {
+       background-position: 50px 50px;
+    }
+}
+
+
+.nostripes > span > span, .nostripes > span:after {
+        -webkit-animation: none;
+        background-image: none;
+}

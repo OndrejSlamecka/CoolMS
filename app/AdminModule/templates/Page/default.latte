@@ -1,0 +1,39 @@
+{block #title}Pages{/block}
+{block content}
+
+<div class="floatingContentContainer">
+    <h2 class="asidebutton">Pages</h2> <div class="asideheader"><a href="{link new}" class="button">Add page</a></div>
+</div>
+
+
+{if !count($pages)}
+    <p class="important">There aren't any pages on the site yet.</p>
+{else}
+
+   <table class="data">
+    <thead class="hidden">
+	<tr>
+	  <th>Name</th>
+	  <th>Edit</th>
+	  <th>Delete</th>
+	</tr>
+    </thead>
+
+    <tbody>
+
+      {foreach $pages as $page}
+      <tr n:class="$iterator->isEven() ? even">
+	<td class="name">
+	  <a href="{link :Front:Page:default, name => $page->name_webalized}">{$page->name}</a>
+	</td>
+
+	<td class="padded"><a href="{link edit id => $page->id}" class="edit">Edit</a></td>
+	<td class="padded"><a href="{link delete id => $page->id}" class="delete">Delete</a></td>
+      </tr>
+
+      {/foreach}
+
+    </tbody>
+  </table>
+
+{/if}

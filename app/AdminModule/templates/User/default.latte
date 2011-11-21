@@ -1,0 +1,62 @@
+{block #title}Users{/block}
+{block content}
+
+<div class="floatingContentContainer">
+    <h2 class="asidebutton">User management</h2> 
+    {if $loggedUser->isInRole('admin')}
+        <div class="asideheader"><a href="{link new}" class="button">Add user</a></div>
+    {/if}
+</div>
+
+{if !empty($users)} {* I hope that empty($users) will always give false *}
+
+    <table class="data">
+        <thead class="hidden">
+            <tr>
+              <th>Email</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {foreach $users as $user}     
+            {? $hasEditingRight = ($loggedUser->isInRole('admin') || $loggedUser->getIdentity()->getId() == $user['id']); }
+            <tr {if $iterator->isEven()}class="even"{/if}>
+                
+                <td class="name">
+                    {$user['email']}
+                    {if $user['role'] === 'admin'}<small>Správce</small>{/if}
+                </td>
+
+                <td class="padded">
+                    <a href="{link profile id => $user['id']}" class="edit">
+                        {if $hasEditingRight}   Edit
+                                       {else}   Show
+                        {/if}
+                    </a>
+                </td>
+                
+                {if $loggedUser->isInRole('admin')}
+                <td class="padded">
+                    {if $user['id'] != $loggedUser->getIdentity()->getId()} 
+                    {* Intentionaly equal, not identical because from database it's string, in identity int *}
+                        <a href="{link confirmDelete id => $user['id']}" class="delete">Delete</a>                    
+                    {/if}
+                </td>
+                {/if}
+                
+            </tr>
+        {/foreach}
+
+        </tbody>
+    </table>
+    
+    <p>
+        <small>
+            Supreme administrator can create, edit and delete accounts.
+            {if $loggedUser->isInRole('admin')}<br />You can't delete your own account.{/if}
+        </small>    
+    </p>
+
+{/if}

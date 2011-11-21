@@ -1,0 +1,6 @@
+    {block #title}New article{/block}        
+    {block #content}
+
+    {? $header = "New article"}
+
+    {include 'articleForm.latte' "header" => $header}

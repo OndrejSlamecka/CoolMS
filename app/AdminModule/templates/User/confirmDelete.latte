@@ -1,0 +1,12 @@
+{block #title}Delete user {$user['email']}{/block}
+{block content}
+
+{if $user}
+    <h2>Delete user {$user['email']}?</h2>
+    <p>User deletion is irreversible. Please confirm deletion by entering your password.</p>
+    {control confirmDeleteForm}
+    
+{else}
+    <p>User was not found.</p>
+{/if}
+

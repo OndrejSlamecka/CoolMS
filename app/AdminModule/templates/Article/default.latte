@@ -1,0 +1,38 @@
+{block #title}Articles{/block}
+{block content}
+
+<div class="floatingContentContainer">
+    <h2 class="asidebutton">Articles</h2> <div class="asideheader"><a href="{link new}" class="button">Add article</a></div>
+</div>
+
+
+{if !count($articles)}
+    <p class="important">There aren't any articles on the web yet.</p>
+{else}
+
+   <table class="data">
+    <thead class="hidden">
+	<tr>
+	  <th>Name</th>
+	  <th>Edit</th>
+	  <th>Delete</th>
+	</tr>
+    </thead>
+
+    <tbody>
+
+      {foreach $articles as $article}
+      <tr n:class="$iterator->isEven() ? even">
+	<td class="name">
+	  <a href="{link :Front:Article:default, name => $article->name_webalized}">{$article->name}</a>
+	</td>
+
+	<td class="padded"><a href="{link edit id => $article->id}" class="edit">Edit</a></td>
+	<td class="padded"><a href="{link delete id => $article->id}" class="delete">Delete</a></td>
+      </tr>
+      {/foreach}
+
+    </tbody>
+  </table>
+
+{/if}
