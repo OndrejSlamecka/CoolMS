@@ -76,6 +76,12 @@ class Menuitem extends \NDBF\Repository
         $this->cleanCache();
     }    
     
+    public function remove($conditions)
+    {
+        parent::remove($conditions);  
+        $this->fixOrder();  
+    }
+    
     
     /* STRUCTURE */
     
@@ -90,6 +96,30 @@ class Menuitem extends \NDBF\Repository
         
         return $index;        
     }
+    
+    /**
+     * Orders all menuitems
+     */
+    public function fixOrder()
+    {               
+        $mis = $this->fetchStructured();        
+        $this->recursiveOrderFixer( $mis );
+    }
+    
+    private function recursiveOrderFixer($mis)
+    {
+        $i=1;
+        foreach( $mis as $mi ){
+            $this->orderUpdate($mi['id'], $i);
+                    
+            if( isset( $mi['children'] ) ){
+                $this->recursiveOrderFixer( $mi['children'] );
+            }
+            
+            $i++;
+        }
+    }
+    
     
     // TODO: Give all pairs and use the (f-word) transaction!!
     public function orderUpdate( $id, $order )
