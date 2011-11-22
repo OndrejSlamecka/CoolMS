@@ -13,8 +13,9 @@ namespace AdminModule;
 use \Nette\Utils\Strings;
 
 /**
- * file manager's presenter
- *
+ * File manager's presenter
+ * TODO: Refactor. sanitizePath, getRelativePath, getFullPath, getFolderAbove, recursiveRemoveDir should be moved into some model
+ * 
  * @author Ondrej Slamecka
  */
 class FilePresenter extends BasePresenter
@@ -128,6 +129,24 @@ class FilePresenter extends BasePresenter
         $this->invalidateControl('FileList');
     }
     
+    
+    private function recursiveRemoveDir($dir)
+    {
+        /* http://www.php.net/manual/en/function.rmdir.php#98622 */
+        $objects = scandir($dir); 
+        
+        if( is_array( $objects ) ) // scandir returns false for empty folders
+        foreach($objects as $object)
+        {
+            if ($object !== "." && $object !== "..")
+              if(filetype($dir."/".$object) === "dir") 
+                $this->recursiveRemoveDir($dir."/".$object);
+              else 
+                unlink($dir."/".$object);              
+        }         
+        rmdir($dir);  
+    }
+    
     public function actionDelete($path)
     {
         $path = $this->sanitizePath($path);
@@ -142,8 +161,10 @@ class FilePresenter extends BasePresenter
                 unlink( $fullpath );
                 $this->flashMessage( 'File deleted' );
             }elseif( is_dir( $fullpath ) ){
-                rmdir( $fullpath );
+                
+                $this->recursiveRemoveDir( $fullpath );
                 $this->flashMessage( 'Folder deleted' );
+                
             }else{
                 $this->flashMessage( 'Something strange happened, please try again.' );
             }
