@@ -192,8 +192,8 @@ class UserPresenter extends BasePresenter
         $form = new \App\Form($this, $name);
 
         $form->addHidden('id');
-        $form->addText('email','Email')
-                ->addRule(Form::EMAIL, 'Email is not correct.');        
+        /*$form->addText('email','Email')
+                ->addRule(Form::EMAIL, 'Email is not correct.');     */   
         $form->addPassword('password','Password');
 
         $form->addText( 'name', 'Name' );
@@ -216,7 +216,7 @@ class UserPresenter extends BasePresenter
             if( $form['password'] === "" )
                 unset( $form['password'] );
             else
-                $form['password'] = Authenticator::hashPassword($form['email'], $form['password']);            
+                $form['password'] = Authenticator::hashPassword( $this->getUser()->getIdentity()->email, $form['password']);            
             
             $users = $this->repositories->User;           
             $user = $users->find(array('id'=>$form['id']))->fetch();
