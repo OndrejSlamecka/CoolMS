@@ -66,12 +66,15 @@ h1{
 }
 
 h2{
-    font-size: 1.7em;  
+    font-size: 1.8em;  
     margin: 0 0 .7em;
-    text-shadow: 1px 1px 1px #CCC;
+    text-shadow: 1px 1px 1px #999;
+    color: #252525;
 }
 
-h3{ font-size: 1.35em; margin: 0 0 .5em; }
+h3{ font-size: 1.45em; margin: 0 0 .5em; text-shadow: 1px 1px 1px #999; }
+
+h4{ font-size: 1.1em; margin: 0 0 .3em; font-weight: bold; }
 
 p{ margin: 0 0 1.6em; }
 
@@ -79,11 +82,8 @@ strong, em { padding: 0 .05em; color: #3d171e; }
 strong{ font-weight: bold; }
 em{ font-style: italic; }
 
-#content ul{
-  list-style: disc;
-  list-style-position: inside;
-  margin: 1.5em 0;
-}
+#content ul{ list-style: disc; list-style-position: inside; margin: 1.4em 0 2em .8em; }    
+#content ol{ list-style: decimal; list-style-position: inside; margin: 1.4em 0 2em .8em; }
 
 hr{
     border: 0;
