@@ -119,20 +119,26 @@
         <td>{$presenter['menuitemForm']['parent']->control}</td>
     </tr>                   
 
-    <tr class="option"> <!-- style="display: none;" -->
+    <tr class="option">
         <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_caption']->label}</th>
         <td>{$presenter['menuitemForm']['module_caption']->control}</td>
-    </tr>           
+    </tr>  
+    
+    <tr class="option">
+        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['strict_link_comparison']->label}</th>
+        <td>{$presenter['menuitemForm']['strict_link_comparison']->control}</td>
+    </tr>       
     {/if}            
 
     {* SubmenuLink *}
     {if $menuitemtype === 'submenu'}
-        <tr class="option"> <!-- style="display: none;" -->
+        <tr class="option">
             <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['submenu_caption']->label}</th>
             <td>{$presenter['menuitemForm']['submenu_caption']->control}</td>
         </tr>
     {/if}            
 
+        
     {* * *}
 
     <tr>
@@ -142,5 +148,8 @@
 
 </table>
 {control menuitemForm end}
+
+<p><small>* If checked, the link will be considered active only if is the exact same as current URL.
+        If unchecked, the link will be considered active if the current section/module is the same as linked.</small></p>
 {/snippet}
     

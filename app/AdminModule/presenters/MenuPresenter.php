@@ -212,6 +212,7 @@ class MenuPresenter extends BasePresenter
 
         
         $form->addHidden( 'id' );
+        $form->addHidden( 'order' );
         
         if( $this->template->editing ){
             $labels = array(
@@ -222,6 +223,7 @@ class MenuPresenter extends BasePresenter
                 'module_caption' => 'It is titled',
                 'submenu_caption' => 'titled',                
                 'parent' => 'In submenu?',
+                'strict_link_comparison' => 'Strict link comparison *',
                 'save' => 'Save'
             );  
         }else{
@@ -233,6 +235,7 @@ class MenuPresenter extends BasePresenter
                 'module_caption' => 'And titled',
                 'submenu_caption' => 'titled',                
                 'parent' => 'In submenu?',
+                'strict_link_comparison' => 'Strict link comparison *',                
                 'save' => 'Save'
             );            
         }
@@ -245,7 +248,7 @@ class MenuPresenter extends BasePresenter
         
         $module = $this->getSession('modules');                     
         
-        $moduleManager = $this->context->moduleManager; 
+        $moduleManager = $this->context->moduleManager;
                 
         /* Option 1: Link to module (modulelink) */
         $form->addSelect( 'module_name' , $labels['module_name'], $moduleManager->getLinkableModules() );
@@ -269,10 +272,11 @@ class MenuPresenter extends BasePresenter
 	$submenus = array( 0 => 'No!' );	
 	$storedsubmenus = $menu->fetchSubmenusPairs();	
 	if( is_array( $storedsubmenus ) )
-	    $submenus = $submenus + $storedsubmenus; // + will preserve keys (in contrary to array_merge)
+	    $submenus = $submenus + $storedsubmenus;
 	
 	$form->addSelect( 'parent', $labels['parent'], $submenus );
 
+        $form->addCheckbox( 'strict_link_comparison' , $labels['strict_link_comparison']);
 
 	/**/
 	$form->addSubmit( 'save', $labels['save'] );        
@@ -301,8 +305,8 @@ class MenuPresenter extends BasePresenter
         if( $menuitem['parent'] === '0' )
             $menuitem['parent'] = null;  
         
-        if( empty($menuitem['id']) )
-            $menuitem['id'] = null;  
+        if( empty($menuitem['id']) ) $menuitem['id'] = null;  
+        if( empty($menuitem['order']) ) $menuitem['order'] = null;          
         
 	try{ 
 	    $menu->save( $menuitem,'id' );            
