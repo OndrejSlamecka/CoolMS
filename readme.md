@@ -28,3 +28,7 @@ Installation
 - Execute coolms.sql (located in the root folder of downloaded package) on your mysql server
 - Run from browser
 
+
+---
+
+If you want to participate on development see development_notes.txt
