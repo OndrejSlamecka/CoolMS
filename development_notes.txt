@@ -22,13 +22,17 @@ Major:
     * Add possibility to revert removal action to whole administration
     * Improve texts in menu designer form
     * Check security (http://php.vrana.cz/common-mistakes-in-securing-web-applications.php)
+    * Port this item's content to github's issues?
+
 Minor:
     * Add user the possibility to change his email (remember that email is used when hashing password)
-    * Remove injecting of whole container (see app/Configurator.php) where possible. (Is it possible somewhere else than in authenticator?)
-    * Rewrite Admin:Menu:menudesignerSubmit (use transactions probably)   
+    * Remove injecting of whole container (see app/Configurator.php) where possible. (Is it possible somewhere else than in authenticator?)    
     * Create webalized name dynamically (using AJAX) on page creation form instead of hint "Empty fills itself"
     * Improve page creation form (some design cleanup)
+
+    * Refactor Configurator
     * Refactor Front\RouteManager
+    * Rewrite Admin:Menu:menudesignerSubmit and models/Repositories/Menuitem.php (use transactions probably)   
 
 Far future:
     * Add support for multiple languages
