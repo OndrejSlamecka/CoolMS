@@ -87,7 +87,7 @@ class PagePresenter extends BasePresenter
 
         $form->addText( 'template', 'Template' );
         
-	$form->addSubmit( 'save', 'Uložit' );
+	$form->addSubmit( 'save', 'Save' );
 
 	$form->onSuccess[] = array( $this, 'pageSubmit' );
 

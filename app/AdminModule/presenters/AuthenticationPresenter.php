@@ -190,7 +190,7 @@ class AuthenticationPresenter extends BasePresenter
     {
         $form = new \App\Form($this,$name);
         $form->addPassword('password','New password');
-        $form->addSubmit('save', 'Uložit');
+        $form->addSubmit('save', 'Save');
         $form->onSuccess[] = array( $this, 'newPasswordSuccess' );
         return $form;
     }
