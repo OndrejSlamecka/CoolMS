@@ -18,101 +18,100 @@ use Nette\Forms\Form;
  * @author Ondrej Slamecka
  */
 class ArticlePresenter extends BasePresenter
-{        
-    
-    public function actionDelete( $id )
+{
+
+    public function actionDelete($id)
     {
         $articles = $this->repositories->Article;
-        
-        $article = $articles->find( array( 'id' => $id ) )->fetch();
-        
-        if( !$article ){            
-            $this->flashMessage( 'Article not found' );
-            $this->redirect( 'default' );
+
+        $article = $articles->find(array('id' => $id))->fetch();
+
+        if (!$article) {
+            $this->flashMessage('Article not found');
+            $this->redirect('default');
         }
-        
-        try{
-            $articles->remove( array( 'id' => $id ) );
+
+        try {
+            $articles->remove(array('id' => $id));
             $this->flashMessage('Article deleted');
-        }catch( Exception $e ){
+        } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
-        $this->redirect( 'default' );
-    }    
-    
+        $this->redirect('default');
+    }
+
     public function beforeRender()
     {
         parent::beforeRender();
         $this->setLayout('wysiwyg_layout');
     }
-    
-    public function renderEdit( $id )
+
+    public function renderEdit($id)
     {
         $articles = $this->repositories->Article;
 
-        $this->template->article = $article = $articles->find( array( 'id' => $id ) )->fetch();
-	
+        $this->template->article = $article = $articles->find(array('id' => $id))->fetch();
 
-        if( !$article ){
-            $this->flashMessage( 'Requested article was not found' );
-            $this->redirect( 'default' );
+
+        if (!$article) {
+            $this->flashMessage('Requested article was not found');
+            $this->redirect('default');
         }
 
         $arr = $article->toArray();
 
-        $this[ 'articleForm' ]->setDefaults( $arr );
-
+        $this['articleForm']->setDefaults($arr);
     }
 
     public function renderDefault()
     {
-	$article = $this->repositories->Article;
-	$this->template->articles = $article->find();
+        $article = $this->repositories->Article;
+        $this->template->articles = $article->find();
     }
 
     public function createComponentArticleForm($name)
     {
-	$form = new \App\Form($this, $name);
-	$form->getElementPrototype()->class( 'textFormatForm' );
+        $form = new \App\Form($this, $name);
+        $form->getElementPrototype()->class('textFormatForm');
 
         $form->addHidden('id');
-        
-	$form->addText( 'name_webalized', 'Name in URL' );
-        
-	$form->addText( 'name', 'Name' );
-	$form['name']->getControlPrototype()->class( 'ribbon' );
 
-	$form->addTextarea( 'text', 'Text', 60, 30 );
-        $form['text']->getControlPrototype()->class( 'wysiwyg' );
-        
-	$form->addSubmit( 'save', 'Save' );
+        $form->addText('name_webalized', 'Name in URL');
 
-	$form->onSuccess[] = array( $this, 'articleSubmit' );
+        $form->addText('name', 'Name');
+        $form['name']->getControlPrototype()->class('ribbon');
 
-	return $form;
+        $form->addTextarea('text', 'Text', 60, 30);
+        $form['text']->getControlPrototype()->class('wysiwyg');
+
+        $form->addSubmit('save', 'Save');
+
+        $form->onSuccess[] = array($this, 'articleSubmit');
+
+        return $form;
     }
 
     public function articleSubmit($form)
     {
-	$article = $form->getValues();                
+        $article = $form->getValues();
 
-        if( $article['id'] === ''){
-            $article['id'] = null;             
+        if ($article['id'] === '') {
+            $article['id'] = null;
             $article['date'] = new \DateTime;
         }
-        if( $article['name_webalized'] === '' )
-            $article['name_webalized'] = \Nette\Utils\Strings::webalize( $article['name'] );
-        
-	$articles = $this->repositories->Article;
+        if ($article['name_webalized'] === '')
+            $article['name_webalized'] = \Nette\Utils\Strings::webalize($article['name']);
 
-	try{
-	    $articles->save( $article, 'id' );
-	    $this->flashMessage( 'Article saved.' );
-	}catch( Exception $e ){
-	    $this->flashMessage( 'Article was not saved. Please try again and then contact the administrator');
-	}
+        $articles = $this->repositories->Article;
 
-	$this->redirect( 'default' );
+        try {
+            $articles->save($article, 'id');
+            $this->flashMessage('Article saved.');
+        } catch (Exception $e) {
+            $this->flashMessage('Article was not saved. Please try again and then contact the administrator');
+        }
+
+        $this->redirect('default');
     }
 
 }

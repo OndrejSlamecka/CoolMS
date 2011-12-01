@@ -18,101 +18,100 @@ use Nette\Forms\Form;
  * @author Ondrej Slamecka
  */
 class PagePresenter extends BasePresenter
-{        
-    
-    public function actionDelete( $id )
+{
+
+    public function actionDelete($id)
     {
         $pages = $this->repositories->Page;
-        
-        $page = $pages->find( array( 'id' => $id ) )->fetch();
-        
-        if( !$page ){            
-            $this->flashMessage( 'Page not found' );
-            $this->redirect( 'default' );
+
+        $page = $pages->find(array('id' => $id))->fetch();
+
+        if (!$page) {
+            $this->flashMessage('Page not found');
+            $this->redirect('default');
         }
-        
-        try{
-            $pages->remove( array( 'id' => $id ) );
+
+        try {
+            $pages->remove(array('id' => $id));
             $this->flashMessage('Page deleted');
-        }catch( Exception $e ){
+        } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
-        $this->redirect( 'default' );
-    }    
-    
+        $this->redirect('default');
+    }
+
     public function beforeRender()
     {
         parent::beforeRender();
         $this->setLayout('wysiwyg_layout');
     }
-    
-    public function renderEdit( $id )
+
+    public function renderEdit($id)
     {
         $pages = $this->repositories->Page;
 
-        $this->template->page = $page = $pages->find( array( 'id' => $id ) )->fetch();
-	
+        $this->template->page = $page = $pages->find(array('id' => $id))->fetch();
 
-        if( !$page ){
-            $this->flashMessage( 'Requested page was not found' );
-            $this->redirect( 'default' );
+
+        if (!$page) {
+            $this->flashMessage('Requested page was not found');
+            $this->redirect('default');
         }
 
         $arr = $page->toArray();
 
-        $this[ 'pageForm' ]->setDefaults( $arr );
-
+        $this['pageForm']->setDefaults($arr);
     }
 
     public function renderDefault()
     {
-	$pages = $this->repositories->Page;
-	$this->template->pages = $pages->find();
+        $pages = $this->repositories->Page;
+        $this->template->pages = $pages->find();
     }
 
     public function createComponentPageForm($name)
     {
-	$form = new \App\Form($this, $name);
-	$form->getElementPrototype()->class( 'textFormatForm' );
+        $form = new \App\Form($this, $name);
+        $form->getElementPrototype()->class('textFormatForm');
 
         $form->addHidden('id');
-        
-	$form->addText( 'name_webalized', 'Name in URL' );
-        
-	$form->addText( 'name', 'Název' );
-	$form['name']->getControlPrototype()->class( 'ribbon' );
 
-	$form->addTextarea( 'text', 'Text', 60, 30 );
-        $form['text']->getControlPrototype()->class( 'wysiwyg' );
+        $form->addText('name_webalized', 'Name in URL');
 
-        $form->addText( 'template', 'Template' );
-        
-	$form->addSubmit( 'save', 'Save' );
+        $form->addText('name', 'Název');
+        $form['name']->getControlPrototype()->class('ribbon');
 
-	$form->onSuccess[] = array( $this, 'pageSubmit' );
+        $form->addTextarea('text', 'Text', 60, 30);
+        $form['text']->getControlPrototype()->class('wysiwyg');
 
-	return $form;
+        $form->addText('template', 'Template');
+
+        $form->addSubmit('save', 'Save');
+
+        $form->onSuccess[] = array($this, 'pageSubmit');
+
+        return $form;
     }
 
     public function pageSubmit($form)
     {
-	$page = $form->getValues();      
+        $page = $form->getValues();
 
-        if( $page['id'] === '')         
-            $page['id'] = null;        
-        if( $page['name_webalized'] === '' )
-            $page['name_webalized'] = \Nette\Utils\Strings::webalize( $page['name'] );
-        
-	$pages = $this->repositories->Page;
+        if ($page['id'] === '')
+            $page['id'] = null;
+        if ($page['name_webalized'] === '')
+            $page['name_webalized'] = \Nette\Utils\Strings::webalize($page['name']);
 
-	try{
-	    $pages->save( $page, 'id' );
-	    $this->flashMessage( 'Page saved' );
-	}catch( Exception $e ){
-	    $this->flashMessage( 'Article was not saved. Please try again and then contact the administrator' );
-	}
+        $pages = $this->repositories->Page;
 
-	$this->redirect( 'default' );
+        try {
+            $pages->save($page, 'id');
+            $this->flashMessage('Page saved');
+        } catch (Exception $e) {
+            $this->flashMessage('Article was not saved. Please try again and then contact the administrator');
+        }
+
+        $this->redirect('default');
     }
 
 }

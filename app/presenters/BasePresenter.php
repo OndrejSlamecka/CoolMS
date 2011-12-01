@@ -16,23 +16,23 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function createTemplate($class = NULL)
     {
-        $template = parent::createTemplate($class);        
-        $template->registerHelperLoader( array( 'App\Helpers',  'loader' ) );        
+        $template = parent::createTemplate($class);
+        $template->registerHelperLoader(array('App\Helpers', 'loader'));
         return $template;
-    }    
-    
+    }
+
     final public function getRepositories()
     {
         return $this->context->repositoryManager;
-    }    
-    
+    }
+
     public function getTemplatesFolder()
     {
-        $dir = dirname(dirname($this->getReflection()->getFileName()));        
+        $dir = dirname(dirname($this->getReflection()->getFileName()));
         $name = $this->getName();
-        $presenter = substr($name, strrpos(':' . $name, ':'));  
-        
+        $presenter = substr($name, strrpos(':' . $name, ':'));
+
         return "$dir/templates/$presenter";
-    }    
-    
+    }
+
 }

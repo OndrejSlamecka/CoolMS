@@ -10,7 +10,6 @@
 
 namespace App;
 
-
 class Form extends \Nella\Forms\Form
 {
     

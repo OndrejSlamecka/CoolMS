@@ -10,39 +10,38 @@
 
 namespace FrontModule;
 
-
 /**
  * @module(name="Articles")
  */
 class ArticlePresenter extends BasePresenter
 {
-    
+
     /**
      * @view(name="List")
      */
-    public function renderDefault( )
+    public function renderDefault()
     {
         $articles = $this->repositories->Article;
-        $this->template->articles = $articles->find();        
+        $this->template->articles = $articles->find();
     }
-        
+
     public function getDefaultViewPossibleParams()
     {
         return null;
     }
-    
+
     /**
      * @view(name="Detail")
      */
     public function renderDetail($name)
     {
-        $articles = $this->repositories->Article;        
-        $this->template->article = $articles->find(array( 'name_webalized'=>$name ))->fetch();       
+        $articles = $this->repositories->Article;
+        $this->template->article = $articles->find(array('name_webalized' => $name))->fetch();
     }
-        
+
     public function getDetailViewPossibleParams()
     {
         return null;
-    }    
-    
+    }
+
 }
