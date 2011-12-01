@@ -2,7 +2,7 @@
 
 /* Layout */
 
-html{ background: url(../img/bg.jpg); }
+html{ background: url(../img/bg.jpg); overflow-y:scroll; }
 
 body{
     color: #111;
@@ -75,6 +75,10 @@ h2{
 h3{ font-size: 1.45em; margin: 0 0 .5em; text-shadow: 1px 1px 1px #999; }
 
 h4{ font-size: 1.1em; margin: 0 0 .3em; font-weight: bold; }
+
+a{ color: blue; }
+a:hover{ text-decoration: none; }
+a:visited{ color: purple; }
 
 p{ margin: 0 0 1.6em; }
 

@@ -1,4 +1,4 @@
-Notes:
+﻿Notes:
 ======
 * Default login (change ASAP after first login): 
     * Email: admin@example.com
@@ -19,7 +19,7 @@ Major:
     * Admin:Page: Add page previews
     * Write tests
     * Improve default front functions (create archive and paginator for articles, add print style to default theme)
-    * Add possibility to revert removal action
+    * Add possibility to revert removal action to whole administration
     * Improve texts in menu designer form
     * Check security (http://php.vrana.cz/common-mistakes-in-securing-web-applications.php)
 Minor:
