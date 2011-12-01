@@ -13,6 +13,5 @@ namespace App\Entity;
 class Menuitem extends \Nette\Object
 {
     const TYPE_SUBMENU = 'submenu';
-    const TYPE_MODULE = 'modulelink';    
-
+    const TYPE_MODULE = 'modulelink';
 }

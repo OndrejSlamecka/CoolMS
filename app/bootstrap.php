@@ -1,5 +1,4 @@
 <?php
-
 // Set directories
 $params['libsDir'] = $params['appDir'] . '/../libs';
 $params['tempDir'] = $params['appDir'] . '/../temp';
@@ -21,10 +20,10 @@ $config->setupServices();
 $config->setupSession();
 $config->setupRouting();
 
-if( !$container->params['consoleMode'] ){    
-    
-    $config->setupApplication();    
+if (!$container->params['consoleMode']) {
+
+    $config->setupApplication();
 
     // Run the app
-    $container->application->run();    
+    $container->application->run();
 }

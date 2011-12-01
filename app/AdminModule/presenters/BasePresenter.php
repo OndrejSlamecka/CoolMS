@@ -19,32 +19,30 @@ abstract class BasePresenter extends \BasePresenter
 {
 
     public function createTemplate($class = NULL)
-    {        
+    {
         $template = parent::createTemplate($class);
         $template->loggedUser = $this->context->user;
-	$template->themePath = $template->basePath . '/admintheme';
+        $template->themePath = $template->basePath . '/admintheme';
 
         return $template;
     }
-
 
     public function startup()
     {
         parent::startup();
 
         // If user isn't signed in, redirects to AuthenticationPresenter (more restrictions will be solved there)
-        if( ! \Nette\Environment::getUser()->isLoggedIn() ){
-            if( $this->getName() !== 'Admin:Authentication' ){
-                $this->redirect( 'Authentication:login' );
+        if (!\Nette\Environment::getUser()->isLoggedIn()) {
+            if ($this->getName() !== 'Admin:Authentication') {
+                $this->redirect('Authentication:login');
             }
-        }else{
-	    if( $this->getName() === 'Admin:Authentication' && $this->getAction() !== 'logout' ){
-		$this->redirect( 'Dashboard:' );
-	    }
-	}
-
+        } else {
+            if ($this->getName() === 'Admin:Authentication' && $this->getAction() !== 'logout') {
+                $this->redirect('Dashboard:');
+            }
+        }
     }
-    
+
     public function beforeRender()
     {
         parent::beforeRender();

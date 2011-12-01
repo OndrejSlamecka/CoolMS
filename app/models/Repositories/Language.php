@@ -12,10 +12,10 @@ namespace App\Repository;
 
 class Language extends \NDBF\Repository
 {
-    
-    public function fetchPairs($key="code",$val="name")
+
+    public function fetchPairs($key="code", $val="name")
     {
-        return parent::fetchPairs($key,$val);
+        return parent::fetchPairs($key, $val);
     }
 
 }

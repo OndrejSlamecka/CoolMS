@@ -15,18 +15,20 @@ namespace AdminModule;
  */
 class DashboardPresenter extends BasePresenter
 {
+
     public function renderDefault()
-    {    
+    {
         $this->template->nPages = $this->repositories->Page->count();
-                
-        $this->template->nArticles = $this->repositories->Article->count();  
-        $this->template->lastArticle = $this->repositories->Article->find(null,'id DESC',1)->fetch();
-        
+
+        $this->template->nArticles = $this->repositories->Article->count();
+        $this->template->lastArticle = $this->repositories->Article->find(null, 'id DESC', 1)->fetch();
+
         /* New user info message */
         $userinfo = $this->getSession('userinfo');
         $this->template->newUser = $userinfo->newUser;
-        if( $userinfo->newUser ){            
-            unset( $userinfo->newUser );
-        }   
+        if ($userinfo->newUser) {
+            unset($userinfo->newUser);
+        }
     }
+
 }
