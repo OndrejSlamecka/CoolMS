@@ -108,12 +108,16 @@ class Menuitem extends \NDBF\Repository
         $this->recursiveOrderFixer($mis);
     }
 
-    // TODO: Needs rewriting after rewriting orderUpdate... hell
+    /**
+     * Fixes order numbers, e.g. from order [2,3,4] it makes [1,2,3]
+     * @param array Given array has to be SORTED
+     */
     private function recursiveOrderFixer($mis)
     {
         $i = 1;
-        foreach ($mis as $mi) {
-            $this->orderUpdate($mi['id'], $i);
+        $orders = array();
+        foreach ($mis as $id => $mi) {
+            $orders[$id] = $i;
 
             if (isset($mi['children'])) {
                 $this->recursiveOrderFixer($mi['children']);
@@ -121,17 +125,27 @@ class Menuitem extends \NDBF\Repository
 
             $i++;
         }
-    }
-
-    // TODO: Give all pairs and use the (f-word) transaction!!
-    public function orderUpdate($id, $order)
-    {
-        $order = array('order' => $order, 'id' => $id);
-        $this->save($order, 'id');
+        $this->orderUpdate($orders);
     }
 
     /**
-     * Updates menuitems parents
+     * Updates menuitems' order
+     * @param array array( menuitem id => order)
+     */
+    public function orderUpdate($orders)
+    {
+        $this->db->beginTransaction();
+
+        foreach ($orders as $id => $order) {
+            $record = array('order' => $order);
+            $this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
+        }
+
+        $this->db->commit();
+    }
+
+    /**
+     * Updates menuitems' parents
      * @param array array( menuitem id => its parent id)
      */
     public function parentsUpdate($parents)

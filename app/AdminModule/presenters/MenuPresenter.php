@@ -131,6 +131,8 @@ class MenuPresenter extends BasePresenter
     {
         $menu = $this->repositories->Menuitem;
         $this->template->menuitems = $menu->fetchStructured();
+        
+        $menu->fixOrder();
     }
 
     /* MENU DESIGNER CONTROL - STRUCTURE */
@@ -182,11 +184,10 @@ class MenuPresenter extends BasePresenter
         $menuitems = $this->repositories->Menuitem;
 
         try {
-            foreach ($newOrder as $id => $order) {
-                $menuitems->orderUpdate($id, $order);
-            }
 
-            $menuitems->parentsUpdate( $childrenParents );
+            $menuitems->orderUpdate($newOrder);
+
+            $menuitems->parentsUpdate($childrenParents);
 
             $menuitems->cleanCache();
 
