@@ -22,6 +22,7 @@ class Configurator extends \Nette\Configurator
     }
 
     /* INSTANTIATED */
+
     public function __construct($params)
     {
         parent::__construct();
@@ -50,7 +51,7 @@ class Configurator extends \Nette\Configurator
         $this->container->robotLoader;
 
         // Other services
-        $this->container->addService('authenticator', new \AdminModule\Authenticator($this->container));
+        $this->container->addService('authenticator', new \Backend\Authenticator($this->container));
 
         $this->container->addService('presenterTree', new \Kdyby\PresenterTree($this->container));
 
@@ -82,9 +83,9 @@ class Configurator extends \Nette\Configurator
         } else {
             // NOT CONSOLE MODE       
             // Admin module // TODO: Move into separate class?
-            $router[] = new \Nette\Application\Routers\Route('admin/<presenter>/<action>[/<id>]', array(
-                        'module' => 'Admin',
-                        'presenter' => 'Dashboard',
+            $router[] = new \Nette\Application\Routers\Route('admin/<module>/<action>[/<id>]', array(
+                        'module' => 'Dashboard',
+                        'presenter' => 'Backend',
                         'action' => 'default'
                     ));
 
