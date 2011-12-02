@@ -22,7 +22,7 @@ class Menuitem extends \NDBF\Repository
 
     public function fetchStructured()
     {
-        $mis = $this->find(null, "order");
+        $mis = $this->find(null, '`order` ASC');
         $structuredMis = array();
 
         // I got to create new array, because when tried to modify the original one 
@@ -38,24 +38,30 @@ class Menuitem extends \NDBF\Repository
             }
 
             if ($mi['parent'] === null) {
-                // Is top level item
-                // Copy into final menuitems
-                $structuredMis[$mi['id']] = $mis[$mi['id']]->toArray();
-
-                // Possible parent, create array for children
-                if (!isset($structuredMis[$mi['id']]['children']))
+                // Is a top level item
+                // If wasn't already created (in following section), copy into final menuitems
+                if (!isset($structuredMis[$mi['id']])) {
+                    $structuredMis[$mi['id']] = $mis[$mi['id']]->toArray();
                     $structuredMis[$mi['id']]['children'] = array();
-            }else {
+                }
+            } else {
                 // Is child
-                // If its parent wasn't initialized yet. This could happen only when child was created BEFORE parent (only possible if it was moved)
+                // If its parent wasn't initialized yet do:
                 if (!isset($structuredMis[$mi['parent']]['children'])) {
                     $structuredMis[$mi['parent']] = $mis[$mi['parent']]->toArray();
                     $structuredMis[$mi['parent']]['children'] = array();
                 }
+
                 $structuredMis[$mi['parent']]['children'][$mi['id']] = $mi;
+
                 unset($mis[$mi['id']]);
             }
         }
+
+        // Submenus can be written in array earlier due to two lines following after "Possible parent, create array for children".
+        uasort($structuredMis, function($itemA, $itemB) {
+                    return ( $itemA['order'] < $itemB['order'] ? -1 : 1 );
+                });
 
         return $structuredMis;
     }
@@ -124,11 +130,20 @@ class Menuitem extends \NDBF\Repository
         $this->save($order, 'id');
     }
 
-    // TODO: Give all pairs and use the (f-word) transaction!!
-    public function parentsUpdate($id, $parents)
+    /**
+     * Updates menuitems parents
+     * @param array array( menuitem id => its parent id)
+     */
+    public function parentsUpdate($parents)
     {
-        $parents = array('parent' => $parents, 'id' => $id);
-        $this->save($parents, 'id');
+        $this->db->beginTransaction();
+
+        foreach ($parents as $id => $parent) {
+            $record = array('parent' => $parent);
+            $this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
+        }
+
+        $this->db->commit();
     }
 
     /**

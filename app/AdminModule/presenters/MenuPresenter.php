@@ -186,9 +186,7 @@ class MenuPresenter extends BasePresenter
                 $menuitems->orderUpdate($id, $order);
             }
 
-            foreach ($childrenParents as $id => $parent) {
-                $menuitems->parentsUpdate($id, $parent);
-            }
+            $menuitems->parentsUpdate( $childrenParents );
 
             $menuitems->cleanCache();
 
