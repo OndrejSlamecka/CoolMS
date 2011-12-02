@@ -27,9 +27,9 @@ CREATE TABLE `menuitem` (
   `parent` smallint(6) DEFAULT NULL,
   `type` enum('modulelink','submenu') COLLATE utf8_bin NOT NULL,
   `order` smallint(6) NOT NULL,
-  `module_name` varchar(128) COLLATE utf8_bin NOT NULL,
-  `module_view` varchar(128) COLLATE utf8_bin NOT NULL,
-  `module_view_param` varchar(256) COLLATE utf8_bin NOT NULL,
+  `module_name` varchar(128) COLLATE utf8_bin NULL,
+  `module_view` varchar(128) COLLATE utf8_bin NULL,
+  `module_view_param` varchar(256) COLLATE utf8_bin NULL,
   `strict_link_comparison` tinyint(1) DEFAULT '1',
   `name` varchar(256) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
