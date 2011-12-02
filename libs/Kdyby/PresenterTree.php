@@ -222,12 +222,12 @@ class PresenterTree extends Nette\Object
 	 * @return array
 	 */
 	public function getPresenters($nettePath = NULL, $all = FALSE)
-	{
-		$nettePath = trim($nettePath, ':');
-
-		if ($all === FALSE && $nettePath === NULL) {
-			return isset($this->cache['presenters']['all'][$nettePath]) ? $this->cache['presenters']['all'][$nettePath] : NULL;
+	{       
+		if ($all === FALSE && $nettePath === NULL) {                        
+			return isset($this->cache['presenters']['all']['']) ? $this->cache['presenters']['all'][''] : NULL;
 		}
+                
+                $nettePath = trim($nettePath, ':');
 
 		$tree = $this->cache['presenters']['byModule'];
 		foreach (Strings::split($nettePath, '~:~') as $step) {
