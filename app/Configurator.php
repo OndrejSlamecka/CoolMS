@@ -13,7 +13,7 @@ namespace App;
 class Configurator extends \Nette\Configurator
 {
 
-    /** STATIC - container independent **/
+    /** STATIC - container independent * */
     public static function setupDebugger()
     {
         \Nette\Diagnostics\Debugger::$logDirectory = __DIR__ . '/../log';
@@ -21,7 +21,7 @@ class Configurator extends \Nette\Configurator
         \Nette\Diagnostics\Debugger::enable();
     }
 
-    /** INSTANTIATED **/
+    /* INSTANTIATED */
     public function __construct($params)
     {
         parent::__construct();
@@ -33,10 +33,9 @@ class Configurator extends \Nette\Configurator
         return $this->loadConfig($this->container->params['appDir'] . '/config.neon');
     }
 
-    // Merge setupRobotloader with setupServices?
-    public function setupRobotloader()
+    public function setupServices()
     {
-        $container = $this->container;
+        // RobotLoader
         $this->container->addService(
                 'robotLoader', function( $container ) {
                     return \Nette\Configurator::createServiceRobotLoader(
@@ -49,10 +48,8 @@ class Configurator extends \Nette\Configurator
         ); // addService 
         // Run
         $this->container->robotLoader;
-    }
 
-    public function setupServices()
-    {
+        // Other services
         $this->container->addService('authenticator', new \AdminModule\Authenticator($this->container));
 
         $this->container->addService('presenterTree', new \Kdyby\PresenterTree($this->container));

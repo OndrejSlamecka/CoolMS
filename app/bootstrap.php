@@ -15,7 +15,6 @@ $config = new App\Configurator($params);
 
 $container = $config->setupContainer();
 
-$config->setupRobotloader();
 $config->setupServices();
 $config->setupSession();
 $config->setupRouting();
