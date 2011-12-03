@@ -10,7 +10,7 @@ CREATE TABLE `article` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `name_webalized` varchar(255) COLLATE utf8_bin NOT NULL,
-  `user_id` smallint(6) NOT NULL,
+  `user_id` smallint(6) NULL,
   `date` datetime NOT NULL,
   `text` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
