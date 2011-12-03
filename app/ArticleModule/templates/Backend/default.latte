@@ -38,7 +38,6 @@
 {/if}
 
 {if $autosave}
-    <h2>Backup of the last edited item</h2>
-    <p><a href="{link :Article:Frontend:detail, name => $autosave['name_webalized']}">{$autosave['name']}</a>
-        <a href="{link edit id => 0, autosave => true}" class="edit">Edit</a></td></p>
+    <h2>Backup of the last edited article</h2>
+    <p>{$autosave['name']} <a href="{link edit id => 0, autosave => true}" class="edit">Edit</a></p>
 {/if}

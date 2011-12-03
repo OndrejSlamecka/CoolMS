@@ -37,3 +37,8 @@
   </table>
 
 {/if}
+
+{if $autosave}
+    <h2>Backup of the last edited page</h2>
+    <p>{$autosave['name']} <a href="{link edit id => 0, autosave => true}" class="edit">Edit</a></p>
+{/if}

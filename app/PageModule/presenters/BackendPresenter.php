@@ -68,33 +68,39 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $this->setLayout($this->context->params['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
     }
 
-    public function renderEdit($id)
+    public function renderEdit($id, $autosave=false)
     {
         $pages = $this->repositories->Page;
-
-        $this->template->page = $page = $pages->find(array('id' => $id))->fetch();
-
+        
+        if ($autosave)
+            $page = $this->sessionSection->autosave;
+        else
+            $page = $pages->find(array('id' => $id))->fetch();
+        
+        $this->template->page = $page;
 
         if (!$page) {
             $this->flashMessage('Requested page was not found');
             $this->redirect('default');
         }
 
-        $arr = $page->toArray();
+        if( $page instanceof \Nette\Database\Table\Selection )
+            $page = $page->toArray();
 
-        $this['pageForm']->setDefaults($arr);
+        $this['pageForm']->setDefaults($page);
     }
 
     public function renderDefault()
     {
         $pages = $this->repositories->Page;
         $this->template->pages = $pages->find();
+        $this->template->autosave = $this->sessionSection->autosave;
     }
 
     public function createComponentPageForm($name)
     {
         $form = new \App\Form($this, $name);
-        $form->getElementPrototype()->class('textFormatForm');
+        $form->getElementPrototype()->class('textFormatForm continualsave');
 
         $form->addHidden('id');
 
@@ -127,7 +133,13 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $pages = $this->repositories->Page;
 
         try {
-            $pages->save($page, 'id');
+            if ($this->isAjax()) {
+                $this->sessionSection->autosave = $page;
+            } else {
+                unset($this->sessionSection->autosave);
+                $pages->save($page, 'id');
+            }
+            
             $this->flashMessage('Page saved');
         } catch (Exception $e) {
             $this->flashMessage('Article was not saved. Please try again and then contact the administrator');
