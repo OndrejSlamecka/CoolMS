@@ -33,11 +33,33 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 
         try {
             $articles->remove(array('id' => $id));
-            $this->flashMessage('Article deleted');
+
+            // Save for reverse
+            $this->sessionSection->reversableItem = $article->toArray();
+
+            $this->flashMessage('Article deleted &ndash; <a href="'.$this->link( 'reverse' ).'" >Undo</a>');
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
         $this->redirect('default');
+    }
+
+    public function actionReverse()
+    {
+        $article = $this->sessionSection->reversableItem;
+        $articles = $this->repositories->Article;        
+
+        try {
+            $articles->save($article, 'id');
+
+            $this->flashMessage('Article "' . htmlspecialchars($article['name']) . '" was restored'); // Not sure if htmlspecialchars is needed, check later
+
+            unset($this->sessionSection->reversableItem);
+        } catch (Exception $e) {
+            $this->flashMessage("I am sorry, but the article could not be restored");
+        }
+
+        $this->redirect("default");
     }
 
     public function beforeRender()

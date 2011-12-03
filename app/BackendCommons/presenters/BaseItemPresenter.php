@@ -18,12 +18,13 @@ namespace Backend;
 abstract class BaseItemPresenter extends BasePresenter
 {
 
-    private $session = null;
+    /** @var Nette\Http\Session */
+    protected $sessionSection = null;
 
     public function startup()
     {
         parent::startup();
-        $this->session = \Nette\Environment::getSession($this->getName() . 'PresenterStorage');
+        $this->sessionSection = $this->getSession($this->getName() . 'PresenterStorage');
     }
 
 }
