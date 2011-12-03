@@ -50,10 +50,10 @@
 
 	<ul id="menu">
             {foreach $modules as $module => $name}
-                <li><a href="{link ':'.$module.":Backend:default"}" n:class="$presenter->isLinkCurrent($module.':Backend:*') ? active">{$name}</a></li>
+                <li><a href="{link ':'.$module.":Backend:default"}" n:class="$presenter->isLinkCurrent(':'.$module.':Backend:*') ? active">{$name}</a></li>
             {/foreach}
-	    <li><a href="{link :Menu:Backend:default}" n:class="$presenter->isLinkCurrent(':User:Menu:*') ? active">Menu designer</a></li>
-	    <li><a href="{link :File:Backend:default}" n:class="$presenter->isLinkCurrent(':User:File:*') ? active">File manager</a></li>
+	    <li><a href="{link :Menu:Backend:default}" n:class="$presenter->isLinkCurrent(':Menu:Backend:*') ? active">Menu designer</a></li>
+	    <li><a href="{link :File:Backend:default}" n:class="$presenter->isLinkCurrent(':File:Backend:*') ? active">File manager</a></li>
 	    <li><a href="{link :User:Backend:default}" n:class="$presenter->isLinkCurrent(':User:Backend:*') ? active">Users</a></li>
 	</ul> <!-- #menu -->
 
