@@ -3,14 +3,9 @@
 * Default login (change ASAP after first login): 
     * Email: admin@example.com
     * Passw: admin
-* AuthenticationPresenter and UserPresenter both works with User entity, 
-  but Authentication works with unauthorized users,
-  while UserPresenter is responsible for work with users' profiles.
-* Modules are basically presenters with proper annotation
-
-Known issues:
-=============
-
+* AuthenticationModule and UserModule both works with User entity, 
+  but AuthenticationModule works with unauthorized users,
+  while UserModule is responsible for work with users' profiles.
 
 TODO:
 =====

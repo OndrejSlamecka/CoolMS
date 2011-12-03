@@ -31,6 +31,7 @@ html.gecko hr{ height: 2px; }
   left: -9999px;
 }
 
+.notdisplay{ display: none; }
 
 /* Floating objects */
 .flleft{float:left;}
@@ -41,6 +42,13 @@ div.clear hr{ display: none; }
                                                                  
 .nopad{
     padding: 0;    
+}
+
+/* Messages */
+.errorMsg{
+    border: 1px solid #AAA;
+    background: #CCC;
+    padding: .5em;    
 }
 
 /* Text & Typography

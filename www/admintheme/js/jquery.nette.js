@@ -46,7 +46,7 @@ jQuery.ajaxSetup({
  */
 
 jQuery.fn.extend({
-	ajaxSubmit: function (callback) {
+	ajaxSubmit: function ( options ) {
 		var form;
 		var sendValues = {};
 
@@ -70,7 +70,7 @@ jQuery.fn.extend({
 
 		// get values
 		var values = form.serializeArray();
-
+                
 		for (var i = 0; i < values.length; i++) {
 			var name = values[i].name;
 
@@ -96,9 +96,7 @@ jQuery.fn.extend({
 			type: form.attr("method") || "get"
 		};
 
-		if (callback) {
-			ajaxOptions.success = callback;
-		}
+                ajaxOptions = $.extend(ajaxOptions, options);            
                 
 		return jQuery.ajax(ajaxOptions);
 	}

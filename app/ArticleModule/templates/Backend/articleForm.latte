@@ -1,4 +1,4 @@
-    {form articleForm begin}
+    {form articleForm}
 
     <div id="inner-content">
 
@@ -6,19 +6,21 @@
 
             {control articleForm errors}
 
-                <table>
+            <table>
 
-                    <tr class="required">
-                        <th class="hidden">{label name /}</th>
-                        <td>{input name}</td>
-                    </tr>
+                <tr class="required">
+                    <th class="hidden">{label name /}</th>
+                    <td>{input name}</td>
+                </tr>
 
-                    <tr>
-                        <th class="hidden">{label text /}</th>
-                        <td>{input text}</td>
-                    </tr>
+                <tr>
+                    <th class="hidden">{label text /}</th>
+                    <td>{input text}</td>
+                </tr>
 
-                </table>
+            </table>
+        
+        <p class="notdisplay errorMsg"><strong>Autosave backup is not working</strong>. You should save your work to be sure.</p>
 
 
     </div> <!-- #inner-content -->
@@ -44,4 +46,5 @@
 
 
     <div class="clear"><hr /></div>
+    {input id} {* Fixes https://github.com/nette/nette/issues/400 TODO: Remove after issues is closed *}
     {/form articleForm}

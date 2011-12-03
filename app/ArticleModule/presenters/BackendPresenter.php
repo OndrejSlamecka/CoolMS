@@ -68,33 +68,39 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $this->setLayout($this->context->params['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
     }
 
-    public function renderEdit($id)
+    public function renderEdit($id, $autosave=false)
     {
         $articles = $this->repositories->Article;
 
-        $this->template->article = $article = $articles->find(array('id' => $id))->fetch();
-
+        if ($autosave)
+            $article = $this->sessionSection->autosave;
+        else
+            $article = $articles->find(array('id' => $id))->fetch();
+        
+        $this->template->article = $article;
 
         if (!$article) {
             $this->flashMessage('Requested article was not found');
             $this->redirect('default');
         }
 
-        $arr = $article->toArray();
+        if( $article instanceof \Nette\Database\Table\Selection )
+            $article = $article->toArray();
 
-        $this['articleForm']->setDefaults($arr);
+        $this['articleForm']->setDefaults($article);
     }
 
     public function renderDefault()
     {
         $article = $this->repositories->Article;
         $this->template->articles = $article->find();
+        $this->template->autosave = $this->sessionSection->autosave;
     }
 
     public function createComponentArticleForm($name)
     {
         $form = new \App\Form($this, $name);
-        $form->getElementPrototype()->class('textFormatForm');
+        $form->getElementPrototype()->class('textFormatForm continualsave');
 
         $form->addHidden('id');
 
@@ -127,10 +133,22 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $articles = $this->repositories->Article;
 
         try {
-            $articles->save($article, 'id');
+
+            if ($this->isAjax()) {
+                $this->sessionSection->autosave = $article;
+            } else {
+                unset($this->sessionSection->autosave);
+                $articles->save($article, 'id');
+            }
+
             $this->flashMessage('Article saved.');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->flashMessage('Article was not saved. Please try again and then contact the administrator');
+
+            if ($this->isAjax()) {
+                $this->payload->error = TRUE;
+                $this->terminate();
+            }
         }
 
         $this->redirect('default');
