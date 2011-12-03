@@ -8,7 +8,7 @@
  * 
  */
 
-namespace FrontModule;
+namespace Frontend;
 
 use Nette\Application\Routers\Route;
 
@@ -44,12 +44,16 @@ class RouteManager extends \Nette\Object
         }
     }
 
+    /**
+     *
+     * @param Nette\Application\Routers\RouteList $router 
+     */
     public function addRoutes(&$router)
     {
         $names = $this->getTranslationTable();
         $names = array_flip($names['names']);
 
-        /**/
+        /* FRONT ROUTES ARE EDITED HERE */
 
         // Index
         $router[] = new Route('', $this->getIndexMetadata());
@@ -76,13 +80,20 @@ class RouteManager extends \Nette\Object
 
     /* METHODS */
 
-    public function formMetadata($presenter, $action = null, $args = null)
+    /**
+     * Forms metadata into form accepted by Nette\Application\Routers\Route. Adds translation tables
+     * @param string $module
+     * @param string $action
+     * @param array $args
+     * @return array 
+     */
+    public function formMetadata($module, $action = null, $args = null)
     {
         $transl_table = $this->getTranslationTable();
 
         $metadata = array('presenter' => 'Frontend',
             'module' => array(
-                Route::VALUE => $presenter,
+                Route::VALUE => $module,
                 Route::FILTER_TABLE => $transl_table['names'],
             )
         );
@@ -90,11 +101,9 @@ class RouteManager extends \Nette\Object
         if ($action !== null)
             $metadata += array('action' => array(
                     Route::VALUE => $action,
-                    Route::FILTER_TABLE => $transl_table['methods'][$presenter]
+                    Route::FILTER_TABLE => $transl_table['methods'][$module]
                 )
             );
-
-        //var_dump( $transl_table['methods'][$presenter] );
 
         if (is_array($args))
             $metadata += $args;
@@ -125,14 +134,7 @@ class RouteManager extends \Nette\Object
         $this->getCache()->save('translationTable', $names_filters);
     }
 
-    /*     * ******* */
-
-    // TODO: Remove, obsolete?
-    public function getIndexModule()
-    {
-        $index = $this->menu->getIndex();
-        return $index['module_name'];
-    }
+    /* Index data */
 
     public function getIndexViewParams()
     {

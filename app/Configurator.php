@@ -27,11 +27,7 @@ class Configurator extends \Nette\Configurator
     {
         parent::__construct();
         $this->container->params += $params;
-    }
-
-    public function setupContainer()
-    {
-        return $this->loadConfig($this->container->params['appDir'] . '/config.neon');
+        $this->loadConfig($this->container->params['appDir'] . '/config.neon');
     }
 
     public function setupServices()
@@ -89,9 +85,9 @@ class Configurator extends \Nette\Configurator
                         'action' => 'default'
                     ));
 
-            // Front module
-            $fm_routemanager = new \FrontModule\RouteManager($this->container);
-            $fm_routemanager->addRoutes($router);
+            // Frontend
+            $frontRoutemanager = new \Frontend\RouteManager($this->container);
+            $frontRoutemanager->addRoutes($router);
         }
     }
 

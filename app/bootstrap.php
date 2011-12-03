@@ -13,11 +13,11 @@ App\Configurator::setupDebugger();
 // Configuration
 $config = new App\Configurator($params);
 
-$container = $config->setupContainer();
-
 $config->setupServices();
 $config->setupSession();
 $config->setupRouting();
+
+$container = $config->getContainer();
 
 if (!$container->params['consoleMode']) {
 

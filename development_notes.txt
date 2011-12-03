@@ -30,10 +30,6 @@ Minor:
     * Create webalized name dynamically (using AJAX) on page creation form instead of hint "Empty fills itself"
     * Improve page creation form (some design cleanup)
 
-    * Refactor Configurator
-    * Refactor Front\RouteManager
-    * Rewrite Admin:Menu:menudesignerSubmit and models/Repositories/Menuitem.php (use transactions probably)   
-
 Far future:
     * Add support for multiple languages
     * Add alternative menu designer with support for more "depth" (and probably without this jquery based tool)                
