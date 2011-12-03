@@ -30,14 +30,14 @@ abstract class BasePresenter extends \BasePresenter
     public function startup()
     {
         parent::startup();
-
+        
         // If user isn't signed in, redirects to AuthenticationPresenter (more restrictions will be solved there)
-        if (!\Nette\Environment::getUser()->isLoggedIn()) {
-            if ($this->getName() !== ':Authentication:Backend') {
+        if (! $this->getUser()->isLoggedIn() ) {
+            if ($this->getName() !== 'Authentication:Backend') {
                 $this->redirect(':Authentication:Backend:login');
             }
         } else {
-            if ($this->getName() === ':Authentication:Backend' && $this->getAction() !== 'logout') {
+            if ($this->getName() === 'Authentication:Backend' && $this->getAction() !== 'logout') {
                 $this->redirect(':Dashboard:Backend:');
             }
         }

@@ -21,6 +21,12 @@ use Backend\Authenticator;
  */
 class BackendPresenter extends \Backend\BasePresenter
 {
+    public function startup()
+    {
+        parent::startup();
+        $this->setLayout( 'layout' ); // This - default layout - was overriden in BasePresenter
+    }
+    
     /* ******************************* LOGIN ******************************** */
 
     /**
@@ -52,7 +58,7 @@ class BackendPresenter extends \Backend\BasePresenter
             // Try to authenticate
             $this->getUser()->login($form['email']->getValue(), $form['password']->getValue());
 
-            $this->redirect('Dashboard:');
+            $this->redirect(':Dashboard:Backend:');
         } catch (\Nette\Security\AuthenticationException $e) {
             $form->addError($e->getMessage());
         }
@@ -60,7 +66,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function renderLogin()
     {
-        //dump( Authenticator::hashPassword( 'email', 'password' ) ); // Printing for development purposes
+        //dump( Authenticator::hashPassword( 'email', 'password' ) ); // Printing for development purposes        
     }
 
     /** ******************************* LOGOUT ******************************** */
@@ -68,7 +74,7 @@ class BackendPresenter extends \Backend\BasePresenter
     public function actionLogout()
     {
         $this->getUser()->logout(TRUE);
-        $this->redirect('Authentication:login');
+        $this->redirect(':Authentication:Backend:login');
     }
 
     /** ************************ REQUEST NEW PASSWORD ************************* */
@@ -78,8 +84,8 @@ class BackendPresenter extends \Backend\BasePresenter
         $form = new \App\Form($this, $name);
         $form->getElementPrototype()->class('ajax');
 
-        $form->addText('email', 'Email')->addRule(Form::EMAIL, 'Musíte zadat email.');
-        $form->addSubmit('request', 'Poslat nové heslo');
+        $form->addText('email', 'Email')->addRule(Form::EMAIL, 'You have to enter email');
+        $form->addSubmit('request', 'Send new password');
 
         $form->onSuccess[] = array($this, 'requestNewPasswordFormSubmit');
         return $form;
@@ -126,7 +132,7 @@ class BackendPresenter extends \Backend\BasePresenter
             $host = $this->getHttpRequest()->getUrl()->getHost();
 
             $mail = new \Nette\Mail\Message();
-            $mail->setFrom("Obnova hesla <cms@{$host}>")
+            $mail->setFrom("Password renewal <cms@{$host}>")
                     ->addTo($user['email'])
                     ->setHtmlBody($template)
                     ->send();

@@ -36,7 +36,7 @@
 	<h1>Administration</h1>
 
 	{if $loggedUser->isLoggedIn()}
-	    <div id="userinfo" class="actionbar">{$loggedUser->getIdentity()->data['email']} | <a href="{link Authentication:logout}">Log out</a></div>
+	    <div id="userinfo" class="actionbar">{$loggedUser->getIdentity()->data['email']} | <a href="{link :Authentication:Backend:logout}">Log out</a></div>
 	{/if}
 
 	<div class="actionbar">
