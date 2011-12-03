@@ -17,7 +17,7 @@ use Nette\Forms\Form;
  *
  * @author Ondrej Slamecka
  */
-class BackendPresenter extends \Backend\BasePresenter
+class BackendPresenter extends \Backend\BaseItemPresenter
 {
 
     public function actionDelete($id)
@@ -33,11 +33,33 @@ class BackendPresenter extends \Backend\BasePresenter
 
         try {
             $pages->remove(array('id' => $id));
-            $this->flashMessage('Page deleted');
+
+            // Save for reverse
+            $this->sessionSection->reversableItem = $page->toArray();
+
+            $this->flashMessage('Page deleted &ndash; <a href="' . $this->link('reverse') . '" >Undo</a>');
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
         $this->redirect('default');
+    }
+
+    public function actionReverse()
+    {
+        $page = $this->sessionSection->reversableItem;
+        $pages = $this->repositories->Page;
+
+        try {
+            $pages->save($page, 'id');
+
+            $this->flashMessage('Page "' . htmlspecialchars($page['name']) . '" was restored'); // Not sure if htmlspecialchars is needed, check later
+
+            unset($this->sessionSection->reversableItem);
+        } catch (Exception $e) {
+            $this->flashMessage("I am sorry, but the page could not be restored");
+        }
+
+        $this->redirect("default");
     }
 
     public function beforeRender()

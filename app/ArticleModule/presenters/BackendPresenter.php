@@ -37,7 +37,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             // Save for reverse
             $this->sessionSection->reversableItem = $article->toArray();
 
-            $this->flashMessage('Article deleted &ndash; <a href="'.$this->link( 'reverse' ).'" >Undo</a>');
+            $this->flashMessage('Article deleted &ndash; <a href="' . $this->link('reverse') . '" >Undo</a>');
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
@@ -47,7 +47,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function actionReverse()
     {
         $article = $this->sessionSection->reversableItem;
-        $articles = $this->repositories->Article;        
+        $articles = $this->repositories->Article;
 
         try {
             $articles->save($article, 'id');

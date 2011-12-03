@@ -30,9 +30,9 @@ abstract class BasePresenter extends \BasePresenter
     public function startup()
     {
         parent::startup();
-        
+
         // If user isn't signed in, redirects to AuthenticationPresenter (more restrictions will be solved there)
-        if (! $this->getUser()->isLoggedIn() ) {
+        if (!$this->getUser()->isLoggedIn()) {
             if ($this->getName() !== 'Authentication:Backend') {
                 $this->redirect(':Authentication:Backend:login');
             }
