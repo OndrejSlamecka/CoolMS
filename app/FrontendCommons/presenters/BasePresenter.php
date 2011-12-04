@@ -64,7 +64,7 @@ abstract class BasePresenter extends \BasePresenter
         if ($mi['strict_link_comparison'])
             $this->menulink($mi);
         else
-            $this->link($mi['module_name'] . ":*");
+            $this->link(':'.$mi['module_name'] . ":Frontend:*");
 
         return $this->getPresenter()->getLastCreatedRequestFlag('current');
     }

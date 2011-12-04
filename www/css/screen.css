@@ -44,6 +44,12 @@ body{
     text-decoration: none; 
 }
 
+
+    #menu li#nav-active a{
+        font-weight: bold;
+    }
+
+
 #menu a:hover{
     color: #000;
     background-color: #F7F7F7;
