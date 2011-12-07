@@ -279,7 +279,12 @@ class BackendPresenter extends \Backend\BasePresenter
         /**/
         $form->addSubmit('save', $labels['save']);
 
-        $form->setDefaults(array('type' => $this->template->menuitemtype, 'module_name' => $module->chosen, 'module_view' => $module->chosenView));
+        $form->setDefaults(array(
+            'type' => $this->template->menuitemtype,
+            'module_name' => $module->chosen,
+            'module_view' => $module->chosenView,
+            'strict_link_comparison' => true
+        ));
 
         $form->onSuccess[] = array($this, 'menuitemSubmit');
 
