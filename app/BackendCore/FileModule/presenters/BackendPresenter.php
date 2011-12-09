@@ -221,7 +221,12 @@ class BackendPresenter extends \Backend\BasePresenter
             $file->move($filepath, $filename);
         }
 
-        $this->redirect('default', array('path' => $path));
+        if ($this->isAjax()) {
+            // $this->invalidateControl('flash'); // Uncomment if you want to show some flash messages
+            $this->invalidateControl('FileList');
+        } else {
+            $this->redirect('default', array('path' => $path));
+        }
     }
 
     public function createComponentFolderCreationForm($name)

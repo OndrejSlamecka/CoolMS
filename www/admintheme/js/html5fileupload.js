@@ -19,6 +19,7 @@ $(document).ready(function(){
             value = "100%";
             $statusBar.width( value );
             $statusBar.text( value );
+            jQuery.nette.success( JSON.parse(responseText) );
         }
     });     
 });        
