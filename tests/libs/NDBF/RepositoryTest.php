@@ -1,6 +1,6 @@
 <?php
 
-// TODO: Add dependancies
+// TODO: Add dependencies
 class RepositoryTest extends PHPUnit_Framework_TestCase
 {  
     private $instance;

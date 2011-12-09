@@ -40,10 +40,10 @@ abstract class BasePresenter extends \BasePresenter
         $menu = $this->repositories->Menuitem;
         $this->template->topMenu = $menu->find(array('parent' => null,
             'type != ?' => \App\Entity\Menuitem::TYPE_SUBMENU,)
-                , '`order` ASC');
+                , '`order` ASC');        
     }
 
-    /*     * ******************************* MENU ********************************* */
+    /* ******************************* MENU ********************************* */
 
     public function menulink($mi)
     {

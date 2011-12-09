@@ -102,7 +102,7 @@ class Menuitem extends \NDBF\Repository
     /**
      * Orders all menuitems
      */
-    public function fixOrder()
+    private function fixOrder()
     {
         $mis = $this->fetchStructured();
         $this->recursiveOrderFixer($mis);
