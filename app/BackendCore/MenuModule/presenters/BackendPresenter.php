@@ -131,8 +131,6 @@ class BackendPresenter extends \Backend\BasePresenter
     {
         $menu = $this->repositories->Menuitem;
         $this->template->menuitems = $menu->fetchStructured();
-
-        $menu->fixOrder();
     }
 
     /* MENU DESIGNER CONTROL - STRUCTURE */

@@ -7,6 +7,7 @@
  * License within file license.txt in the root folder.
  * 
  */
+
 class ModuleManagerTest extends PHPUnit_Framework_TestCase
 {
 
@@ -20,7 +21,7 @@ class ModuleManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * THIS TEST IS ONLY FOR DEFAULT INSTALLATION (else it would be too hard to write)
+     * THIS TEST IS ONLY FOR DEFAULT INSTALLATION (else it would be too much mocking... todo in future)
      */
     public function testGetLinkableModules()
     {
