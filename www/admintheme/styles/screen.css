@@ -352,7 +352,7 @@ h3 input[type="text"], h4 input[type="text"]{
  * ==============
 -----------------*/  
 html{
-  height:101%; /* Force scrollbars 100% of the time */
+    overflow-y:scroll; /* Force scrollbars 100% of the time */
 }
 
 body{
