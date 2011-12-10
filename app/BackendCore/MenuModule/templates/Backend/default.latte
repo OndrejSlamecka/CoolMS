@@ -16,7 +16,7 @@
 	<li id="mi-{$tmi['id']}">
 	    <div class="tmi-handler">
 		<h3>  
-                    {if $tmi['type'] === \App\Entity\Menuitem::TYPE_SUBMENU}
+                    {if $tmi['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
                         <img src="{$themePath}/icons/table_link.png" alt="Submenu" title="Submenu" >                  
                     {else}
                         {*<a href="{link :Front:".$tmi['module_name'].":".$tmi['module_view']."}">*}
@@ -29,7 +29,7 @@
 		</h3>
                 
                 <div class="menuitemOptions">
-                    {if $tmi['type'] !== \App\Entity\Menuitem::TYPE_SUBMENU}
+                    {if $tmi['type'] !== \Application\Entity\Menuitem::TYPE_SUBMENU}
                     <table> 
                         <tr>
                             <td>{$tmi['module_name_verbalname']} &rarr;&nbsp;</td>
@@ -43,7 +43,7 @@
                     </span>                                       
                 </div>
 	    </div>
-	    {if $tmi['type'] === \App\Entity\Menuitem::TYPE_SUBMENU}
+	    {if $tmi['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
 		<ul>
 		{if count($tmi['children'])}
 		{foreach $tmi['children'] as $mi}

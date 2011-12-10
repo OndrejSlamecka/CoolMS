@@ -8,7 +8,7 @@
  * 
  */
 
-namespace App;
+namespace Application;
 
 use \Nette\Utils\Strings;
 

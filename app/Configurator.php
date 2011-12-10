@@ -8,7 +8,7 @@
  * 
  */
 
-namespace App;
+namespace Application;
 
 class Configurator extends \Nette\Configurator
 {

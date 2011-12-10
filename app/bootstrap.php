@@ -8,10 +8,10 @@ require $params['libsDir'] . '/Nette/loader.php';
 require $params['appDir'] . '/Configurator.php';
 
 // Debugging
-App\Configurator::setupDebugger();
+Application\Configurator::setupDebugger();
 
 // Configuration
-$config = new App\Configurator($params);
+$config = new Application\Configurator($params);
 
 $config->setupServices();
 $config->setupSession();

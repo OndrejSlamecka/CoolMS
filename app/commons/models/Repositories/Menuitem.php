@@ -8,7 +8,7 @@
  * 
  */
 
-namespace App\Repository;
+namespace Application\Repository;
 
 use \Nette\Caching\Cache;
 
@@ -32,7 +32,7 @@ class Menuitem extends \NDBF\Repository
 
         foreach ($mis as $mi) {
 
-            if ($mi['type'] === \App\Entity\Menuitem::TYPE_MODULE) {
+            if ($mi['type'] === \Application\Entity\Menuitem::TYPE_MODULE) {
                 $mi['module_name_verbalname'] = $modulesNames[$mi['module_name']]['name'];
                 $mi['module_view_verbalname'] = $modulesNames[$mi['module_name']]['methods'][$mi['module_view']];
             }
@@ -68,7 +68,7 @@ class Menuitem extends \NDBF\Repository
 
     public function fetchSubmenusPairs()
     {
-        return $this->find(array('type' => \App\Entity\Menuitem::TYPE_SUBMENU))->fetchPairs('id', 'name');
+        return $this->find(array('type' => \Application\Entity\Menuitem::TYPE_SUBMENU))->fetchPairs('id', 'name');
     }
 
     public function save(&$mi, $table_id = 'id')
@@ -93,7 +93,7 @@ class Menuitem extends \NDBF\Repository
         if ($index === null) {
             $index = $this->find(array('parent' => null, 'order' => 1))->fetch();
             $index = $index->toArray();
-            $this->getCache()->save('index', $index, array(Cache::TAGS => array('AppFrontMenu')));
+            $this->getCache()->save('index', $index, array(Cache::TAGS => array('ApplicationFrontMenu')));
         }
 
         return $index;
@@ -179,14 +179,14 @@ class Menuitem extends \NDBF\Repository
     private function getCache()
     {
         if ($this->cache === null)
-            $this->cache = new Cache($this->container->cacheStorage, 'App.Front.Menu');
+            $this->cache = new Cache($this->container->cacheStorage, 'Application.Front.Menu');
 
         return $this->cache;
     }
 
     public function cleanCache()
     {
-        $this->getCache()->clean(array(Cache::TAGS => array('AppFrontMenu')));
+        $this->getCache()->clean(array(Cache::TAGS => array('ApplicationFrontMenu')));
     }
 
 }

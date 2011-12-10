@@ -11,9 +11,9 @@
 namespace MenuModule;
 
 use Nette\Environment;
-use App\Entity\Menuitem;
-use App\Repository\Menuitems;
-use App\Repository\Pages;
+use Application\Entity\Menuitem;
+use Application\Repository\Menuitems;
+use Application\Repository\Pages;
 
 /**
  * Menu manager
@@ -139,7 +139,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentMenuDesignerControlForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
 
         $form->addHidden('structure');
         $form->addSubmit('save', 'Save menu order');
@@ -203,7 +203,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentMenuitemForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
         $menu = $this->repositories->Menuitem;
 
 

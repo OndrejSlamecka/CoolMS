@@ -8,7 +8,7 @@
  * 
  */
 
-namespace App;
+namespace Application;
 
 class ModuleManager extends \Nette\Object
 {

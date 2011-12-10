@@ -17,7 +17,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     public function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
-        $template->registerHelperLoader(array('App\Helpers', 'loader'));
+        $template->registerHelperLoader(array('Application\Helpers', 'loader'));
         return $template;
     }
 

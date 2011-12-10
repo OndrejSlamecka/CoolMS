@@ -17,7 +17,7 @@ class MenuitemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers App/Repository/Menuitem::fetchStructured()
+     * @covers Application/Repository/Menuitem::fetchStructured()
      */
     public function testFetchStructured()
     {

@@ -8,7 +8,7 @@
  * 
  */
 
-namespace App\Entity;
+namespace Application\Entity;
 
 class Menuitem extends \Nette\Object
 {

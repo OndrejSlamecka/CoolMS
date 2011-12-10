@@ -35,7 +35,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentConfirmDeleteForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
         $form->addHidden('id');
         $form->addPassword('password', 'Password');
         $form->addSubmit('send', 'Confirm');
@@ -110,7 +110,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentNewUserForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
         $form->addText('email', 'Email')->addRule(Form::EMAIL, 'Email is not in the right format.');
         $form->addSubmit('send', 'Create');
         $form->onSuccess[] = array($this, 'newUserFormSuccess');
@@ -182,7 +182,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentUserForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
 
         $form->addHidden('id');
         /* $form->addText('email','Email')

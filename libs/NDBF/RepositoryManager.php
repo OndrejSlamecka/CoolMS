@@ -27,7 +27,7 @@ class RepositoryManager
     public function getRepository($repository)
     {
         if (empty($this->instantiated_repositories) || !in_array($repository, array_keys($this->instantiated_repositories))) {
-            $repo_class = 'App\\Repository\\' . $repository;
+            $repo_class = 'Application\\Repository\\' . $repository;
 
             if (class_exists($repo_class)) {
                 $repo = new $repo_class($this->repositoryContainer, $repository);

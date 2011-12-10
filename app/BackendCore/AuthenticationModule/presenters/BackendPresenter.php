@@ -34,7 +34,7 @@ class BackendPresenter extends \Backend\BasePresenter
      */
     protected function createComponentLoginForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
         $form->getElementPrototype()->id("LoginForm");
 
         $form->addText('email', 'Email');
@@ -81,7 +81,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentRequestNewPasswordForm($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
         $form->getElementPrototype()->class('ajax');
 
         $form->addText('email', 'Email')->addRule(Form::EMAIL, 'You have to enter email');
@@ -189,7 +189,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentNewPassword($name)
     {
-        $form = new \App\Form($this, $name);
+        $form = new \Application\Form($this, $name);
         $form->addPassword('password', 'New password');
         $form->addSubmit('save', 'Save');
         $form->onSuccess[] = array($this, 'newPasswordSuccess');

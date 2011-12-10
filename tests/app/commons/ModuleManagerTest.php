@@ -17,7 +17,7 @@ class ModuleManagerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $container = \Nette\Environment::getContext();
-        $this->instance = new App\ModuleManager($container);
+        $this->instance = new Application\ModuleManager($container);
     }
 
     /**

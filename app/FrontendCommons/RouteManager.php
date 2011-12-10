@@ -26,10 +26,10 @@ class RouteManager extends \Nette\Object
     /** @var Nette\Caching\IStorage */
     private $cacheStorage;
 
-    /** @var App\ModuleManager */
+    /** @var Application\ModuleManager */
     private $moduleManager;
 
-    /** @var App\Repository\Menuitem */
+    /** @var Application\Repository\Menuitem */
     private $menu;
 
     function __construct($container)
