@@ -151,13 +151,13 @@ class Repository extends \Nette\Object
 
         if ($insert) {
             $this->db
-                    ->exec('INSERT INTO ' . $this->table_name, $record);
+                    ->exec('INSERT INTO `' . $this->table_name . '`', $record);
 
             // Set last inserted item id
             $record[$table_id] = $this->db->lastInsertId();
         }else
             $this->db
-                    ->exec('UPDATE ' . $this->table_name . ' SET ? WHERE ' . $table_id . ' = ?', $record, $record[$table_id]);
+                    ->exec('UPDATE `' . $this->table_name . '` SET ? WHERE ' . $table_id . ' = ?', $record, $record[$table_id]);
     }
 
 }
