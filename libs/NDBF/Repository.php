@@ -128,7 +128,7 @@ class Repository extends \Nette\Object
      */
     public function remove($conditions)
     {
-        $this->db->exec('DELETE FROM ' . $this->table_name . ' WHERE ', $conditions);
+        $this->db->exec('DELETE FROM `' . $this->table_name . '` WHERE ', $conditions);
     }
 
     /**
@@ -157,7 +157,7 @@ class Repository extends \Nette\Object
             $record[$table_id] = $this->db->lastInsertId();
         }else
             $this->db
-                    ->exec('UPDATE `' . $this->table_name . '` SET ? WHERE ' . $table_id . ' = ?', $record, $record[$table_id]);
+                    ->exec('UPDATE `' . $this->table_name . '` SET ? WHERE `' . $table_id . '` = ?', $record, $record[$table_id]);
     }
 
 }
