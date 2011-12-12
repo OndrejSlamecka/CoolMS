@@ -1,17 +1,14 @@
 <?php
-// Set directories
-$params['libsDir'] = $params['appDir'] . '/../libs';
-$params['tempDir'] = $params['appDir'] . '/../temp';
 
 // Load nette and setup
-require $params['libsDir'] . '/Nette/loader.php';
-require $params['appDir'] . '/Configurator.php';
+require LIBS_DIR . '/Nette/loader.php';
+require APP_DIR . '/Configurator.php';
 
 // Debugging
 Application\Configurator::setupDebugger();
 
 // Configuration
-$config = new Application\Configurator($params);
+$config = new Application\Configurator(LIBS_DIR, APP_DIR, APP_DIR.'/../temp');
 
 $config->setupServices();
 $config->setupSession();

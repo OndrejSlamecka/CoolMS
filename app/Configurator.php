@@ -10,8 +10,10 @@
 
 namespace Application;
 
-class Configurator extends \Nette\Configurator
+class Configurator extends \Nette\Config\Configurator
 {
+
+    public $directories;
 
     /** STATIC - container independent * */
     public static function setupDebugger()
@@ -23,28 +25,24 @@ class Configurator extends \Nette\Configurator
 
     /* INSTANTIATED */
 
-    public function __construct($params)
+    public function __construct($libsDir, $appDir, $tempDir)
     {
+        $this->directories = array('libsDir' => $libsDir, 'appDir' => $appDir, 'tempDir' => $tempDir);
         parent::__construct();
-        $this->container->params += $params;
-        $this->loadConfig($this->container->params['appDir'] . '/config.neon');
+        $this->setCacheDirectory($this->directories['tempDir']);
+        $this->loadConfig($this->directories['appDir'] . '/config.neon');
     }
 
     public function setupServices()
     {
-        // RobotLoader
-        $this->container->addService(
-                'robotLoader', function( $container ) {
-                    return \Nette\Configurator::createServiceRobotLoader(
-                                    $container, array('directory' =>
-                                array(0 => $container->params['appDir'],
-                                    1 => $container->params['libsDir'])
-                                    )
-                    ); // createService
-                } // function
-        ); // addService 
-        // Run
-        $this->container->robotLoader;
+        // robotLoader
+        $robotLoader = $this->createRobotLoader();
+
+        $robotLoader->addDirectory($this->directories['libsDir']);
+        $robotLoader->addDirectory($this->directories['appDir']);
+
+        $robotLoader->register();
+        $this->container->addService('robotLoader', $robotLoader);
 
         // Other services
         $this->container->addService('authenticator', new \Backend\Authenticator($this->container));

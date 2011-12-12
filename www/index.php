@@ -1,15 +1,16 @@
 <?php
 
-// uncomment this line if you must temporarily take down your site for maintenance
-// require '.maintenance.php';
-
-$params = array();
-
 // absolute filesystem path to this web root
-$params['wwwDir'] = __DIR__;
+define('WWW_DIR', __DIR__);
 
 // absolute filesystem path to the application root
-$params['appDir'] = realpath(__DIR__ . '/../app');
+define('APP_DIR', WWW_DIR . '/../app');
+
+// absolute filesystem path to the libraries
+define('LIBS_DIR', WWW_DIR . '/../libs');
+
+// uncomment this line if you must temporarily take down your site for maintenance
+// require APP_DIR . '/commons/templates/maintenance.phtml';
 
 // load bootstrap file
-require $params['appDir'] . '/bootstrap.php';
+require APP_DIR . '/bootstrap.php';

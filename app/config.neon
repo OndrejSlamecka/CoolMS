@@ -11,7 +11,8 @@ common:
 		# zlib.output_compression: yes
 		# default_charset: "UTF-8"
 
-	database: ['mysql:host=localhost;dbname=cms', 'root', 'root']
+	parameters:
+		database: ['mysql:host=localhost;dbname=cms', 'root', 'root']
 
 production < common:
 
