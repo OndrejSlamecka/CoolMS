@@ -1,7 +1,8 @@
 <?php
-
 require_once 'PHPUnit/Autoload.php';
 
-$params['appDir'] = realpath(__DIR__ . '/../app');
+define('TESTS_DIR', __DIR__);
+define('LIBS_DIR', TESTS_DIR . '/../libs');
+define('APP_DIR', TESTS_DIR . '/../app');
 
-require_once $params['appDir'].'/bootstrap.php';
+require_once APP_DIR . '/bootstrap.php';
