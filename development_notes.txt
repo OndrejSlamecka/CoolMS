@@ -1,4 +1,4 @@
-﻿Notes:
+Notes:
 ======
 * Default login (change ASAP after first login): 
     * Email: admin@example.com
@@ -20,8 +20,7 @@ Major:
     * Port this item's content to github's issues?
 
 Minor:
-    * Add user the possibility to change his email (remember that email is used when hashing password)
-    * Remove injecting of whole container (see app/Configurator.php) where possible. (Is it possible somewhere else than in authenticator?)    
+    * Add user the possibility to change his email (remember that email is used when hashing password)        
     * Create webalized name dynamically (using AJAX) on page creation form instead of hint "Empty fills itself"
     * Improve page creation form (some design cleanup)
 
