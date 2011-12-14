@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
  * 
- * License within file license.txt in the root folder.
+ * License can be found within the file license.txt in the root folder.
  * 
  */
 
@@ -15,7 +15,7 @@ namespace NDBF;
  */
 class Repository extends \Nette\Object
 {
-    /******************************* VARIABLES ********************************/
+    /****************************** VARIABLES *********************************/
 
     /** @var \Nette\DI\Container */
     protected $container;
@@ -34,7 +34,7 @@ class Repository extends \Nette\Object
         $this->container = $container;
         $this->connection = $container->database;
 
-        /** DATABASE TABLE NAME * */
+        // DATABASE TABLE NAME
         if ($table_name === null) {
             $table_name = get_class($this);
             $table_name = substr($table_name, strrpos($table_name, '\\') + 1);
@@ -44,14 +44,17 @@ class Repository extends \Nette\Object
 
     /**
      * Allows $this->repositories->Repository    
-     * @return \SimpleOM\RepositoryManager    
+     * @return \NDBF\RepositoryManager           
+     */
+    /*
       final public function getRepositories()
       {
       return $this->container->repositoryManager;
-      } */
+      }
+     */
 
     /**
-     * @return DibiConnection
+     * @return \Nette\Database\Connection
      */
     final public function getDb()
     {
@@ -59,7 +62,7 @@ class Repository extends \Nette\Object
     }
 
     /**
-     * @return Nette\Database\Table\Selection
+     * @return \Nette\Database\Table\Selection
      */
     final public function table()
     {
@@ -72,11 +75,11 @@ class Repository extends \Nette\Object
      * 
      * @param array $conditions (column=>value)
      * @param string $order
+     * @param int $limit      
      * @param int $offset
-     * @param int $limit
      * @return array, null
      */
-    public function find($conditions = null, $order = null, $offset = null, $limit = null)
+    public function find($conditions = null, $order = null, $limit = null, $offset = null)
     {
         // Start basic command
         $query = $this->db->table($this->table_name);
@@ -100,7 +103,13 @@ class Repository extends \Nette\Object
         return $query;
     }
 
-    public function fetchPairs($key, $val)
+    /**
+     * Returns all rows as associative array.
+     * @param  string
+     * @param  string column name used for an array value or an empty string for the whole row
+     * @return array
+     */
+    public function fetchPairs($key, $val = '')
     {
         return $this->db->table($this->table_name)->fetchPairs($key, $val);
     }
@@ -132,7 +141,9 @@ class Repository extends \Nette\Object
     }
 
     /**
-     * Saves record. (ID required for updates)
+     * Saves record
+     * @param type $record
+     * @param type $table_id 
      */
     public function save(&$record, $table_id)
     {

@@ -11,7 +11,6 @@ Application\Configurator::setupDebugger();
 $config = new Application\Configurator(LIBS_DIR, APP_DIR, APP_DIR.'/../temp');
 
 $config->setupServices();
-$config->setupSession();
 $config->setupRouting();
 
 $container = $config->getContainer();

@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
  * 
- * License within file license.txt in the root folder.
+ * License can be found within the file license.txt in the root folder.
  * 
  */
 
@@ -14,31 +14,43 @@ class RepositoryManager
 {
 
     /** @var Nette\DI\Container */
-    private $repositoryContainer;
+    private $container;
+
+    /** @var array */
     private $instantiated_repositories;
 
     /************************** CONSTRUCTOR, DESIGN ***************************/
 
     public function __construct(\Nette\DI\Container $container)
     {
-        $this->repositoryContainer = $container;
+        $this->container = $container;
     }
 
-    public function getRepository($repository)
+    /**
+     * Returns instance of Application\Repository\<$repository> if exists else instance of NDBF\Repository
+     * @param string Repository name
+     * @return NDBF\Repository
+     */
+    public function getRepository($name)
     {
-        if (empty($this->instantiated_repositories) || !in_array($repository, array_keys($this->instantiated_repositories))) {
-            $repo_class = 'Application\\Repository\\' . $repository;
+        if (empty($this->instantiated_repositories) || !in_array($name, array_keys($this->instantiated_repositories))) {
+            $class = 'Application\\Repository\\' . $name;
 
-            if (class_exists($repo_class)) {
-                $repo = new $repo_class($this->repositoryContainer, $repository);
+            if (class_exists($class)) {
+                $instance = new $class($this->container, $name);
             } else {
-                $repo = new Repository($this->repositoryContainer, $repository);
+                $instance = new Repository($this->container, $name);
             }
-            $this->instantiated_repositories[$repository] = $repo;
+            $this->instantiated_repositories[$name] = $instance;
         }
-        return $this->instantiated_repositories[$repository];
+        return $this->instantiated_repositories[$name];
     }
 
+    /**
+     * Getter and shortuct for getRepository()
+     * @param string Repository name
+     * @return NDBF\Repository
+     */
     public function __get($name)
     {
         return $this->getRepository($name);

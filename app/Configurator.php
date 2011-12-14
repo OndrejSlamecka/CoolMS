@@ -52,14 +52,9 @@ class Configurator extends \Nette\Config\Configurator
         $this->container->addService('moduleManager', new ModuleManager($this->container));
 
         list($dsn, $user, $password) = $this->container->params['database'];
-        $this->container->addService('database', \NDBF\Factory::createService($this->container, $dsn, $user, $password));
+        $this->container->addService('database', \NDBF\Factory::createService($dsn, $user, $password, $this->container->cacheStorage));
 
         $this->container->addService('repositoryManager', new \NDBF\RepositoryManager($this->container));
-    }
-
-    public function setupSession()
-    {
-        $this->container->session->start();
     }
 
     public function setupApplication()
