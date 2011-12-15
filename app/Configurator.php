@@ -51,7 +51,7 @@ class Configurator extends \Nette\Config\Configurator
 
         $this->container->addService('moduleManager', new ModuleManager($this->container));
 
-        list($dsn, $user, $password) = $this->container->params['database'];
+        list($dsn, $user, $password) = $this->container->parameters['database'];
         $this->container->addService('database', \NDBF\Factory::createService($dsn, $user, $password, $this->container->cacheStorage));
 
         $this->container->addService('repositoryManager', new \NDBF\RepositoryManager($this->container));
@@ -66,7 +66,7 @@ class Configurator extends \Nette\Config\Configurator
     {
         $router = $this->container->router;
 
-        if ($this->container->params['consoleMode']) {
+        if ($this->container->parameters['consoleMode']) {
             // CONSOLE MODE
             $router = new \Nette\Application\Routers\SimpleRouter();
         } else {

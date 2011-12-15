@@ -31,7 +31,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
      */
     public function formatLayoutTemplateFiles()
     {
-        if (!empty($this->layout) && strpos($this->layout, $this->context->params['appDir']) !== false)
+        if (!empty($this->layout) && strpos($this->layout, $this->context->parameters['appDir']) !== false)
             return array($this->layout);
         else
             return parent::formatLayoutTemplateFiles();

@@ -22,7 +22,7 @@ abstract class BasePresenter extends \BasePresenter
     public function startup()
     {
         parent::startup();
-        $this->setLayout($this->context->params['appDir'] . '/FrontendCommons/templates/@layout.latte');
+        $this->setLayout($this->context->parameters['appDir'] . '/FrontendCommons/templates/@layout.latte');
     }
 
     public function templatePrepareFilters($template)

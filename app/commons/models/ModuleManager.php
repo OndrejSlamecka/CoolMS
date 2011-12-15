@@ -117,7 +117,7 @@ class ModuleManager extends \Nette\Object
 
         foreach ($modules as $module) {
             $moduleFront = $module . 'Module\\FrontendPresenter';
-            $moduleFront = new $moduleFront;
+            $moduleFront = new $moduleFront($this->container);
             $moduleFrontReflection = $moduleFront->getReflection();
             $modules_names[$module]['name'] = $moduleFrontReflection->getAnnotation('module')->name;
 
