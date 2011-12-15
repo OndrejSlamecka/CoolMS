@@ -65,7 +65,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLayout($this->context->params['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
+        $this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
     }
 
     public function renderEdit($id, $autosave=false)

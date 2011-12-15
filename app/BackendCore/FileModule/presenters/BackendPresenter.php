@@ -47,7 +47,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function getFullPath($path = null)
     {
-        return $this->context->params['wwwDir'] . $this->getRelativePath($path);
+        return $this->context->parameters['wwwDir'] . $this->getRelativePath($path);
     }
 
     public function getFolderAbove($path)

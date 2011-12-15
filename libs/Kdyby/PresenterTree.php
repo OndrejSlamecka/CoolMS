@@ -152,7 +152,7 @@ class PresenterTree extends Nette\Object
 		foreach ($presenters['all'][NULL] as $fullPath => $presenter) {
 			$ref = $presenter->getPresenterReflection();
                         
-			$presenterInstance = new $presenter->presenterClass;
+			$presenterInstance = new $presenter->presenterClass($this->context);
 			$templateViewPattern = $presenterInstance->formatTemplateFiles(substr($fullPath, 1), '*');
 
 			$views = array();

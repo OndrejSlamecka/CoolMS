@@ -15,7 +15,7 @@ $config->setupRouting();
 
 $container = $config->getContainer();
 
-if (!$container->params['consoleMode']) {
+if (!$container->parameters['consoleMode']) {
 
     $config->setupApplication();
 

@@ -42,7 +42,7 @@ abstract class BasePresenter extends \BasePresenter
             }
         }
 
-        $this->setLayout($this->context->params['appDir'] . '/BackendCommons/templates/@layout.latte');
+        $this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@layout.latte');
     }
 
     public function beforeRender()
