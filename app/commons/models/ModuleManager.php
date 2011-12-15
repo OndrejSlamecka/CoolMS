@@ -69,8 +69,7 @@ class ModuleManager extends \Nette\Object
     public function getModuleViewParams($module, $view)
     {
         $presenter_name = "{$module}Module\\FrontendPresenter";
-        $presenter = new $presenter_name;
-        $presenter->setContext($this->container);
+        $presenter = new $presenter_name($this->container);
 
         $method_name = 'get' . ucfirst($view) . 'ViewPossibleParams';
         return $presenter->$method_name();
