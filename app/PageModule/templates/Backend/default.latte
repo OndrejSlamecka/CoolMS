@@ -24,7 +24,7 @@
       {foreach $pages as $page}
       <tr n:class="$iterator->isEven() ? even">
 	<td class="name">
-	  <a href="{link :Front:Page:default, name => $page->name_webalized}">{$page->name}</a>
+	  <a href="{link :Page:Frontend:default, name => $page->name_webalized}">{$page->name}</a>
 	</td>
 
 	<td class="padded"><a href="{link edit id => $page->id}" class="edit">Edit</a></td>
