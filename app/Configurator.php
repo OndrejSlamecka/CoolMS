@@ -31,6 +31,7 @@ class Configurator extends \Nette\Config\Configurator
         parent::__construct();
         $this->setCacheDirectory($this->directories['tempDir']);
         $this->loadConfig($this->directories['appDir'] . '/config.neon');
+        $this->container->session->start();
     }
 
     public function setupServices()
@@ -56,7 +57,7 @@ class Configurator extends \Nette\Config\Configurator
 
         $this->container->addService('repositoryManager', new \NDBF\RepositoryManager($this->container));
     }
-
+    
     public function setupApplication()
     {
         $this->container->application->errorPresenter = 'Error';
