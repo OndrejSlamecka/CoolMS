@@ -20,7 +20,7 @@ use Backend\Authenticator;
  */
 class BackendPresenter extends \Backend\BasePresenter
 {
-    /*     * ************************** DELETING USER ****************************** */
+    /**************************** DELETING USER *******************************/
 
     public function actionConfirmDelete($id)
     {
@@ -70,7 +70,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->redirect('default');
     }
 
-    /*     * ********************** CHANGE ADMINISTRATOR *************************** */
+    /************************ CHANGE ADMINISTRATOR ****************************/
 
     public function actionMakeAdmin($id)
     {
@@ -99,14 +99,14 @@ class BackendPresenter extends \Backend\BasePresenter
         }
     }
 
-    /*     * *************************** DEFAULT - list **************************** */
+    /***************************** DEFAULT - list *****************************/
 
     public function renderDefault()
     {
         $this->template->users = $user = $this->repositories->User->find();
     }
 
-    /*     * ************************** CREATING USER ****************************** */
+    /**************************** CREATING USER *******************************/
 
     public function createComponentNewUserForm($name)
     {
@@ -163,7 +163,7 @@ class BackendPresenter extends \Backend\BasePresenter
         } // if $loggedUser->isInRole('admin')
     }
 
-    /*     * ********************** EDITING, RENDERING USER ************************* */
+    /************************ EDITING, RENDERING USER **************************/
 
     public function renderProfile($id)
     {
@@ -212,7 +212,7 @@ class BackendPresenter extends \Backend\BasePresenter
                 $form['password'] = Authenticator::hashPassword($this->getUser()->getIdentity()->email, $form['password']);
 
             $users = $this->repositories->User;
-            $user = $users->find(array('id' => $form['id']))->fetch();
+            $user = $users->find(array('id' => $form['id']))->fetch()->toArray();
             foreach ($form as $key => $val) {
                 $user[$key] = $val;
             }
