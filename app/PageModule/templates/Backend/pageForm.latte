@@ -1,54 +1,46 @@
     {form pageForm begin}
-
-    <div id="inner-content">
-
         <h2>{$header}</h2>
 
             {control pageForm errors}
+        
+            <p class="notdisplay errorMsg"><strong>Autosave backup is not working</strong>. You should save your work to be sure.</p>
 
-            <table>
+            <table class="textFormatForm">
 
                 <tr class="required">
-                    <th class="hidden">{!$presenter["pageForm"]["name"]->label}</th>
-                    <td>{!$presenter["pageForm"]["name"]->control}</td>
+                    <th class="hidden">{label name /}</th>
+                    <td>
+                        {input name}
+                        {input save}
+                    </td>
                 </tr>
 
                 <tr>
-                    <th class="hidden">{!$presenter["pageForm"]["text"]->label}</th>
-                    <td>{!$presenter["pageForm"]["text"]->control}</td>
+                    <th class="hidden">{label text /}</th>
+                    <td>{input text}</td>
                 </tr>
 
-            </table>
-        
-        <p class="notdisplay errorMsg"><strong>Autosave backup is not working</strong>. You should save your work to be sure.</p>
+            </table>                
 
+        <div class="toolbox">
 
-    </div> <!-- #inner-content -->
-
-    <div id="inner-sidebar">
-
-        <h3>Options</h3>
-        <div class="box">
-	    <p>
-                {!$presenter["pageForm"]["save"]->control}                                        
-            </p>
-
-            <p>
-                {!$presenter["pageForm"]["name_webalized"]->label}
-                {!$presenter["pageForm"]["name_webalized"]->control}
-                <br>
-                <small>If left empty, it will fill itself</small>
-            </p>
-            
-            <p>
-                {!$presenter["pageForm"]["template"]->label}
-                {!$presenter["pageForm"]["template"]->control}
-            </p>            
-
-        </div>
-
-    </div> <!-- #inner-sidebar -->
-
+            <h3>Options</h3>
+            <div class="body">
+                <table>
+                    <tr>
+                        <th>{label name_webalized /}</th>
+                        <td>
+                            {input name_webalized}                  
+                            <small>If left empty, it will fill itself</small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{label template /}</th>
+                        <td>{input template}</td>
+                    </tr>
+                </table>
+            </div>
+        </div> <!-- /.toolbox -->
 
     <div class="clear"><hr /></div>
     {input id} {* Fixes https://github.com/nette/nette/issues/400 TODO: Remove after issues is closed *}

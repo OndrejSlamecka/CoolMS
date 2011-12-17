@@ -22,7 +22,6 @@ Major:
 Minor:
     * Add user the possibility to change his email (remember that email is used when hashing password)        
     * Create webalized name dynamically (using AJAX) on page creation form instead of hint "Empty fills itself"
-    * Improve page creation form (some design cleanup)
 
 Far future:
     * Add support for multiple languages

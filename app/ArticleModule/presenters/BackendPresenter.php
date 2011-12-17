@@ -52,7 +52,8 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         try {
             $articles->save($article, 'id');
 
-            $this->flashMessage('Article "' . htmlspecialchars($article['name']) . '" was restored'); // Not sure if htmlspecialchars is needed, check later
+            // Not sure if htmlspecialchars is needed, check later
+            $this->flashMessage('Article "' . htmlspecialchars($article['name']) . '" was restored');
 
             unset($this->sessionSection->reversableItem);
         } catch (Exception $e) {
@@ -76,7 +77,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             $article = $this->sessionSection->autosave;
         else
             $article = $articles->find(array('id' => $id))->fetch();
-        
+
         $this->template->article = $article;
 
         if (!$article) {
@@ -84,7 +85,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             $this->redirect('default');
         }
 
-        if( $article instanceof \Nette\Database\Table\Selection )
+        if ($article instanceof \Nette\Database\Table\Selection)
             $article = $article->toArray();
 
         $this['articleForm']->setDefaults($article);
@@ -100,7 +101,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function createComponentArticleForm($name)
     {
         $form = new \Application\Form($this, $name);
-        $form->getElementPrototype()->class('textFormatForm continualsave');
+        $form->getElementPrototype()->class('continualsave');
 
         $form->addHidden('id');
 
@@ -112,7 +113,8 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $form->addTextarea('text', 'Text', 60, 30);
         $form['text']->getControlPrototype()->class('wysiwyg');
 
-        $form->addSubmit('save', 'Save');
+        $form->addSubmit('save', 'Save')
+                ->getControlPrototype()->class('emphasized');
 
         $form->onSuccess[] = array($this, 'articleSubmit');
 

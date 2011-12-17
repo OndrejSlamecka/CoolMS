@@ -51,6 +51,8 @@ div.clear hr{ display: none; }
     padding: .5em;    
 }
 
+p.errorMsg{ margin-bottom: 1em; }
+
 /* Text & Typography
  * =================
 --------------------*/
@@ -238,7 +240,7 @@ table.data{
         }
   
           table.data td.name small{
-              margin-top: 2px;
+              margin: 3px 0 0 10px;              
               float: right;
           }
           
@@ -300,9 +302,8 @@ th{
 
 
 /* TODO: All forms made in tables should have class .form - this would solve all those ambiguous selectors */
-td input, .padlikeinput{
-  margin: .4em 0 0;
-}
+.padlikeinput{ margin: .4em 0 0; }
+td input{ margin: .5em 0 0 }    
 
   td input.low{
     margin: 0;
@@ -482,6 +483,8 @@ p.flash{
 .textFormatForm{
     
 }
+    .textFormatForm td input{ margin:0; }
+    
     .textFormatForm input.large, .textFormatForm textarea{
       width: 100%;
     }
@@ -505,34 +508,35 @@ p.flash{
         margin-bottom: 0.5em;
     }
     
-    .textFormatForm textarea[name="text"], .textFormatForm input[name="name"]{
-      width: 470px;
-    }
-
-    
-    /* Page divison */
-    #inner-content{
-        float: left;
-        width: 470px;
+    .textFormatForm input[name="name"]{
+        width: 658px;
     }
     
-      #inner-content h2{
-        margin: 0;
-      }
-    
-    #inner-sidebar{
-        width: 240px;
-        margin: 0 0 0 520px;
-        padding-top: 10px;
+    .textFormatForm textarea[name="text"]{
+      width: 734px;
     }
     
-        #inner-sidebar h3{
+    input[type="submit"].emphasized{
+        padding: 6px 12px;
+        margin:0 0 6px;
+        vertical-align:middle;
+        font-weight: bold;
+        width: 72px;
+    } 
+    
+    html.opera input[type="submit"].emphasized{ margin-bottom: 2px; padding: 8px 12px; }
+    
+    /* Page divison */    
+    .toolbox{ margin: 1em 0 0; }
+        
+        .toolbox h3{
             background: url(../img/sidebar-header-bg.png) repeat-x 0px 0px;
             padding: 0.2em 15px;
             letter-spacing: 0.02em;
             font-size: 110%;
             background-color: #284a89;          
             margin-bottom: 0;
+            width: 715px;
             
             border: 1px solid #AAA;
             color: #FFF;
@@ -546,15 +550,12 @@ p.flash{
         }
         
         
-        #inner-sidebar .box{
+        .toolbox .body{
+            width: 725px;
             border: 1px solid #AAA;
             border-top: 0;
             padding: 10px;
             margin: 0 0 16px 0;
-        }
-
-        #inner-sidebar .box input[type="submit"], input[type="submit"].emphasized{
-            padding: 6px 12px;
         }
         
         .submitButtonRow, .submitButtonRow td{
@@ -562,10 +563,6 @@ p.flash{
         }
         
 /* Menuitem Form */
-#frm-menuitemForm{
-  
-}
-
 #frm-menuitemForm h3{
   display: inline;
   font-weight: bold;
