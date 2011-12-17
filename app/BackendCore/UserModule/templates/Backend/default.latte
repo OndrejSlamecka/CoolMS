@@ -2,7 +2,7 @@
 {block content}
 
 <div class="floatingContentContainer">
-    <h2 class="asidebutton">User management</h2> 
+    <h1 class="asidebutton">User management</h1> 
     {if $loggedUser->isInRole('admin')}
         <div class="asideheader"><a href="{link new}" class="button">Add user</a></div>
     {/if}

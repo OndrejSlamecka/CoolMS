@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
 
     <!-- Meta info -->
@@ -7,8 +7,7 @@
     <meta name="robots" content="noindex, nofollow" />
 
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/reset.css" />
-    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/screen.css" media="screen,projection" />    
+    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/screen.css" />    
 
     <!--  Javascript, AJAX, jQuery -->
     <!--[if IE]>
@@ -31,9 +30,9 @@
 </head>
 <body>
 
-    <div id="header">
+    <div id="header" class="clearfix">
 
-	<h1>Administration</h1>
+	<span id="logo">Administration</span>
 
 	{if $loggedUser->isLoggedIn()}
 	    <div id="userinfo" class="actionbar">{$loggedUser->getIdentity()->data['email']} | <a href="{link :Authentication:Backend:logout}">Log out</a></div>
@@ -43,18 +42,17 @@
 	    <a href="{$baseUri}">To site</a>
 	</div>
 
-	<div class="clear"><hr /></div>
     </div> <!-- #header -->
 
-    <div id="panel">
+    <div id="panel" class="clearfix">
 
 	<ul id="menu">
             {foreach $modules as $module => $name}
-                <li><a href="{link ':'.$module.":Backend:default"}" n:class="$presenter->isLinkCurrent(':'.$module.':Backend:*') ? active">{$name}</a></li>
+                <li><a href="{link ':'.$module.":Backend:default"}" {if $presenter->isLinkCurrent(':'.$module.':Backend:*')}id="active"{/if}>{$name}</a></li>
             {/foreach}
-	    <li><a href="{link :Menu:Backend:default}" n:class="$presenter->isLinkCurrent(':Menu:Backend:*') ? active">Menu designer</a></li>
-	    <li><a href="{link :File:Backend:default}" n:class="$presenter->isLinkCurrent(':File:Backend:*') ? active">File manager</a></li>
-	    <li><a href="{link :User:Backend:default}" n:class="$presenter->isLinkCurrent(':User:Backend:*') ? active">Users</a></li>
+	    <li><a href="{link :Menu:Backend:default}" {if $presenter->isLinkCurrent(':Menu:Backend:*')}id="active"{/if}>Menu designer</a></li>
+	    <li><a href="{link :File:Backend:default}" {if $presenter->isLinkCurrent(':File:Backend:*')}id="active"{/if}>File manager</a></li>
+	    <li><a href="{link :User:Backend:default}" {if $presenter->isLinkCurrent(':User:Backend:*')}id="active"{/if}>Users</a></li>
 	</ul> <!-- #menu -->
 
 	<div id="content">
@@ -68,7 +66,6 @@
 
 	</div> <!-- #content -->
 
-	<div class="clear"><hr></div>
     </div> <!-- #panel -->
 
     <div id="footer">
