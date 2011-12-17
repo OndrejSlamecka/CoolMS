@@ -32,8 +32,6 @@ h1 { font-size:28px; text-shadow:1px 1px 0 rgba( 0, 0, 0, 0.2 ); margin:0 0 0.4e
 h2 { font-size:22px; text-shadow:1px 1px 0 rgba( 0, 0, 0, 0.2 ); margin:0 0 0.2em }
 
 p { margin:0.5em 0 2em }
-body.authentication p { margin:1em 0 -1em }
-body.authentication p.flash { margin:0 0 0.5em }
 
 /* Visibility */
 .hidden { position:absolute; height:1px; width:1px; top:-9999px; left:-9999px }
@@ -110,7 +108,7 @@ table.data+p { text-indent:0; margin:0 0 -1em }
 table.data a.edit:hover,table.data a.delete:hover { text-decoration:underline }
 
 /* Forms */
-/* TODO: All forms made in tables should have class .form - this would solve all those ambiguous selectors */
+/* TODO: All tables containing forms should have class .form - this would solve all those ambiguous selectors */
 th { text-align:right; vertical-align:top; padding:.4em .5em 0 0 }
 
 td input { margin:.5em 0 0 }
@@ -160,17 +158,20 @@ body{ width:1040px; background:#4a92c0 url(body-bg.png) repeat-x; margin:0 auto 
 #footer { text-indent:0; text-align:right; color:#EEE; margin:0.5em 20px 0.75em }
 #footer a { color:#EEE }
 
-/* Special cases of general elements */
+    
+/* Modules
+ * =======
+----------*/
+
+/* AuthenticationModule */
 body.authentication { width:339px }
 body.authentication #snippet--requestNewPassword { display:none; margin:1em 0 -1em }
 body.authentication input[type="text"],.authentication input[type="password"] { width:160px }
 body.authentication #panel { background-image:none }
 body#createpassword #content { padding:1em 2em 2em 1.5em }
-    
-/* Modules
- * =======
-----------*/
-    
+body.authentication p { margin:1em 0 -1em }
+body.authentication p.flash { margin:0 0 0.5em }
+
 /* FileModule */
 table.files img { vertical-align:middle }
 td.folderabove { height:31px }
