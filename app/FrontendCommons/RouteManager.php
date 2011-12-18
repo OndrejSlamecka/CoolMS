@@ -73,7 +73,7 @@ class RouteManager extends \Nette\Object
         );
 
         // The rest...
-        $router[] = new Route('<presenter>/<action>[/<name>]',
+        $router[] = new Route('<module>/<action>[/<name>]',
                         $this->getIndexMetadata()
         );
     }
