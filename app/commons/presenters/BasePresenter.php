@@ -23,7 +23,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
         // If this is a module (a colon is contained) create session section
         if ($modulDelimiter = strpos($this->getName(), ':')) {
-            $module = substr($this->getName(), 0, strpos($this->getName(), ':'));
+            $module = substr($this->getName(), 0, $modulDelimiter);
             $this->sessionSection = $this->getSession($module . 'ModuleStorage');
         }
     }
