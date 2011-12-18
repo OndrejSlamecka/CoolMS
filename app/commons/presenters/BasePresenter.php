@@ -14,6 +14,20 @@
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
 
+    /** @var Nette\Http\Session */
+    protected $sessionSection = null;
+
+    public function startup()
+    {
+        parent::startup();
+
+        // If this is a module (a colon is contained) create session section
+        if ($modulDelimiter = strpos($this->getName(), ':')) {
+            $module = substr($this->getName(), 0, strpos($this->getName(), ':'));
+            $this->sessionSection = $this->getSession($module . 'ModuleStorage');
+        }
+    }
+
     public function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
