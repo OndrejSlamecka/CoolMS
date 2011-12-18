@@ -19,7 +19,7 @@ class ModuleManager extends \Nette\Object
     /** @var \Nette\Caching\Cache */
     private $cache;
 
-    /** ************************ CONSTRUCTOR, DESIGN ************************** */
+    /* ----------------------- CONSTRUCTOR, DESIGN -------------------------- */
 
     public function __construct(\Nette\DI\Container $container)
     {
@@ -47,7 +47,7 @@ class ModuleManager extends \Nette\Object
         return $this->cache;
     }
 
-    /*     * ****************************** METHODS ******************************** */
+    /* ----------------------------- METHODS -------------------------------- */
 
     /**
      * Returns views of given module
@@ -82,7 +82,7 @@ class ModuleManager extends \Nette\Object
     }
 
     /**
-     * Returns array. Key is actual name of presenter and value is formal name
+     * Returns array. Key is an actual name of a presenter and value is its formal name
      * @return array
      */
     public function buildLinkableModulesCache()

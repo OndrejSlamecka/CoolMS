@@ -27,7 +27,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->setLayout( 'layout' ); // This - default layout - was overriden in BasePresenter
     }
     
-    /* ******************************* LOGIN ******************************** */
+    /* ------------------------------- LOGIN -------------------------------- */
 
     /**
      * Login form component factory.
@@ -69,7 +69,7 @@ class BackendPresenter extends \Backend\BasePresenter
         //dump( Authenticator::hashPassword( 'email', 'password' ) ); // Printing for development purposes        
     }
 
-    /** ******************************* LOGOUT ******************************** */
+    /* ------------------------------ LOGOUT -------------------------------- */
 
     public function actionLogout()
     {
@@ -77,7 +77,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->redirect(':Authentication:Backend:login');
     }
 
-    /** ************************ REQUEST NEW PASSWORD ************************* */
+    /* ----------------------- REQUEST NEW PASSWORD ------------------------- */
 
     public function createComponentRequestNewPasswordForm($name)
     {

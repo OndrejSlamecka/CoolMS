@@ -103,7 +103,7 @@ class BackendPresenter extends \Backend\BasePresenter
         }
     }
 
-    /*     * ********** */
+    /* ----------------- */
 
     public function createTemplate($class = NULL)
     {

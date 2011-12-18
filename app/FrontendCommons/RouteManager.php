@@ -179,7 +179,7 @@ class RouteManager extends \Nette\Object
         return $front_default;
     }
 
-    /*     * ********* */
+    /* ------------- */
 
     /**
      * @return Nette\Caching\Cache
