@@ -41,7 +41,7 @@ $(document).ready(function(){
                     if(payload.error){
                         $continuousSavingError.show();
                     }else{
-                        $continuousSavingError.show();
+                        $continuousSavingError.hide();
                     }
                     
                     fncSaveContinually();
@@ -51,7 +51,7 @@ $(document).ready(function(){
                     $continuousSavingError.show();
                 }
             });             
-        }, 30 * 1000 );
+        }, 15 * 1000 );
     };
    
     if ($savableForm.length) {
