@@ -51,7 +51,7 @@ class RouteManager extends \Nette\Object
     public function addRoutes(&$router)
     {
         $names = $this->getTranslationTable();
-        $names = array_flip($names['names']);
+        $modules = array_flip($names['names']);
 
         /* FRONT ROUTES ARE EDITED HERE */
 
@@ -59,16 +59,22 @@ class RouteManager extends \Nette\Object
         $router[] = new Route('', $this->getIndexMetadata());
 
         // Module: Page
-        $router[] = new Route($names['Page'] . '/<name>',
+        $router[] = new Route($modules['Page'] . '/<name>',
                         $this->formMetadata('Page', 'default')
         );
 
         // Module: Article
-        $router[] = new Route($names['Article'],
+        $articleMethods = array_flip($names['methods']['Article']);
+
+        $router[] = new Route($modules['Article'],
                         $this->formMetadata('Article', 'default')
         );
 
-        $router[] = new Route($names['Article'] . '/<name>',
+        $router[] = new Route($modules['Article'] . '/' . $articleMethods['archive'],
+                        $this->formMetadata('Article', 'archive')
+        );
+
+        $router[] = new Route($modules['Article'] . '/<name>',
                         $this->formMetadata('Article', 'detail')
         );
 

@@ -31,6 +31,28 @@ class FrontendPresenter extends \Frontend\BasePresenter
     }
 
     /**
+     * @view(name="Archive")
+     */
+    public function renderArchive()
+    {
+        $articles = $this->repositories->Article;
+        $archive = array();
+
+        // Make sure AS is upper case - required by Nette\Database
+        $selection = $articles->find(null, 'date DESC');
+        foreach ($selection as $article) {
+            $archive[$article['date']->format('F Y')][$article['id']] = $article;
+        }
+
+        $this->template->archive = $archive;
+    }
+
+    public function getArchiveViewPossibleParams()
+    {
+        return null;
+    }
+
+    /**
      * @view(name="Detail")
      */
     public function renderDetail($name)
