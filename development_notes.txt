@@ -11,7 +11,7 @@ TODO:
 =====
 
 Major:
-    * Admin:Page: Add page previews
+    * Admin:Page: Add ajax save
     * Write tests
     * Improve default front functions (create archive and paginator for articles, add print style to default theme)
     * Add possibility to revert removal action to whole administration

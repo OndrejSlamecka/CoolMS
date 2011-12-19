@@ -28,8 +28,8 @@ $(document).ready(function(){
     });
 
     // Continual saving of forms
-    $savableForm = $('form.continualsave');
-    $continuousSavingError = $('#continuousSavingError');
+    $savableForm = $('form.savable');
+    $continualSaveError = $('#continualSaveError');
    
     var fncSaveContinually = function(){        
         setTimeout(function()
@@ -39,19 +39,18 @@ $(document).ready(function(){
             form.ajaxSubmit({
                 success: function(payload){
                     if(payload.error){
-                        $continuousSavingError.show();
+                        $continualSaveError.show();
                     }else{
-                        $continuousSavingError.hide();
+                        $continualSaveError.hide();
                     }
-                    
                     fncSaveContinually();
                     return false;
                 },
                 error: function(){ // includes timeout
-                    $continuousSavingError.show();
+                    $continualSaveError.show();
                 }
             });             
-        }, 15 * 1000 );
+        }, 10 * 1000 );
     };
    
     if ($savableForm.length) {

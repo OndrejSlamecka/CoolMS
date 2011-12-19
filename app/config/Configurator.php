@@ -54,7 +54,7 @@ class Configurator extends \Nette\Config\Configurator
         $robotLoader->addDirectory($this->container->parameters['libsDir']);
         $robotLoader->addDirectory($this->container->parameters['appDir']);
         $robotLoader->register();
-        
+
         $this->container->addService('robotLoader', $robotLoader);
 
         // Other services
@@ -86,14 +86,13 @@ class Configurator extends \Nette\Config\Configurator
          *       - One universal route is enough
          *    - Frontend
          *       - Routes defined in RouteManager
-         */        
-        
-        if ($this->container->parameters['consoleMode']) {            
-            
+         */
+
+        if ($this->container->parameters['consoleMode']) {
+
             $router = new \Nette\Application\Routers\SimpleRouter();
-            
         } else {
-            
+
             // Backend module
             $router[] = new \Nette\Application\Routers\Route('admin/<module>/<action>[/<id>]', array(
                         'module' => 'Dashboard',

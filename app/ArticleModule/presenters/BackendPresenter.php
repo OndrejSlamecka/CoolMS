@@ -101,7 +101,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function createComponentArticleForm($name)
     {
         $form = new \Application\Form($this, $name);
-        $form->getElementPrototype()->class('continualsave');
+        $form->getElementPrototype()->class('savable');
 
         $form->addHidden('id');
 
