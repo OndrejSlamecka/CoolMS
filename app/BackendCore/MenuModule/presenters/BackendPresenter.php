@@ -213,24 +213,24 @@ class BackendPresenter extends \Backend\BasePresenter
         if ($this->template->editing) {
             $labels = array(
                 'type' => 'Link is a',
-                'module_name' => 'to module',
+                'module_name' => 'It\'s linking to the module',
                 'module_view' => 'and it\'s view',
                 'module_view_param' => 'with parameter',
-                'module_caption' => 'It is titled',
+                'module_caption' => 'titled',
                 'submenu_caption' => 'titled',
-                'parent' => 'In submenu?',
+                'parent' => 'Should it be in a submenu?',
                 'strict_link_comparison' => 'Strict link comparison *',
                 'save' => 'Save'
             );
         } else {
             $labels = array(
                 'type' => 'I want to add a',
-                'module_name' => 'to module',
+                'module_name' => 'and linking to the module',
                 'module_view' => 'and it\'s view',
                 'module_view_param' => 'with parameter',
-                'module_caption' => 'And titled',
+                'module_caption' => 'titled',
                 'submenu_caption' => 'titled',
-                'parent' => 'In submenu?',
+                'parent' => 'Should it be in a submenu?',
                 'strict_link_comparison' => 'Strict link comparison *',
                 'save' => 'Save'
             );

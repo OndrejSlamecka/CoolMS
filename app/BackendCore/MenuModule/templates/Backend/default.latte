@@ -81,7 +81,12 @@
 {* FORM *}
 
 {snippet MenuitemFormSnippet}
-<h2>{if $editing}Edit{else}Add{/if} item to menu</h2>
+
+<div class="floatingContentContainer">
+    <h2 class="asidebutton">{if $editing}Edit an item in the menu{else}Add an item to the menu{/if}</h1> 
+    {if $editing}<div class="asideheader low"><a href="{link default}" class="button">Cancel editing</a></div>{/if}
+</div>
+
 {control menuitemForm begin}
 {control menuitemForm errors}
 <table>
@@ -95,7 +100,12 @@
 
 
     {* ModuleLink *}
-    {if $menuitemtype === 'modulelink'}
+    {if $menuitemtype === 'modulelink'}    
+    <tr class="option">
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}{if !$editing} <small>(e.g. 'Articles')</small>{/if}</th>
+        <td>{$presenter['menuitemForm']['module_caption']->control}</td>
+    </tr>      
+    
     <tr class="option">
         <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_name']->label}</th>
         <td>{$presenter['menuitemForm']['module_name']->control}</td>
@@ -118,17 +128,12 @@
         <th><h2><span class="stepnumber">{$nStep++}</span>)</h2> {$presenter['menuitemForm']['parent']->label}</th>
         <td>{$presenter['menuitemForm']['parent']->control}</td>
     </tr>                   
-
-    <tr class="option">
-        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}</th>
-        <td>{$presenter['menuitemForm']['module_caption']->control}</td>
-    </tr>  
     
     <tr class="option">
         <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['strict_link_comparison']->label}</th>
         <td>{$presenter['menuitemForm']['strict_link_comparison']->control}</td>
     </tr>       
-    {/if}            
+    {/if} {* /modulelink *}           
 
     {* SubmenuLink *}
     {if $menuitemtype === 'submenu'}

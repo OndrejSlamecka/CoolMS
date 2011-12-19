@@ -80,6 +80,8 @@ a.button:hover { border:1px solid #536fb3 }
 .asideheader a { margin:0 0 0 12px }
 .asideheader.small { margin-top:15px }
 .asideheader.small a.button { padding:2px 9px }
+.asideheader.low{ margin-top: 5px; }
+.asideheader.low a.button{ padding: 2px 9px; }
 
 /* Emphasize */
 strong { font-weight:700 }
@@ -112,6 +114,8 @@ table.data a.edit:hover,table.data a.delete:hover { text-decoration:underline }
 th { text-align:right; vertical-align:top; padding:.4em .5em 0 0 }
 
 td input { margin:.5em 0 0 }
+
+    td input[type=checkbox]{ margin-top: .4em; }
 
     .padlikeinput { margin:.4em 0 0 }
 
