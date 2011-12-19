@@ -128,7 +128,13 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         if ($article['id'] === '') {
             $article['id'] = null;
             $article['date'] = new \DateTime;
+            $article['user_id'] = $this->getUser()->getId();
+        } else {
+            // Preserve original date
+            $orig_record = $articles->find(array('id' => $article['id']))->fetch();
+            $article['date'] = $orig_record['date'];
         }
+
         if ($article['name_webalized'] === '')
             $article['name_webalized'] = \Nette\Utils\Strings::webalize($article['name']);
 
