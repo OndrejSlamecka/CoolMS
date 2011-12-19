@@ -71,6 +71,9 @@ class Configurator extends \Nette\Config\Configurator
     public function setupApplication()
     {
         $this->container->application->errorPresenter = 'Error';
+
+        if ($this->container->parameters['productionMode'])
+            $this->container->application->catchExceptions = TRUE;
     }
 
     public function setupRouting()
