@@ -19,7 +19,7 @@ body{
 #panel{   
     margin: 1.5em auto 0;
     border: 1px solid #EEE;
-    background: white;    
+    background: #FFF;    
 }
 
 #menu{
@@ -49,7 +49,7 @@ body{
 #menu a:hover{
     color: #000;
     background-color: #F7F7F7;
-    box-shadow: 0px 0px 3px #888;    
+    box-shadow: 0 0 3px #888;    
     text-decoration: underline;
 }
 
@@ -63,18 +63,16 @@ a#logo{
     text-shadow: 1px 1px 1px #777;        
 }
 
-h1{ }
-
-h2{
+h1{
     font-size: 1.8em;  
     margin: 0 0 .7em;
     text-shadow: 1px 1px 1px #999;
     color: #252525;
 }
 
-h3{ font-size: 1.45em; margin: 0 0 .5em; text-shadow: 1px 1px 1px #999; }
+h2{ font-size: 1.45em; margin: 0 0 .5em; text-shadow: 1px 1px 1px #999; }
 
-h4{ font-size: 1.1em; margin: 0 0 .3em; font-weight: bold; }
+h3{ font-size: 1.1em; margin: 0 0 .3em; font-weight: bold; }
 
 a{ color: blue; }
 a:hover{ text-decoration: none; }
