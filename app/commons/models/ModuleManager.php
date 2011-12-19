@@ -130,7 +130,7 @@ class ModuleManager extends \Nette\Object
                 $method = lcfirst($method);
 
                 if ($methodReflection->hasAnnotation('view'))
-                    $modules_names[$module]['methods'][$method] = \Nette\Utils\Strings::webalize($methodReflection->getAnnotation('view')->name);
+                    $modules_names[$module]['methods'][$method] = $methodReflection->getAnnotation('view')->name;
             }
         }
 

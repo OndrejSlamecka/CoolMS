@@ -10,7 +10,8 @@
 
 namespace Frontend;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\Route,
+    Nette\Utils\Strings;
 
 /**
  * Front module routing. TODO: Hard refactoring…
@@ -70,7 +71,8 @@ class RouteManager extends \Nette\Object
                         $this->formMetadata('Article', 'default')
         );
 
-        $router[] = new Route($modules['Article'] . '/' . $articleMethods['archive'],
+        // webalize so that cool-uri will appear, not any unfriendly characters
+        $router[] = new Route($modules['Article'] . '/' . Strings::webalize($articleMethods['archive']),
                         $this->formMetadata('Article', 'archive')
         );
 
@@ -104,12 +106,20 @@ class RouteManager extends \Nette\Object
             )
         );
 
-        if ($action !== null)
+        if ($action !== null) {
+            /* // Note to myself: 
+             * // Remove later when ensured that following 3 lines are wrong/useless/unnecessary
+             * $methods = array();
+             * foreach($transl_table['methods'][$module] as $key => $method)
+             *     $methods[ $key ] = \Nette\Utils\Strings::webalize($method);   
+             *
+             */
             $metadata += array('action' => array(
                     Route::VALUE => $action,
                     Route::FILTER_TABLE => $transl_table['methods'][$module]
                 )
             );
+        }
 
         if (is_array($args))
             $metadata += $args;
