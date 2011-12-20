@@ -69,9 +69,15 @@
         {foreach $items as $key => $item}
             
             {* Preparation *}
-            {? $editingThis = false;}
-            {? $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();}
-            {? if($editingItem === $fullFilename) $editingThis = true;}
+            <?php
+                $editingThis = false;
+                if ($mode === $presenter::MODE_SEARCH) {
+                    $fullFilename = str_replace($fullpath, '', $presenter->fileHandler->sanitizePath($item->getPathname()));
+                } else {            
+                    $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();
+                }
+                if($editingItem === $fullFilename) $editingThis = true;
+            ?>
             
             <tr n:class="$iterator->getCounter() % 2 === $oddOrEven ? even"> {* isOdd because of the <tr> above *}
                 
@@ -91,10 +97,10 @@
                         {if $item->isDir()}
                             <a href="{link default path => $fullFilename}">
                         {else}
-                            <a href="{$baseUri}{$presenter->getRelativePath($fullFilename)}">
+                            <a href="{$baseUri}{$presenter->fileHandler->getRelativePath($fullFilename)}">                            
                         {/if}
                                 {if $mode === $presenter::MODE_SEARCH}
-                                    {$item->getPathname()|remove:$fullpath|replace:'\\':'/'}   
+                                    {$fullFilename}   
                                 {else}
                                     {$item->getFileName()}
                                 {/if}
@@ -121,7 +127,7 @@
 {/if} {* if path exists *}
 {/snippet}
         
-<hr />    
+<hr>    
     
 <h2>Upload file</h2>    
 
@@ -129,7 +135,7 @@
 <div id="status" class="meter"><span></span></div>   
 <p><small>You can select multiple files by holding Ctrl key and clicking.<br />All files can be selected by using key combination Ctrl-A.</small></p>
 
-<hr />    
+<hr>    
     
 <h2>Create folder</h2>    
 
