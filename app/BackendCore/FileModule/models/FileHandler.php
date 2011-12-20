@@ -12,28 +12,55 @@ namespace FileModule;
 
 use \Nette\Utils\Strings;
 
+/**
+ * TODO: Refactor: getRelativePath, getFullPath, sanitizePath, getFolderAbove VERSUS recursiveRemoveDir, rename, moveFile
+ *                 |--------------------- Path methods ---------------------|        |------ file, folder methods ------|
+ */
 class FileHandler extends \Nette\Object
 {
 
     private $baseDir;
     private $relativePath;
 
+    /**
+     *
+     * @param string $baseDir
+     * @param string $relativePath 
+     */
     public function __construct($baseDir, $relativePath='/')
     {
         $this->baseDir = $baseDir;
         $this->relativePath = $relativePath;
+
+        if (!file_exists($this->baseDir . $this->relativePath))
+            throw new \Nette\InvalidArgumentException('Given relative path must be an existing folder under the given base directory.');
     }
 
+    /**
+     * Returns <filehandler work dir>/<path> for given path.
+     * @param string $path
+     * @return string
+     */
     public function getRelativePath($path = null)
     {
         return $this->relativePath . $path;
     }
 
+    /**
+     * Returns <filesystem path>/<relative path>/<path> for given path.
+     * @param string $path
+     * @return string
+     */
     public function getFullPath($path = null)
     {
         return $this->baseDir . $this->getRelativePath($path);
     }
 
+    /**
+     * Converts backslashes to forward slashes, removes redundant slashes and double dots ("..")
+     * @param string $path
+     * @return string 
+     */
     public function sanitizePath($path)
     {
         // Use just '/' everywhere
@@ -49,6 +76,11 @@ class FileHandler extends \Nette\Object
         return $path;
     }
 
+    /**
+     * Returns folder above given path
+     * @param string $path
+     * @return string 
+     */
     public function getFolderAbove($path)
     {
         // If not base folder
@@ -64,6 +96,10 @@ class FileHandler extends \Nette\Object
         return $folder_above;
     }
 
+    /**
+     * Recursively removes directory and its contents
+     * @param type $dir 
+     */
     private function recursiveRemoveDir($dir)
     {
         /* http://www.php.net/manual/en/function.rmdir.php#98622 */
@@ -81,6 +117,12 @@ class FileHandler extends \Nette\Object
         rmdir($dir);
     }
 
+    /**
+     * Renames file $oldName to $newName
+     * @param string $oldName
+     * @param string $newName
+     * @return bool True on success, false on failure
+     */
     public function rename($oldName, $newName)
     {
         $newName = $this->sanitizePath($newName);
@@ -88,11 +130,24 @@ class FileHandler extends \Nette\Object
 
         $newName = $this->getFolderAbove($oldName) . '/' . $newName;
 
-        $newName = $this->getFullPath($newName); // Necessary?
+        $newName = $this->getFullPath($newName);
         $oldName = $this->getFullPath($oldName);
 
         if (file_exists($oldName))
             return rename($oldName, $newName);
+    }
+
+    /**
+     * Sanitizes path and moves file to path/filename
+     * @param \Nette\Http\FileUpload $file 
+     */
+    public function moveFile($path, \Nette\Http\FileUpload $file)
+    {
+        // Get name and path to place
+        $filename = Strings::webalize($file->name, '.');
+        $filepath = $this->getFullPath($this->sanitizePath($path)) . '/' . $filename;
+        // Move
+        $file->move($filepath, $filename);
     }
 
 }

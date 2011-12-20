@@ -152,11 +152,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $form = $form->getValues();
 
         foreach ($form['files'] as $file) {
-            // Get name and path to place
-            $filename = Strings::webalize($file->name, '.');
-            $filepath = $this->fileHandler->getFullPath($this->fileHandler->sanitizePath($path)) . '/' . $filename;
-            // Move
-            $file->move($filepath, $filename);
+            $this->fileHandler->moveFile($path, $file);
         }
 
         if ($this->isAjax()) {
