@@ -37,14 +37,14 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             // Save for reverse
             $this->sessionSection->reversableItem = $page->toArray();
 
-            $this->flashMessage('Page deleted &ndash; <a href="' . $this->link('reverse') . '" >Undo</a>');
+            $this->flashMessage('Page deleted &ndash; <a href="' . $this->link('reverseDelete') . '" >Undo</a>');
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
         $this->redirect('default');
     }
 
-    public function actionReverse()
+    public function actionReverseDelete()
     {
         $page = $this->sessionSection->reversableItem;
         $pages = $this->repositories->Page;
