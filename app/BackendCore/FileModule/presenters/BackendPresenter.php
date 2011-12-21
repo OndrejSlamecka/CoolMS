@@ -11,8 +11,8 @@
 namespace FileModule;
 
 use \Nette\Utils\Strings,
-    \NetteExt\Utils\Files,
-    \NetteExt\Utils\Paths;
+    \Application\Utils\Files,
+    \Application\Utils\Paths;
 
 /**
  * File manager's presenter

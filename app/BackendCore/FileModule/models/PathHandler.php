@@ -11,7 +11,7 @@
 namespace FileModule;
 
 use \Nette\Utils\Strings;
-use NetteExt\Utils\Paths;
+use \Application\Utils\Paths;
 
 /**
  * Class responsible for determining paths

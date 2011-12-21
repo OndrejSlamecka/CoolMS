@@ -72,7 +72,7 @@
             <?php
                 $editingThis = false;
                 if ($mode === $presenter::MODE_SEARCH) {
-                    $fullFilename = str_replace($fullpath, '', \NetteExt\Utils\Paths::sanitize('/'.$item->getPathname()));
+                    $fullFilename = str_replace($fullpath, '', \Application\Utils\Paths::sanitize('/'.$item->getPathname()));
                 } else {            
                     $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();
                 }
