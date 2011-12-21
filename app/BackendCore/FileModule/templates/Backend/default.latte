@@ -16,7 +16,7 @@
 
 {snippet FileList}
 {if !file_exists( $fullpath )} 
-    <p>Requested folder does not exist. Try to find it <a href="{link default}">among all files</a>.</p> {* TODO: Correct english? *}
+    <p>Requested folder does not exist. Try to find it <a href="{link default}">among all the files</a>.</p> {* TODO: Correct english? *}
 {else}
 
     {* Preparation *}
@@ -72,7 +72,7 @@
             <?php
                 $editingThis = false;
                 if ($mode === $presenter::MODE_SEARCH) {
-                    $fullFilename = str_replace($fullpath, '', $presenter->fileHandler->sanitizePath($item->getPathname()));
+                    $fullFilename = str_replace($fullpath, '', \NetteExt\Utils\Paths::sanitize('/'.$item->getPathname()));
                 } else {            
                     $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();
                 }
@@ -97,7 +97,7 @@
                         {if $item->isDir()}
                             <a href="{link default path => $fullFilename}">
                         {else}
-                            <a href="{$baseUri}{$presenter->fileHandler->getRelativePath($fullFilename)}">                            
+                            <a href="{$baseUri}{$presenter->pathHandler->getRelativePath($fullFilename)}">                            
                         {/if}
                                 {if $mode === $presenter::MODE_SEARCH}
                                     {$fullFilename}   
