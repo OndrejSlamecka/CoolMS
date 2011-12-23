@@ -148,7 +148,7 @@ class BackendPresenter extends \Backend\BasePresenter
             $template->registerFilter(new \Nette\Latte\Engine);
 
             $template->site = $this->getHttpRequest()->getUrl()->getHostUrl();
-            $template->link = $this->link('//Authentication:createPassword', array('token' => $token, 'newuser' => 'true'));
+            $template->link = $this->link('//:Authentication:Backend:createPassword', array('token' => $token, 'newuser' => 'true'));
 
             $host = $this->getHttpRequest()->getUrl()->getHost();
 

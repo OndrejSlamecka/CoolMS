@@ -74,8 +74,9 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
     public static function isTokenValid($token_age)
     {
         // Current setting: 1 day
-
-        $token_age = new \DateTime($token_age);
+        
+        if( is_string($token_age) )
+            $token_age = new \DateTime($token_age);
         $allowed_interval = new \DateTime();
         $allowed_interval->add(new \DateInterval('P0Y1DT0H0M'));
 

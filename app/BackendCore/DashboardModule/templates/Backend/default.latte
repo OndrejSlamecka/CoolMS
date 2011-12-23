@@ -3,7 +3,7 @@
 {if $newUser}
 <h1>Welcome new user</h1>
 <p>We recommend you to set your personal informations in
-    <a href="{link User:profile, id => $loggedUser->getIdentity->getId()}">your profile</a></p>
+    <a href="{link :User:Backend:profile, id => $loggedUser->getId()}">your profile</a></p>
 {/if}
 
 <h1>Site overview</h1>
