@@ -15,18 +15,12 @@
 
     <p><a href="{link Authentication:requestPasswordReset}" id="requestNewPasswordToggleButton">I forgot my password</a></p>
     
-    {snippet requestNewPassword}        
-        {if isset($confirmationEmailSent)}
-            {if $confirmationEmailSent}
+    {snippet requestNewPassword} 
+        {if $presenter->getParam('do') === 'requestNewPasswordForm-submit'}
+            {if $emailSendingSuccessful}
                 <p class="flash msg">Please confirm the action in your inbox.</p>
             {else}
-                <p>Email wasn't sent.
-                {if $userExists}
-                    Oops, sorry, problem is on our side, please contact the administrator.
-                {else} 
-                    I think you haven't entered your email right. Is your adress really {$givenEmail}?
-                {/if}
-                </p>
+                <p class="flash msg">{$errorMessage}</p>
             {/if}
         {else}
             {control requestNewPasswordForm}

@@ -21,12 +21,13 @@ use Backend\Authenticator;
  */
 class BackendPresenter extends \Backend\BasePresenter
 {
+
     public function startup()
     {
         parent::startup();
-        $this->setLayout( 'layout' ); // This - default layout - was overriden in BasePresenter
+        $this->setLayout('layout'); // This - default layout - was overriden in BasePresenter
     }
-    
+
     /* ------------------------------- LOGIN -------------------------------- */
 
     /**
@@ -101,25 +102,21 @@ class BackendPresenter extends \Backend\BasePresenter
         // Find user by provided email
         $user = $users->find(array('email' => $form['email']))->fetch();
 
-        if (empty($user)) {
-            $this->flashMessage('A user with given email does not exist');
-            $this->redirect('login');
-        }
+        // Does user exist?
+        $userExists = empty($user);
 
-        $this->template->confirmationEmailSent = false;
-        $this->template->userExists = false;
-        $this->template->givenEmail = $form['email'];
+        if ($userExists) {
+            $this->template->emailSendingSuccessful = false;
+            $this->template->errorMessage = "You have probably entered a wrong email. Is your address really {$form['email']}?";
+        } else {
 
-        // If user exists // TODO: Rewrite, user existance verified earlier // TODO: Do good testing, earlier verifying code breaks messages in login.latte
-        if (!empty($user)) {
-
-            $this->template->userExists = true;
-
+            $user = $user->toArray();
 
             // Create token for future verification
             $token = Authenticator::createToken();
             $user['token'] = $token;
             $user['token_created'] = new \DateTime();
+
             $users->save($user, 'id');
 
             // Prepare email
@@ -134,11 +131,19 @@ class BackendPresenter extends \Backend\BasePresenter
             $mail = new \Nette\Mail\Message();
             $mail->setFrom("Password renewal <cms@{$host}>")
                     ->addTo($user['email'])
-                    ->setHtmlBody($template)
-                    ->send();
+                    ->setHtmlBody($template);
 
-            $this->template->confirmationEmailSent = true;
-        }
+            try {
+                $mail->send();
+                $this->template->emailSendingSuccessful = true;
+            } catch (\Nette\InvalidStateException $e) {
+                if (strpos($e->getMessage(), "Failed to connect to mailserver")) {
+                    $this->template->errorMessage = 'Failed to send email with instructions due to problems with SMTP. Please let administrator know.';
+                    $this->template->emailSendingSuccessful = false;
+                } else
+                    throw $e;
+            }
+        } // if userExists
 
         $this->invalidateControl('requestNewPassword');
     }
