@@ -18,7 +18,7 @@ class Configurator extends \Nette\Config\Configurator
 
     public static function setupDebugger()
     {
-        Debugger::$logDirectory = __DIR__ . '/../log';
+        Debugger::$logDirectory = __DIR__ . '/../../log';
         Debugger::$strictMode = TRUE;
         Debugger::enable();
     }
