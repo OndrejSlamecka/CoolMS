@@ -130,7 +130,7 @@ class BackendPresenter extends \Backend\BasePresenter
             $user['role'] = 'user';
 
             if ($users->find(array('email' => $user['email']))->fetch()) {
-                $this->flashMessage('Uživatel s emailem ' . $user['email'] . ' již existuje.');
+                $this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
                 $this->redirect('new');
             }
 
@@ -141,7 +141,6 @@ class BackendPresenter extends \Backend\BasePresenter
             $token = Authenticator::createToken();
             $user['token'] = $token;
             $user['token_created'] = new \DateTime();
-            $users->save($user, 'id');
 
             // Prepare email
             $template = new \Nette\Templating\FileTemplate($this->getTemplatesFolder() . "/email/newUser.latte");
@@ -153,12 +152,21 @@ class BackendPresenter extends \Backend\BasePresenter
             $host = $this->getHttpRequest()->getUrl()->getHost();
 
             $mail = new \Nette\Mail\Message();
-            $mail->setFrom("Password creation <cms@$host>")
+            $mail->setFrom("Account creation <cms@$host>")
                     ->addTo($user['email'])
-                    ->setHtmlBody($template)
-                    ->send();
+                    ->setHtmlBody($template);
 
-            $this->flashMessage('New account created. Follow the instructions in the given email.');
+            try {
+                $mail->send();
+                $users->save($user, 'id');
+                $this->flashMessage('New account created. Follow the instructions in the given email.');
+            } catch (\Nette\InvalidStateException $e) {
+                if (strpos($e->getMessage(), "Failed to connect to mailserver"))
+                    $this->flashMessage('Failed to send email with instructions due to problems with SMTP. Please let your administrator know.');
+                else
+                    throw $e;
+            }
+
             $this->redirect('default');
         } // if $loggedUser->isInRole('admin')
     }
