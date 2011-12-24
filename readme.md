@@ -21,9 +21,10 @@ Uses
 
 Installation
 ------------
+You should be familiar with installation of the sandbox from the Nette Framework.
 
 - Download the files.
-- Unpack to the document root directory withing your web server.
+- Unpack folder to your server so that directory www matches your document root.
 - Download Nette (http://nette.org/en/download) and unpack its libraries into libs/Nette.
 - Execute coolms.sql (located in the root folder of downloaded package) on your mysql server
 - Run from browser (default login - change ASAP - is email: admin@example.com, password: admin)
@@ -31,4 +32,4 @@ Installation
 
 ---
 
-If you want to participate on development see development_notes.txt
+See https://github.com/OndrejSlamecka/CoolMS for further information
