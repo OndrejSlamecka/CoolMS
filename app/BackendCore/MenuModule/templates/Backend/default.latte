@@ -49,9 +49,9 @@
 		{foreach $tmi['children'] as $mi}
 		    <li id="mi-{$mi['id']}">
                         <div class="mi-container">
-                            <h4>                                    
+                            <h3>                                    
                                 {$mi['name']}                                                       
-                            </h4>
+                            </h3>
                             <span>
                                 <a href="{link edit! id => $mi->id}" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
                                 <a href="{link delete id => $mi->id}" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
