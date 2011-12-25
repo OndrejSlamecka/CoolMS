@@ -1,16 +1,21 @@
     {form articleForm}
-
-    <div id="inner-content">
-
-        <h2>{$header}</h2>
+        <h1>{$header}</h1>
 
             {control articleForm errors}
+        
+            <p class="notdisplay errorMessage" id="continualSaveError">
+                <strong>Autosave backup is not working</strong>. Please check your internet connection.
+            </p>
 
-            <table>
+            <table class="textFormatForm">
 
                 <tr class="required">
                     <th class="hidden">{label name /}</th>
-                    <td>{input name}</td>
+                    <td>
+                        {input name}
+                        {input publish}
+                        {input save}                        
+                    </td>
                 </tr>
 
                 <tr>
@@ -18,33 +23,26 @@
                     <td>{input text}</td>
                 </tr>
 
-            </table>
-        
-        <p class="notdisplay errorMsg"><strong>Autosave backup is not working</strong>. You should save your work to be sure.</p>
+            </table>                
 
+        <div class="toolbox">
 
-    </div> <!-- #inner-content -->
+            <h2>Options</h2>
+            <div class="body">
+                <table>
+                    <tr>
+                        <th>{label name_webalized /}</th>
+                        <td>
+                            {input name_webalized}                  
+                            <small>If left empty, it will fill itself</small>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div> <!-- /.toolbox -->
 
-    <div id="inner-sidebar">
-
-        <h3>Options</h3>
-        <div class="box">
-	    <p>
-                {input save}                                      
-            </p>
-
-            <p>
-                {label name_webalized /}
-                {input name_webalized}
-                <br>
-                <small>If left empty, it will fill itself</small>
-            </p>
-            
-        </div>
-
-    </div> <!-- #inner-sidebar -->
-
-
-    <div class="clear"><hr /></div>
-    {input id} {* Fixes https://github.com/nette/nette/issues/400 TODO: Remove after issues is closed *}
+    {* Although https://github.com/nette/nette/issues/400 was closed, the problem remains. TODO: Find out why *}
+    {input article_id}
+    {input user_id}
+    {input id}
     {/form articleForm}

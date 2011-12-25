@@ -5,17 +5,20 @@
 # http://nette.org/security-warning
 #
 common:
-	php: # PHP configuration
+	php:
 		date.timezone: Europe/Prague
 		# session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
-		# default_charset: "UTF-8"
 
-	parameters:
-		database: ['mysql:host=localhost;dbname=cms', 'root', 'root']
 
 production < common:
+	includes:
+		- config.production.neon
 
 development < common:
+	includes:
+		- config.development.neon
 
 console < common:
+	includes:
+		- config.development.neon

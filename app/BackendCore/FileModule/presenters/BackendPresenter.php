@@ -10,11 +10,12 @@
 
 namespace FileModule;
 
-use \Nette\Utils\Strings;
+use \Nette\Utils\Strings,
+    \Application\Utils\Files,
+    \Application\Utils\Paths;
 
 /**
  * File manager's presenter
- * TODO: Refactor. sanitizePath, getRelativePath, getFullPath, getFolderAbove, recursiveRemoveDir should be moved into some model
  * 
  * @author Ondrej Slamecka
  */
@@ -25,44 +26,25 @@ class BackendPresenter extends \Backend\BasePresenter
 
     private $mode;
 
-    public function sanitizePath($path)
+    /** @var FileModule/PathHandler */
+    private $pathHandler;
+
+    public function startup()
     {
-        // Use just '/' everywhere
-        $path = Strings::replace($path, '~\\\~', '/');
-        // Use just one separator... 
-        $path = Strings::replace($path, '~\/\/~', '/');
-        // Remove ..
-        $path = Strings::replace($path, '~\.\.~', '');
-
-        if ($path === '')
-            $path = '/';
-
-        return $path;
+        parent::startup();
+        $this->pathHandler = new PathHandler($this->context->parameters['wwwDir'], '/files');
     }
 
-    public function getRelativePath($path = null)
+    public function createTemplate($class = NULL)
     {
-        return '/files' . $path;
+        $template = parent::createTemplate($class);
+        $template->mode = self::MODE_LIST;
+        return $template;
     }
 
-    public function getFullPath($path = null)
+    public function getPathHandler()
     {
-        return $this->context->parameters['wwwDir'] . $this->getRelativePath($path);
-    }
-
-    public function getFolderAbove($path)
-    {
-        // If not base folder
-        if ($path !== '/') {
-            $folder_above = Strings::match($path, "~(.*)/.*$~");
-            if (is_array($folder_above))
-                $folder_above = array_pop($folder_above);
-            else // If it is not array, it is empty - just one dir over base                
-                $folder_above = '/';
-        }else
-            $folder_above = '/';
-
-        return $folder_above;
+        return $this->pathHandler;
     }
 
     public function prepareBreadcrumbs($path)
@@ -88,28 +70,19 @@ class BackendPresenter extends \Backend\BasePresenter
     {
         if ($this->mode === self::MODE_SEARCH) {
             $this->template->path = '/';
-            $this->template->fullpath = $this->getFullPath();
+            $this->template->fullpath = $this->pathHandler->getFullPath();
             $this->template->folder_above = '/';
             $this->template->breadcrumbs = null;
 
             // In search mode path is filename
-            $this->template->items = \Nette\Utils\Finder::findFiles('*' . $path . '*')->from($this->getFullPath());
+            $this->template->items = \Nette\Utils\Finder::findFiles('*' . $path . '*')->from($this->pathHandler->getFullPath());
         } else {
-            $this->template->path = $path = $this->sanitizePath($path);
-            $this->template->fullpath = $fullpath = $this->getFullPath($path);
-            $this->template->folder_above = $this->getFolderAbove($path);
+            $this->template->path = $path = Paths::sanitize($path);
+            $this->template->fullpath = $fullpath = $this->pathHandler->getFullPath($path);
+            $this->template->folder_above = Paths::getFolderAbove($path);
             $this->template->breadcrumbs = $this->prepareBreadcrumbs($path);
             $this->template->items = \Nette\Utils\Finder::find('*')->in($fullpath);
         }
-    }
-
-    /*     * ********** */
-
-    public function createTemplate($class = NULL)
-    {
-        $template = parent::createTemplate($class);
-        $template->mode = self::MODE_LIST;
-        return $template;
     }
 
     public function handleEdit($path)
@@ -117,7 +90,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->template->editingItem = $path;
 
         // We want to show folder above
-        $path = $this->getFolderAbove($path);
+        $path = Paths::getFolderAbove($path);
 
         $this->setTemplateVariables($path);
 
@@ -126,26 +99,10 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->invalidateControl('FileList');
     }
 
-    private function recursiveRemoveDir($dir)
-    {
-        /* http://www.php.net/manual/en/function.rmdir.php#98622 */
-        $objects = scandir($dir);
-
-        if (is_array($objects)) // scandir returns false for empty folders
-            foreach ($objects as $object) {
-                if ($object !== "." && $object !== "..")
-                    if (filetype($dir . "/" . $object) === "dir")
-                        $this->recursiveRemoveDir($dir . "/" . $object);
-                    else
-                        unlink($dir . "/" . $object);
-            }
-        rmdir($dir);
-    }
-
     public function actionDelete($path)
     {
-        $path = $this->sanitizePath($path);
-        $fullpath = $this->getFullPath($path);
+        $path = Paths::sanitize($path);
+        $fullpath = $this->pathHandler->getFullPath($path);
 
 
         if (!file_exists($fullpath)) {
@@ -153,36 +110,16 @@ class BackendPresenter extends \Backend\BasePresenter
         } else {
 
             if (is_file($fullpath)) {
-                unlink($fullpath);
                 $this->flashMessage('File deleted');
             } elseif (is_dir($fullpath)) {
-
-                $this->recursiveRemoveDir($fullpath);
                 $this->flashMessage('Folder deleted');
             } else {
-                $this->flashMessage('Something strange happened, please try again.');
+                $this->flashMessage('File/folder not found.');
             }
+            Files::remove($fullpath);
         }
 
-        $this->redirect("default", array('path' => $this->getFolderAbove($path)));
-    }
-
-    // TODO: Obsolete, remove
-    public function actionDownload($path)
-    {
-        $path = $this->sanitizePath($path);
-        $fullpath = $this->getFullPath($path);
-
-        if (!is_file($fullpath)) {
-            $this->flashMessage('The file you are trying to delete was not found');
-            $this->redirect("default");
-        }
-
-        $name = Strings::match($path, "~.*/(.*)$~");
-        $name = array_pop($name);
-
-        // Send file for download
-        $this->sendResponse(new \Nette\Application\Responses\FileResponse($fullpath, $name));
+        $this->redirect("default", array('path' => Paths::getFolderAbove($path)));
     }
 
     public function renderDefault($path)
@@ -197,7 +134,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $form = new \Application\Form($this, $name);
         $form->getElementPrototype()->class('html5upload');
 
-        //$form->addUpload('file', 'Soubor');
+        //$form->addUpload('files', 'File');
         $form->addMultipleUpload("files", "File(s)");
 
         $form->addSubmit('send', 'Upload');
@@ -210,15 +147,11 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function fileUploadFormSubmit($form)
     {
-        $path = $this->sanitizePath($this->getParam('path'));
+        $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
         foreach ($form['files'] as $file) {
-            // Get name and path to place
-            $filename = Strings::webalize($file->name, '.');
-            $filepath = $this->getFullPath($this->sanitizePath($path)) . '/' . $filename;
-            // Move
-            $file->move($filepath, $filename);
+            Files::move($this->pathHandler->getFullPath($path), $file);
         }
 
         if ($this->isAjax()) {
@@ -245,12 +178,12 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function folderCreationFormSubmit($form)
     {
-        $path = $this->sanitizePath($this->getParam('path'));
+        $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
         $folder = $form['folder'];
 
-        mkdir($this->getFullPath($path . '/' . $form['folder']));
+        mkdir($this->pathHandler->getFullPath($path . '/' . $form['folder']));
 
         $this->redirect('default', array('path' => $path));
     }
@@ -275,20 +208,19 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function renameFormSubmit($form)
     {
-        $showpath = $this->sanitizePath($this->getFolderAbove($this->getParam('path')));
+        $fhandler = $this->pathHandler;
+        $showpath = Paths::sanitize(Paths::getFolderAbove($this->getParam('path')));
 
         $form = $form->getValues();
 
-        $form['new_name'] = $this->sanitizePath($form['new_name']);
-        $form['old_name'] = $this->sanitizePath($form['old_name']);
-
-        $form['new_name'] = $this->getFolderAbove($form['old_name']) . '/' . $form['new_name'];
-
-        $form['new_name'] = $this->getFullPath($form['new_name']);
-        $form['old_name'] = $this->getFullPath($form['old_name']);
-
-        if (file_exists($form['old_name']))
-            rename($form['old_name'], $form['new_name']);
+        $newName = Paths::sanitize($form['new_name']);
+        $oldName = Paths::sanitize($form['old_name']);
+        
+        $newName = Paths::getFolderAbove($oldName) . '/' . $newName;
+        
+        $newName = $fhandler->getFullPath($newName);
+        $oldName = $fhandler->getFullPath($oldName);
+        Files::rename($oldName, $newName);
 
         $this->setTemplateVariables($showpath);
         $this->invalidateControl('FileList');
@@ -322,8 +254,9 @@ class BackendPresenter extends \Backend\BasePresenter
 
             $this->setTemplateVariables($form['q']);
 
-            if (!$this->isAjax())
-                $this->redirect('search', array('path' => $showpath));
+            // TODO: Implement search without AJAX
+            /* if (!$this->isAjax())
+              $this->redirect('search', array('path' => $showpath)); */
         }
 
         $this->invalidateControl('FileList');

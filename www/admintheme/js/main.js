@@ -1,24 +1,21 @@
 $(document).ready(function(){  
     
-    /* Language choose form */  
-    $("#frm-languageChooseForm select").change(function(){
-        this.form.submit();
-    });
-
     // Ajaxed buttons
     $("a.ajax").live("click",function (event) {
         event.preventDefault();
         $.get(this.href);
     });     
   
-    // Ajaxed buttons
+    // Search box in FileManager
     $("form.ajax.onchange input").live("keyup",function () {
-        $( this.form ).ajaxSubmit(function( payload ) {
-            jQuery.nette.success(payload);
-            $( "#frm-searchForm input").focusEnd();
-        });    
-
-        return false;
+        $(this.form).ajaxSubmit(
+        {
+            success: function(payload) {
+                jQuery.nette.success(payload);
+                $("#frm-searchForm input").focusEnd();
+            }
+        }); 
+        
     });       
 
     // Ajaxed forms
@@ -28,8 +25,9 @@ $(document).ready(function(){
     });
 
     // Continual saving of forms
-    $savableForm = $('form.continualsave');
-    $continuousSavingError = $('#continuousSavingError');
+    $savableForm = $('form.savable');
+    $continualSaveError = $('#continualSaveError');
+    $inputId = $("#frmarticleForm-id");
    
     var fncSaveContinually = function(){        
         setTimeout(function()
@@ -38,20 +36,25 @@ $(document).ready(function(){
             var form = $savableForm;
             form.ajaxSubmit({
                 success: function(payload){
-                    if(payload.error){
-                        $continuousSavingError.show();
-                    }else{
-                        $continuousSavingError.show();
-                    }
-                    
                     fncSaveContinually();
+                    if(!payload)
+                        return false;
+                    
+                    if(payload.error){
+                        $continualSaveError.show();
+                    }else{
+                        $continualSaveError.hide();
+                        if(payload.draft_id)
+                            $inputId.val(payload.draft_id);
+                    }
+                
                     return false;
                 },
                 error: function(){ // includes timeout
-                    $continuousSavingError.show();
+                    $continualSaveError.show();
                 }
             });             
-        }, 30 * 1000 );
+        }, 10 * 1000 );
     };
    
     if ($savableForm.length) {

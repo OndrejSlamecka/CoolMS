@@ -40,10 +40,10 @@ abstract class BasePresenter extends \BasePresenter
         $menu = $this->repositories->Menuitem;
         $this->template->topMenu = $menu->find(array('parent' => null,
             'type != ?' => \Application\Entity\Menuitem::TYPE_SUBMENU,)
-                , '`order` ASC');        
+                , '`order` ASC');
     }
 
-    /* ******************************* MENU ********************************* */
+    /* ------------------------------- MENU --------------------------------- */
 
     public function menulink($mi)
     {
@@ -64,7 +64,7 @@ abstract class BasePresenter extends \BasePresenter
         if ($mi['strict_link_comparison'])
             $this->menulink($mi);
         else
-            $this->link(':'.$mi['module_name'] . ":Frontend:*");
+            $this->link(':' . $mi['module_name'] . ":Frontend:*");
 
         return $this->getPresenter()->getLastCreatedRequestFlag('current');
     }

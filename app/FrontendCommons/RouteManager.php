@@ -10,7 +10,8 @@
 
 namespace Frontend;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\Route,
+    Nette\Utils\Strings;
 
 /**
  * Front module routing. TODO: Hard refactoring…
@@ -51,7 +52,7 @@ class RouteManager extends \Nette\Object
     public function addRoutes(&$router)
     {
         $names = $this->getTranslationTable();
-        $names = array_flip($names['names']);
+        $modules = array_flip($names['names']);
 
         /* FRONT ROUTES ARE EDITED HERE */
 
@@ -59,21 +60,28 @@ class RouteManager extends \Nette\Object
         $router[] = new Route('', $this->getIndexMetadata());
 
         // Module: Page
-        $router[] = new Route($names['Page'] . '/<name>',
+        $router[] = new Route($modules['Page'] . '/<name>',
                         $this->formMetadata('Page', 'default')
         );
 
         // Module: Article
-        $router[] = new Route($names['Article'],
+        $articleMethods = array_flip($names['methods']['Article']);
+
+        $router[] = new Route($modules['Article'],
                         $this->formMetadata('Article', 'default')
         );
 
-        $router[] = new Route($names['Article'] . '/<name>',
+        // webalize so that cool-uri will appear, not any unfriendly characters
+        $router[] = new Route($modules['Article'] . '/' . Strings::webalize($articleMethods['archive']),
+                        $this->formMetadata('Article', 'archive')
+        );
+
+        $router[] = new Route($modules['Article'] . '/<name>',
                         $this->formMetadata('Article', 'detail')
         );
 
         // The rest...
-        $router[] = new Route('<presenter>/<action>[/<name>]',
+        $router[] = new Route('<module>/<action>[/<name>]',
                         $this->getIndexMetadata()
         );
     }
@@ -98,12 +106,20 @@ class RouteManager extends \Nette\Object
             )
         );
 
-        if ($action !== null)
+        if ($action !== null) {
+            /* // Note to myself: 
+             * // Remove later when ensured that following 3 lines are wrong/useless/unnecessary
+             * $methods = array();
+             * foreach($transl_table['methods'][$module] as $key => $method)
+             *     $methods[ $key ] = \Nette\Utils\Strings::webalize($method);   
+             *
+             */
             $metadata += array('action' => array(
                     Route::VALUE => $action,
                     Route::FILTER_TABLE => $transl_table['methods'][$module]
                 )
             );
+        }
 
         if (is_array($args))
             $metadata += $args;
@@ -179,7 +195,7 @@ class RouteManager extends \Nette\Object
         return $front_default;
     }
 
-    /*     * ********* */
+    /* ------------- */
 
     /**
      * @return Nette\Caching\Cache

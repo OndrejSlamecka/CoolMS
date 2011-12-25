@@ -37,14 +37,14 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             // Save for reverse
             $this->sessionSection->reversableItem = $page->toArray();
 
-            $this->flashMessage('Page deleted &ndash; <a href="' . $this->link('reverse') . '" >Undo</a>');
+            $this->flashMessage('Page deleted &ndash; <a href="' . $this->link('reverseDelete') . '" >Undo</a>');
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }
         $this->redirect('default');
     }
 
-    public function actionReverse()
+    public function actionReverseDelete()
     {
         $page = $this->sessionSection->reversableItem;
         $pages = $this->repositories->Page;
@@ -71,12 +71,12 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function renderEdit($id, $autosave=false)
     {
         $pages = $this->repositories->Page;
-        
+
         if ($autosave)
             $page = $this->sessionSection->autosave;
         else
             $page = $pages->find(array('id' => $id))->fetch();
-        
+
         $this->template->page = $page;
 
         if (!$page) {
@@ -84,7 +84,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             $this->redirect('default');
         }
 
-        if( $page instanceof \Nette\Database\Table\Selection )
+        if ($page instanceof \Nette\Database\Table\Selection)
             $page = $page->toArray();
 
         $this['pageForm']->setDefaults($page);
@@ -100,21 +100,22 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function createComponentPageForm($name)
     {
         $form = new \Application\Form($this, $name);
-        $form->getElementPrototype()->class('textFormatForm continualsave');
+        $form->getElementPrototype()->class('savable');
 
         $form->addHidden('id');
 
         $form->addText('name_webalized', 'Name in URL');
 
         $form->addText('name', 'Název');
-        $form['name']->getControlPrototype()->class('ribbon');
+        $form['name']->getControlPrototype();
 
         $form->addTextarea('text', 'Text', 60, 30);
         $form['text']->getControlPrototype()->class('wysiwyg');
 
         $form->addText('template', 'Template');
 
-        $form->addSubmit('save', 'Save');
+        $form->addSubmit('save', 'Save')
+                ->getControlPrototype()->class('emphasized');
 
         $form->onSuccess[] = array($this, 'pageSubmit');
 
@@ -139,7 +140,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
                 unset($this->sessionSection->autosave);
                 $pages->save($page, 'id');
             }
-            
+
             $this->flashMessage('Page saved');
         } catch (Exception $e) {
             $this->flashMessage('Article was not saved. Please try again and then contact the administrator');

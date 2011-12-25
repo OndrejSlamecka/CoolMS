@@ -25,14 +25,14 @@ class FrontendPresenter extends \Frontend\BasePresenter
         $this->template->page = $pages->find(array('name_webalized' => $name))->fetch();
 
 
-        /* Set template and prepare it, if page has it's own */
+        /* Set template and prepare it if page has it's own */
         if ($this->template->page['template'] !== null
                 && file_exists($this->getTemplatesFolder() . '/templates/' . $this->template->page['template'] . '.latte')) {
             $method = 'prepare' . ucfirst($this->template->page['template']) . 'Template';
             if (method_exists($this, $method))
                 $this->$method();
 
-            $this->setView('templates/' . $this->template->page['template']); // TODO: IS this a correct way?            
+            $this->setView('templates/' . $this->template->page['template']);
         }
     }
 

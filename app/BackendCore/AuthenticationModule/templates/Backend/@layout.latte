@@ -9,8 +9,7 @@
     <meta name="copyright" content="Ondrej Slamecka" />
 
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/reset.css" />
-    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/screen.css" media="screen,projection" />
+    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/screen.css" />
 
     <!--  Javascript, AJAX, jQuery -->
     <!--[if IE]>
@@ -28,16 +27,15 @@
 </head>
 <body class="authentication" id="{block #bodyId}{/block}">
 
-    <div id="header">
+    <div id="header" class="clearfix">
 
-	<h1>Administration</h1>
+	<span id="logo">Administration</span>
 
         <div class="actionbar">
 	    <a href="{$baseUri}">To site</a>
 	</div>
-
-	<div class="clear"><hr /></div>
-    </div> <!-- #header -->
+        
+    </div> <!-- /#header -->
 
     <div id="panel">
 

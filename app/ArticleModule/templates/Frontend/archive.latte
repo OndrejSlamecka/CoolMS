@@ -1,0 +1,21 @@
+{block #title}Articles archive{/block}
+{block content}
+
+{if count($archive) === 0}
+    <p>There are no articles yet.</p>
+{else}
+    <h1>Archive</h1>
+    
+    <ul n:if="$archive">
+    {foreach $archive as $month => $month_articles}
+        <li><h2>{$month}</h2>
+            <ul n:if="$month_articles">
+            {foreach $month_articles as $article}
+                <li><a href="{link detail, name=> $article['name_webalized']}">{$article['name']}</a></li>
+            {/foreach}
+            </ul>
+        </li>
+    {/foreach}
+    </ul>
+    
+{/if}

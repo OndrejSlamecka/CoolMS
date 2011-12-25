@@ -10,45 +10,56 @@
 
 namespace Application;
 
+use \Nette\Diagnostics\Debugger;
+
 class Configurator extends \Nette\Config\Configurator
 {
+    /* STATIC - container independent */
 
-    public $directories;
-
-    /** STATIC - container independent * */
     public static function setupDebugger()
     {
-        \Nette\Diagnostics\Debugger::$logDirectory = __DIR__ . '/../log';
-        \Nette\Diagnostics\Debugger::$strictMode = TRUE;
-        \Nette\Diagnostics\Debugger::enable();
+        Debugger::$logDirectory = __DIR__ . '/../../log';
+        Debugger::$strictMode = TRUE;
+        Debugger::enable();
     }
 
     /* INSTANTIATED */
 
-    public function __construct($libsDir, $appDir, $tempDir)
+    /**
+     * Constructor.
+     * @param string $libsDir
+     * @param string $appDir 
+     */
+    public function __construct($libsDir, $appDir)
     {
-        $this->directories = array('libsDir' => $libsDir, 'appDir' => $appDir, 'tempDir' => $tempDir);
+        // Define dir for temporary files
+        $tempDir = $appDir . '/../temp';
+
+        // Construct itself and set cache
         parent::__construct();
-        $this->setCacheDirectory($this->directories['tempDir']);
-        $this->loadConfig($this->directories['appDir'] . '/config.neon');
+        $this->setCacheDirectory($tempDir);
+
+        // Define parameters and load config
+        $this->addParameters(array('libsDir' => $libsDir, 'appDir' => $appDir, 'tempDir' => $tempDir));
+        $this->loadConfig($appDir . '/config/config.neon');
+
+        // Start session
+        $this->container->session->start();
     }
 
     public function setupServices()
     {
-        // robotLoader
+        // Robot Loader
         $robotLoader = $this->createRobotLoader();
-
-        $robotLoader->addDirectory($this->directories['libsDir']);
-        $robotLoader->addDirectory($this->directories['appDir']);
-
+        $robotLoader->addDirectory($this->container->parameters['libsDir']);
+        $robotLoader->addDirectory($this->container->parameters['appDir']);
         $robotLoader->register();
+
         $this->container->addService('robotLoader', $robotLoader);
 
         // Other services
         $this->container->addService('authenticator', new \Backend\Authenticator($this->container));
-
         $this->container->addService('presenterTree', new \Kdyby\PresenterTree($this->container));
-
         $this->container->addService('moduleManager', new ModuleManager($this->container));
 
         list($dsn, $user, $password) = $this->container->parameters['database'];
@@ -60,18 +71,32 @@ class Configurator extends \Nette\Config\Configurator
     public function setupApplication()
     {
         $this->container->application->errorPresenter = 'Error';
+
+        if ($this->container->parameters['productionMode'])
+            $this->container->application->catchExceptions = TRUE;
     }
 
     public function setupRouting()
     {
         $router = $this->container->router;
 
+        /*
+         * Console mode
+         *    - SimpleRouter
+         * 
+         * Development / Production mode
+         *    - Backend
+         *       - One universal route is enough
+         *    - Frontend
+         *       - Routes defined in RouteManager
+         */
+
         if ($this->container->parameters['consoleMode']) {
-            // CONSOLE MODE
+
             $router = new \Nette\Application\Routers\SimpleRouter();
         } else {
-            // NOT CONSOLE MODE       
-            // Admin module // TODO: Move into separate class?
+
+            // Backend module
             $router[] = new \Nette\Application\Routers\Route('admin/<module>/<action>[/<id>]', array(
                         'module' => 'Dashboard',
                         'presenter' => 'Backend',

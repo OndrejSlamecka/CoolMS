@@ -20,7 +20,7 @@ use Backend\Authenticator;
  */
 class BackendPresenter extends \Backend\BasePresenter
 {
-    /*     * ************************** DELETING USER ****************************** */
+    /* -------------------------- DELETING USER ----------------------------- */
 
     public function actionConfirmDelete($id)
     {
@@ -70,7 +70,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->redirect('default');
     }
 
-    /*     * ********************** CHANGE ADMINISTRATOR *************************** */
+    /* ------------------------ CHANGE ADMINISTRATOR ------------------------ */
 
     public function actionMakeAdmin($id)
     {
@@ -99,14 +99,14 @@ class BackendPresenter extends \Backend\BasePresenter
         }
     }
 
-    /*     * *************************** DEFAULT - list **************************** */
+    /* --------------------------- DEFAULT - list --------------------------- */
 
     public function renderDefault()
     {
         $this->template->users = $user = $this->repositories->User->find();
     }
 
-    /*     * ************************** CREATING USER ****************************** */
+    /* --------------------------- CREATING USER ---------------------------- */
 
     public function createComponentNewUserForm($name)
     {
@@ -130,7 +130,7 @@ class BackendPresenter extends \Backend\BasePresenter
             $user['role'] = 'user';
 
             if ($users->find(array('email' => $user['email']))->fetch()) {
-                $this->flashMessage('Uživatel s emailem ' . $user['email'] . ' již existuje.');
+                $this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
                 $this->redirect('new');
             }
 
@@ -141,29 +141,37 @@ class BackendPresenter extends \Backend\BasePresenter
             $token = Authenticator::createToken();
             $user['token'] = $token;
             $user['token_created'] = new \DateTime();
-            $users->save($user, 'id');
 
             // Prepare email
             $template = new \Nette\Templating\FileTemplate($this->getTemplatesFolder() . "/email/newUser.latte");
             $template->registerFilter(new \Nette\Latte\Engine);
 
             $template->site = $this->getHttpRequest()->getUrl()->getHostUrl();
-            $template->link = $this->link('//Authentication:createPassword', array('token' => $token, 'newuser' => 'true'));
+            $template->link = $this->link('//:Authentication:Backend:createPassword', array('token' => $token, 'newuser' => 'true'));
 
             $host = $this->getHttpRequest()->getUrl()->getHost();
 
             $mail = new \Nette\Mail\Message();
-            $mail->setFrom("Password creation <cms@$host>")
+            $mail->setFrom("Account creation <cms@$host>")
                     ->addTo($user['email'])
-                    ->setHtmlBody($template)
-                    ->send();
+                    ->setHtmlBody($template);
 
-            $this->flashMessage('New account created. Follow the instructions in the given email.');
+            try {
+                $mail->send();
+                $users->save($user, 'id');
+                $this->flashMessage('New account created. Follow the instructions in the given email.');
+            } catch (\Nette\InvalidStateException $e) {
+                if (strpos($e->getMessage(), "Failed to connect to mailserver"))
+                    $this->flashMessage('Failed to send email with instructions due to problems with SMTP. Please let your administrator know.');
+                else
+                    throw $e;
+            }
+
             $this->redirect('default');
         } // if $loggedUser->isInRole('admin')
     }
 
-    /*     * ********************** EDITING, RENDERING USER ************************* */
+    /* ---------------------- EDITING, RENDERING USER ----------------------- */
 
     public function renderProfile($id)
     {
@@ -212,7 +220,7 @@ class BackendPresenter extends \Backend\BasePresenter
                 $form['password'] = Authenticator::hashPassword($this->getUser()->getIdentity()->email, $form['password']);
 
             $users = $this->repositories->User;
-            $user = $users->find(array('id' => $form['id']))->fetch();
+            $user = $users->find(array('id' => $form['id']))->fetch()->toArray();
             foreach ($form as $key => $val) {
                 $user[$key] = $val;
             }

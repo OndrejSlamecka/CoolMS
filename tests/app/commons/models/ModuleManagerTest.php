@@ -45,8 +45,8 @@ class ModuleManagerTest extends PHPUnit_Framework_TestCase
         // Does the array have key 'default'?
         self::assertTrue(array_key_exists('default', $articleModuleViews));
 
-        // Is the value of key 'default' 'list'?
-        self::assertEquals('list', $articleModuleViews['default']);
+        // Is the value of key 'default' 'List'?
+        self::assertEquals('List', $articleModuleViews['default']);
     }
 
     /**
@@ -67,9 +67,9 @@ class ModuleManagerTest extends PHPUnit_Framework_TestCase
         self::assertTrue(array_key_exists('methods', $article));
         $methods = $article['methods'];
 
-        // Is first method default => "list" ?
+        // Is first method default => "List" ?
         $default = array_shift($methods);
-        self::assertEquals($default, 'list');
+        self::assertEquals($default, 'List');
     }
 
     public function testGetModuleViewParams()

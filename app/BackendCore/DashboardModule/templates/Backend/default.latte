@@ -1,25 +1,25 @@
 {block content}
 
 {if $newUser}
-<h2>Welcome new user</h2>
+<h1>Welcome new user</h1>
 <p>We recommend you to set your personal informations in
-    <a href="{link User:profile, id => $loggedUser->getIdentity->getId()}">your profile</a></p>
+    <a href="{link :User:Backend:profile, id => $loggedUser->getId()}">your profile</a></p>
 {/if}
 
-<h2>Site overview</h2>
+<h1>Site overview</h1>
 
-<h3>Pages</h3>
+<h2>Pages</h2>
 <ul>
     <li>Number of pages: {$nPages}</li>
 </ul>
 
-<h3>Articles</h3>
+<h2>Articles</h2>
 <ul>
     <li>Number of articles: {$nArticles}</li>
     {if $lastArticle}
         <li>Last article: 
             <a href="{link :Article:Frontend:detail, name => $lastArticle['name_webalized']}">{$lastArticle['name']}</a>
-            (<a href="{link :Article:Backend:edit id => $lastArticle['id']}" class="nopad">edit</a>)
+            (<a href="{link :Article:Backend:edit id => $lastArticle['id']}" class="nopadding">edit</a>)
         </li>
     {/if}
 </ul>

@@ -4,7 +4,7 @@
 {/block}
 {block content}
 
-<h2>Order menu</h2>
+<h1>Order menu</h1>
 {if count( $menuitems ) < 1}
 <p>There aren't any items in the menu yet.</p>
 {else}
@@ -15,7 +15,7 @@
     {foreach $menuitems as $tmi}
 	<li id="mi-{$tmi['id']}">
 	    <div class="tmi-handler">
-		<h3>  
+		<h2>  
                     {if $tmi['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
                         <img src="{$themePath}/icons/table_link.png" alt="Submenu" title="Submenu" >                  
                     {else}
@@ -26,7 +26,7 @@
                         
                     {$tmi['name']}                
                         
-		</h3>
+		</h2>
                 
                 <div class="menuitemOptions">
                     {if $tmi['type'] !== \Application\Entity\Menuitem::TYPE_SUBMENU}
@@ -49,9 +49,9 @@
 		{foreach $tmi['children'] as $mi}
 		    <li id="mi-{$mi['id']}">
                         <div class="mi-container">
-                            <h4>                                    
+                            <h3>                                    
                                 {$mi['name']}                                                       
-                            </h4>
+                            </h3>
                             <span>
                                 <a href="{link edit! id => $mi->id}" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
                                 <a href="{link delete id => $mi->id}" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
@@ -81,7 +81,12 @@
 {* FORM *}
 
 {snippet MenuitemFormSnippet}
-<h2>{if $editing}Edit{else}Add{/if} item to menu</h2>
+
+<div class="floatingContentContainer">
+    <h2 class="asidebutton">{if $editing}Edit an item in the menu{else}Add an item to the menu{/if}</h1> 
+    {if $editing}<div class="asideheader low"><a href="{link default}" class="button">Cancel editing</a></div>{/if}
+</div>
+
 {control menuitemForm begin}
 {control menuitemForm errors}
 <table>
@@ -89,51 +94,51 @@
     {? $nStep = 1}
 
     <tr>
-        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['type']->label}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['type']->label}</th>
         <td class="radioinput">{$presenter['menuitemForm']['type']->control}</td>
     </tr>
 
 
     {* ModuleLink *}
-    {if $menuitemtype === 'modulelink'}
+    {if $menuitemtype === 'modulelink'}    
     <tr class="option">
-        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_name']->label}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}{if !$editing} <small>(e.g. 'Articles')</small>{/if}</th>
+        <td>{$presenter['menuitemForm']['module_caption']->control}</td>
+    </tr>      
+    
+    <tr class="option">
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_name']->label}</th>
         <td>{$presenter['menuitemForm']['module_name']->control}</td>
     </tr>
 
     <tr class="option"> <!-- style="display: none;" -->
-        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_view']->label}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_view']->label}</th>
         <td>{$presenter['menuitemForm']['module_view']->control}</td>
     </tr>           
 
     {if !($presenter['menuitemForm']['module_view_param'] instanceof  Nette\Forms\Controls\HiddenField)}
     <tr class="option"> <!-- style="display: none;" -->
-        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_view_param']->label}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_view_param']->label}</th>
         <td>{$presenter['menuitemForm']['module_view_param']->control}</td>
     </tr>
     {/if}
     
     
     <tr class="option">
-        <th><h3><span class="stepnumber">{$nStep++}</span>)</h3> {$presenter['menuitemForm']['parent']->label}</th>
+        <th><h2><span class="stepnumber">{$nStep++}</span>)</h2> {$presenter['menuitemForm']['parent']->label}</th>
         <td>{$presenter['menuitemForm']['parent']->control}</td>
     </tr>                   
-
-    <tr class="option">
-        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['module_caption']->label}</th>
-        <td>{$presenter['menuitemForm']['module_caption']->control}</td>
-    </tr>  
     
     <tr class="option">
-        <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['strict_link_comparison']->label}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['strict_link_comparison']->label}</th>
         <td>{$presenter['menuitemForm']['strict_link_comparison']->control}</td>
     </tr>       
-    {/if}            
+    {/if} {* /modulelink *}           
 
     {* SubmenuLink *}
     {if $menuitemtype === 'submenu'}
         <tr class="option">
-            <th><h3>{$nStep++})</h3> {$presenter['menuitemForm']['submenu_caption']->label}</th>
+            <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['submenu_caption']->label}</th>
             <td>{$presenter['menuitemForm']['submenu_caption']->control}</td>
         </tr>
     {/if}            
@@ -142,7 +147,7 @@
     {* * *}
 
     <tr>
-        <th><h3><span class="stepnumber">{$nStep++}</span>)</h3> {$presenter['menuitemForm']['save']->label}</th>
+        <th><h2><span class="stepnumber">{$nStep++}</span>)</h2> {$presenter['menuitemForm']['save']->label}</th>
         <td class="radioinput">{$presenter['menuitemForm']['save']->control}</td>
     </tr>
 
