@@ -19,8 +19,22 @@ CREATE TABLE `article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO `article` (`id`, `name`, `name_webalized`, `user_id`, `date`, `text`) VALUES
-(1,	'Some article',	'some-article',	1,	'2011-11-07 20:25:47',	'<p>Some article text</p>\r\n<p>Aliquam facilisis semper elit quis consectetur. Fusce sed turpis id est posuere interdum et sit amet est. Maecenas sit amet tellus metus. Etiam eget neque in massa fringilla tempor. Suspendisse sed ultrices orci. Cras convallis massa sed magna tincidunt congue. Proin lectus neque, congue id aliquam in, rutrum quis enim. Aliquam erat volutpat. Ut aliquam turpis ac tortor dictum in tempor nibh luctus. Nullam elementum scelerisque neque, eget adipiscing felis rhoncus et. Sed vitae eros ac purus pellentesque tempus sit amet vel augue. Duis interdum porttitor felis nec fringilla. </p>'),
-(2,	'A very interesting article',	'a-very-interesting-article',	1,	'2011-12-19 17:56:07',	'<p>Trust me. This article is interesting.</p>\r\n<p>Phasellus consectetur tristique malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque vel consectetur mi. Praesent bibendum sodales faucibus. Sed id felis sed ipsum iaculis malesuada. Nunc arcu tellus, dignissim volutpat interdum eu, facilisis id sapien. Suspendisse velit est, mollis ut dictum quis, accumsan eu magna. Phasellus turpis turpis, mollis sit amet tempus nec, vestibulum sit amet mauris. </p>');
+(1,	'Some article',	'some-article',	1,	'2011-12-25 18:51:27',	'<p>Some article text</p>\r\n<p>Aliquam facilisis semper elit quis consectetur. Fusce sed turpis id est posuere interdum et sit amet est. Maecenas sit amet tellus metus. Etiam eget neque in massa fringilla tempor. Suspendisse sed ultrices orci. Cras convallis massa sed magna tincidunt congue. Proin lectus neque, congue id aliquam in, rutrum quis enim. Aliquam erat volutpat. Ut aliquam turpis ac tortor dictum in tempor nibh luctus. Nullam elementum scelerisque neque, eget adipiscing felis rhoncus et. Sed vitae eros ac purus pellentesque tempus sit amet vel augue. Duis interdum porttitor felis nec fringilla.</p>'),
+(2,	'A very interesting article',	'a-very-interesting-article',	1,	'2011-12-25 12:42:00',	'<p>Trust me. This article is interesting.</p>\r\n<p>Phasellus consectetur tristique malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque vel consectetur mi. Praesent bibendum sodales faucibus. Sed id felis sed ipsum iaculis malesuada. Nunc arcu tellus, dignissim volutpat interdum eu, facilisis id sapien. Suspendisse velit est, mollis ut dictum quis, accumsan eu magna. Phasellus turpis turpis, mollis sit amet tempus nec, vestibulum sit amet mauris.</p>');
+
+DROP TABLE IF EXISTS `article_draft`;
+CREATE TABLE `article_draft` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `name_webalized` varchar(255) COLLATE utf8_bin NOT NULL,
+  `user_id` smallint(6) NOT NULL,
+  `text` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `article_id` (`article_id`),
+  CONSTRAINT `article_draft_ibfk_3` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 DROP TABLE IF EXISTS `menuitem`;
 CREATE TABLE `menuitem` (
@@ -74,4 +88,4 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `password`, `role`, `token`, `token_created`, `name`) VALUES
 (1,	'admin@example.com',	'0ce94d16aee929e03ee138283cc06cb017c591341c6d10e93194e1efde747551',	'admin',	NULL,	NULL,	'Admin');
 
--- 2011-12-25 00:25:51
+-- 2011-12-25 21:27:36

@@ -13,7 +13,8 @@
                     <th class="hidden">{label name /}</th>
                     <td>
                         {input name}
-                        {input save}
+                        {input publish}
+                        {input save}                        
                     </td>
                 </tr>
 
@@ -40,5 +41,8 @@
             </div>
         </div> <!-- /.toolbox -->
 
-    {input id} {* Fixes https://github.com/nette/nette/issues/400 TODO: Remove after issue is solved *}
+    {* Although https://github.com/nette/nette/issues/400 was closed, the problem remains. TODO: Find out why *}
+    {input article_id}
+    {input user_id}
+    {input id}
     {/form articleForm}

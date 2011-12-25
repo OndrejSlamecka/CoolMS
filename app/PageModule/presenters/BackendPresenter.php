@@ -107,7 +107,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $form->addText('name_webalized', 'Name in URL');
 
         $form->addText('name', 'Název');
-        $form['name']->getControlPrototype()->class('ribbon');
+        $form['name']->getControlPrototype();
 
         $form->addTextarea('text', 'Text', 60, 30);
         $form['text']->getControlPrototype()->class('wysiwyg');

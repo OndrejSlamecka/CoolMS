@@ -5,6 +5,7 @@
     <h1 class="asidebutton">Articles</h1> <div class="asideheader"><a href="{link new}" class="button">Add article</a></div>
 </div>
 
+<h2>Published articles</h2>
 
 {if !count($articles)}
     <p class="important">There aren't any articles on the web yet.</p>
@@ -27,8 +28,8 @@
 	  <a href="{link :Article:Frontend:detail, name => $article->name_webalized}">{$article->name}</a>
 	</td>
 
-	<td class="padded"><a href="{link edit id => $article->id}" class="edit">Edit</a></td>
-	<td class="padded"><a href="{link delete id => $article->id}" class="delete">Delete</a></td>
+	<td class="padded"><a href="{link edit id => $article->id, draft => false}" class="edit">Edit</a></td>
+	<td class="padded"><a href="{link delete id => $article->id, draft => false}" class="delete">Delete</a></td>
       </tr>
       {/foreach}
 
@@ -36,8 +37,38 @@
   </table>
 
 {/if}
+    
+<h2>Drafts</h2> 
 
-{if $autosave}
-    <h2>Backup of the last edited article</h2>
-    <p>{$autosave['name']} <a href="{link edit id => 0, autosave => true}" class="edit">Edit</a></p>
+{if !count($articles_drafts)}
+    <p class="important">There aren't any drafts at the moment.</p>
+{else}
+
+   <table class="data subtlethead">
+    <thead>
+	<tr>
+	  <th class="hidden">Name</th>
+	  <th>Associated article</th>
+	  <th class="hidden">Edit</th>
+	  <th class="hidden">Delete</th>
+	</tr>
+    </thead>
+
+    <tbody>
+
+      {foreach $articles_drafts as $article}
+      <tr n:class="$iterator->isEven() ? even">
+	<td class="name">
+	  <a href="{link :Article:Frontend:detail, name => $article->name_webalized}">{$article->name}</a>
+	</td>
+
+	<td>{if $article->article_id}{$article->ref('article')->name}{else}-{/if}</td>
+	<td class="padded"><a href="{link edit id => $article->id, draft => true}" class="edit">Edit</a></td>
+	<td class="padded"><a href="{link delete id => $article->id, draft => true}" class="delete">Delete</a></td>
+      </tr>
+      {/foreach}
+
+    </tbody>
+  </table>
+
 {/if}

@@ -20,9 +20,12 @@ use Nette\Forms\Form;
 class BackendPresenter extends \Backend\BaseItemPresenter
 {
 
-    public function actionDelete($id)
+    public function actionDelete($id, $draft=false)
     {
-        $articles = $this->repositories->Article;
+        if ($draft)
+            $articles = $this->repositories->Article_draft;
+        else
+            $articles = $this->repositories->Article;
 
         $article = $articles->find(array('id' => $id))->fetch();
 
@@ -36,6 +39,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 
             // Save for reverse
             $this->sessionSection->reversableItem = $article->toArray();
+            $this->sessionSection->reversableItem['is_draft'] = $draft;
 
             $this->flashMessage('Article deleted &ndash; <a href="' . $this->link('reverseDelete') . '" >Undo</a>');
         } catch (Exception $e) {
@@ -47,7 +51,13 @@ class BackendPresenter extends \Backend\BaseItemPresenter
     public function actionReverseDelete()
     {
         $article = $this->sessionSection->reversableItem;
-        $articles = $this->repositories->Article;
+
+        if ($article['is_draft'])
+            $articles = $this->repositories->Article_draft;
+        else
+            $articles = $this->repositories->Article;
+
+        unset($article['is_draft']);
 
         try {
             $articles->save($article, 'id');
@@ -69,14 +79,14 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
     }
 
-    public function renderEdit($id, $autosave=false)
+    public function renderEdit($id, $draft)
     {
-        $articles = $this->repositories->Article;
-
-        if ($autosave)
-            $article = $this->sessionSection->autosave;
+        if ($draft)
+            $articles = $this->repositories->Article_draft;
         else
-            $article = $articles->find(array('id' => $id))->fetch();
+            $articles = $this->repositories->Article;
+
+        $article = $articles->find(array('id' => $id))->fetch();
 
         $this->template->article = $article;
 
@@ -85,17 +95,21 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             $this->redirect('default');
         }
 
-        if ($article instanceof \Nette\Database\Table\Selection)
+        if ($article instanceof \Nette\Database\Table\ActiveRow)
             $article = $article->toArray();
+
+        $article += array('article_id' => $article['id']);
 
         $this['articleForm']->setDefaults($article);
     }
 
     public function renderDefault()
     {
-        $article = $this->repositories->Article;
-        $this->template->articles = $article->find();
-        $this->template->autosave = $this->sessionSection->autosave;
+        $articles = $this->repositories->Article;
+        $this->template->articles = $articles->find();
+
+        $articles_drafts = $this->repositories->Article_draft;
+        $this->template->articles_drafts = $articles_drafts->find();
     }
 
     public function createComponentArticleForm($name)
@@ -104,17 +118,19 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $form->getElementPrototype()->class('savable');
 
         $form->addHidden('id');
+        $form->addHidden('article_id');
+        $form->addHidden('user_id');
 
         $form->addText('name_webalized', 'Name in URL');
 
         $form->addText('name', 'Name');
-        $form['name']->getControlPrototype()->class('ribbon');
+        $form['name']->getControlPrototype()->class('short');
 
         $form->addTextarea('text', 'Text', 60, 30);
         $form['text']->getControlPrototype()->class('wysiwyg');
 
-        $form->addSubmit('save', 'Save')
-                ->getControlPrototype()->class('emphasized');
+        $form->addSubmit('save', 'Save')->getControlPrototype()->class('emphasized');
+        $form->addSubmit('publish', 'Publish')->getControlPrototype()->class('emphasized');
 
         $form->onSuccess[] = array($this, 'articleSubmit');
 
@@ -123,39 +139,66 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 
     public function articleSubmit($form)
     {
+        $articles = $this->repositories->Article;
+        $articles_drafts = $this->repositories->Article_draft;
+
+        if ($form['publish']->isSubmittedBy()) {
+            $isPublishing = true;
+        } else { // save button, ajax
+            $isPublishing = false;
+        }
+
         $article = $form->getValues();
+
+        // It is useless to autosave empty articles
+        if ($this->isAjax() && $article['name'] === '' && $article['text'] === '') {
+            $this->terminate();
+        }
+
 
         if ($article['id'] === '') {
             $article['id'] = null;
-            $article['date'] = new \DateTime;
             $article['user_id'] = $this->getUser()->getId();
         } else {
             // Preserve original date
             $orig_record = $articles->find(array('id' => $article['id']))->fetch();
-            $article['date'] = $orig_record['date'];
+            //$article['date'] = $orig_record['date'];
+        }
+
+        if ($article['article_id'] === '')
+            $article['article_id'] = null;
+
+        if ($isPublishing) {
+            $draft_id = $article['id'];
+            $article['id'] = $article['article_id'];
+            unset($article['article_id']);
+            $article['date'] = new \DateTime;
         }
 
         if ($article['name_webalized'] === '')
             $article['name_webalized'] = \Nette\Utils\Strings::webalize($article['name']);
 
-        $articles = $this->repositories->Article;
-
         try {
 
-            if ($this->isAjax()) {
-                $this->sessionSection->autosave = $article;
-            } else {
-                unset($this->sessionSection->autosave);
+            if ($isPublishing) {
                 $articles->save($article, 'id');
+                $articles_drafts->remove(array('id' => $draft_id));
+            } else {
+                $articles_drafts->save($article, 'id');
             }
 
-            $this->flashMessage('Article saved.');
+            if ($this->isAjax()) {
+                $this->payload->draft_id = $article['id'];
+            } else {
+                $this->flashMessage('Article saved.');
+            }
         } catch (\Exception $e) {
-            $this->flashMessage('Article was not saved. Please try again and then contact the administrator');
 
             if ($this->isAjax()) {
                 $this->payload->error = TRUE;
                 $this->terminate();
+            } else {
+                $this->flashMessage('Article was not saved. Please try again and then contact the administrator.');
             }
         }
 

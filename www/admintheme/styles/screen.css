@@ -109,6 +109,9 @@ table.data+p { text-indent:0; margin:0 0 -1em }
 
 table.data a.edit:hover,table.data a.delete:hover { text-decoration:underline }
 
+table.data.subtlethead{ margin-top: -1.35em; }
+table.data.subtlethead thead th{ background: #fff; border:0; color: #888; padding:0.3em 0.4em }
+
 /* Forms */
 /* TODO: All tables containing forms should have class .form - this would solve all those ambiguous selectors */
 th { text-align:right; vertical-align:top; padding:.4em .5em 0 0 }
@@ -162,7 +165,7 @@ body{ width:1040px; background:#4a92c0 url(body-bg.png) repeat-x; margin:0 auto 
 #footer { text-indent:0; text-align:right; color:#EEE; margin:0.5em 20px 0.75em }
 #footer a { color:#EEE }
 
-    
+                                                                            
 /* Modules
  * =======
 ----------*/
@@ -213,6 +216,7 @@ html.gecko #frm-menuitemForm tr.optionSubmenu th,html.gecko #frm-menuitemForm tr
 .textFormatForm input[type="text"]:hover,.textFormatForm textarea:hover { border:1px solid #888 }
 .textFormatForm textarea { padding:5px }
 .textFormatForm input[name="name"] { min-height:24px; font-size:18px; font-weight:700; margin-bottom:0.5em; width:658px }
+.textFormatForm input[name="name"].short { width:582px }
 .textFormatForm textarea[name="text"] { width:734px }
 .textFormatForm h2 input[type="text"], .textFormatForm h3 input[type="text"] { height:1em }
 

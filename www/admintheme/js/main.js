@@ -27,6 +27,7 @@ $(document).ready(function(){
     // Continual saving of forms
     $savableForm = $('form.savable');
     $continualSaveError = $('#continualSaveError');
+    $inputId = $("#frmarticleForm-id");
    
     var fncSaveContinually = function(){        
         setTimeout(function()
@@ -35,12 +36,18 @@ $(document).ready(function(){
             var form = $savableForm;
             form.ajaxSubmit({
                 success: function(payload){
+                    fncSaveContinually();
+                    if(!payload)
+                        return false;
+                    
                     if(payload.error){
                         $continualSaveError.show();
                     }else{
                         $continualSaveError.hide();
+                        if(payload.draft_id)
+                            $inputId.val(payload.draft_id);
                     }
-                    fncSaveContinually();
+                
                     return false;
                 },
                 error: function(){ // includes timeout
