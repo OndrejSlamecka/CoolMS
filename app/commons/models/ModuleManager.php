@@ -86,13 +86,18 @@ class ModuleManager extends \Nette\Object
      */
     public function buildLinkableModulesCache()
     {
-        $presenters = $this->container->getService('presenterTree');
-        $presenters = $presenters->getPresenters();
+        $presenterTree = $this->container->getService('presenterTree');        
+        $modules = $presenterTree->getModules();
 
         $links = array();
-        foreach ($presenters as $presenter) {
-            if ($presenter->getPresenterReflection()->hasAnnotation('module')) {
-                $links[$presenter->module] = $presenter->getPresenterReflection()->getAnnotation('module')->name;
+        foreach ($modules as $module) {
+            $presenter_name = $module . 'Module\\FrontendPresenter';
+            if (class_exists($presenter_name)) {
+                $presenter = new $presenter_name($this->container);
+                $reflection = $presenter->getReflection();
+
+                if ($reflection->hasAnnotation('module'))
+                    $links[$module] = $reflection->getAnnotation('module')->name;
             }
         }
         $this->getCache()->save('linkableModules', $links);
