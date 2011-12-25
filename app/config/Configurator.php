@@ -14,6 +14,9 @@ use \Nette\Diagnostics\Debugger;
 
 class Configurator extends \Nette\Config\Configurator
 {
+    /** @var \SystemContainer */
+    private $container;
+    
     /* STATIC - container independent */
 
     public static function setupDebugger()
@@ -37,14 +40,25 @@ class Configurator extends \Nette\Config\Configurator
 
         // Construct itself and set cache
         parent::__construct();
-        $this->setCacheDirectory($tempDir);
+        $this->setTempDirectory($tempDir);
 
-        // Define parameters and load config
+        // Define parameters and add config
         $this->addParameters(array('libsDir' => $libsDir, 'appDir' => $appDir, 'tempDir' => $tempDir));
-        $this->loadConfig($appDir . '/config/config.neon');
+        $this->addConfig($appDir . '/config/config.neon');
+        
+        // Create container
+        $this->container = $this->createContainer();
 
         // Start session
         $this->container->session->start();
+    }
+    
+    /**
+     * @return \SystemContainer
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     public function setupServices()
