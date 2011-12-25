@@ -77,7 +77,6 @@ class ModuleManager extends \Nette\Object
 
     public function getLinkableModules()
     {
-        $this->buildLinkableModulesCache();
         return $this->getCache()->load('linkableModules');
     }
 
