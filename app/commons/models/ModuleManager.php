@@ -109,15 +109,14 @@ class ModuleManager extends \Nette\Object
     public function buildModulesInfoCache()
     {
         $modules = $this->getLinkableModules();
-        $modules = array_keys($modules);
 
         $modules_names = array();
 
-        foreach ($modules as $module) {
+        foreach ($modules as $module => $formal_name) {
             $moduleFront = $module . 'Module\\FrontendPresenter';
             $moduleFront = new $moduleFront($this->container);
             $moduleFrontReflection = $moduleFront->getReflection();
-            $modules_names[$module]['name'] = $moduleFrontReflection->getAnnotation('module')->name;
+            $modules_names[$module]['name'] = $formal_name;
 
             $methods = get_class_methods($moduleFront);
             $modules_names[$module]['methods'] = array();
