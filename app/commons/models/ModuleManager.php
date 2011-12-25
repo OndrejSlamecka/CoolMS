@@ -86,13 +86,13 @@ class ModuleManager extends \Nette\Object
      */
     public function buildLinkableModulesCache()
     {
-        $presenterTree = $this->container->getService('presenterTree');        
+        $presenterTree = $this->container->getService('presenterTree');
         $modules = $presenterTree->getModules();
 
         $links = array();
         foreach ($modules as $module) {
             $presenter_name = $module . 'Module\\FrontendPresenter';
-            if (class_exists($presenter_name)) {                
+            if (class_exists($presenter_name)) {
                 $reflection = new \Nette\Reflection\ClassType($presenter_name);
 
                 if ($reflection->hasAnnotation('module'))
@@ -113,26 +113,33 @@ class ModuleManager extends \Nette\Object
     public function buildModulesInfoCache()
     {
         $modules = $this->getLinkableModules();
-
         $modules_names = array();
 
         foreach ($modules as $module => $formal_name) {
-            $moduleFront = $module . 'Module\\FrontendPresenter';
-            $moduleFront = new $moduleFront($this->container);
-            $moduleFrontReflection = $moduleFront->getReflection();
+
+            // Write down basic information
+            $modules_names[$module] = array();
             $modules_names[$module]['name'] = $formal_name;
 
-            $methods = get_class_methods($moduleFront);
+            // Get presenter reflection
+            $presenter_name = $module . 'Module\\FrontendPresenter';
+            $presenter_reflection = new \Nette\Reflection\ClassType($presenter_name);
+
+            // Get methods of reflected class
+            $methods = get_class_methods($presenter_name);
             $modules_names[$module]['methods'] = array();
 
+            // Try every method if is a module's view
             foreach ($methods as $method) {
-                $methodReflection = $moduleFrontReflection->getMethod($method);
+                $method_reflection = $presenter_reflection->getMethod($method);
 
-                $method = \Nette\Utils\Strings::replace($method, '~^render~');
-                $method = lcfirst($method);
+                // If method has 'view' annotation with parameter name
+                if ($method_reflection->hasAnnotation('view') && ($method_formal_name = $method_reflection->getAnnotation('view')->name)) {
+                    $method = \Nette\Utils\Strings::replace($method, '~^render~');
+                    $method = lcfirst($method);
 
-                if ($methodReflection->hasAnnotation('view'))
-                    $modules_names[$module]['methods'][$method] = $methodReflection->getAnnotation('view')->name;
+                    $modules_names[$module]['methods'][$method] = $method_formal_name;
+                }
             }
         }
 
