@@ -7,13 +7,11 @@ class PagePresenterTest extends PHPUnit_Framework_TestCase
     {
         $presenter = new \PageModule\FrontendPresenter(\Nette\Environment::getContext());
         $presenter->autoCanonicalize = FALSE;
-        $request = new \Nette\Application\Request(':Page:Frontend', 'GET',array());
-        $response = $presenter->run($request); 
+        $request = new \Nette\Application\Request(':Page:Frontend', 'GET', array());
+        $response = $presenter->run($request);
 
-        
         self::assertInstanceOf(
-            'Nette\Application\Responses\TextResponse',
-            $response
+                'Nette\Application\Responses\TextResponse', $response
         );
     }
 
