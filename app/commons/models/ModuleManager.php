@@ -92,9 +92,8 @@ class ModuleManager extends \Nette\Object
         $links = array();
         foreach ($modules as $module) {
             $presenter_name = $module . 'Module\\FrontendPresenter';
-            if (class_exists($presenter_name)) {
-                $presenter = new $presenter_name($this->container);
-                $reflection = $presenter->getReflection();
+            if (class_exists($presenter_name)) {                
+                $reflection = new \Nette\Reflection\ClassType($presenter_name);
 
                 if ($reflection->hasAnnotation('module'))
                     $links[$module] = $reflection->getAnnotation('module')->name;
