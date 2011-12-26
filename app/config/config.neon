@@ -21,7 +21,7 @@ common:
 				#- setDatabaseReflection( Nette\Database\Reflection\DiscoveredReflection() )
 		
 		repositoryManager: NDBF\RepositoryManager(...)
-		authenticator: Backend\Authenticator( @repositoryManager::User )
+		authenticator: Backend\Authenticator( @repositoryManager::getRepository(User) )
 		presenterTree: Kdyby\PresenterTree(...)
 		moduleManager: Application\ModuleManager(...)
 
