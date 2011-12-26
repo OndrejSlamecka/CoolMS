@@ -18,12 +18,12 @@ namespace Backend;
 class Authenticator extends \Nette\Object implements \Nette\Security\IAuthenticator
 {
 
-    /** @var \Nette\DI\Container */
-    protected $context;
+    /** @var \NDBF\Repository  */
+    protected $users;
 
-    public function __construct(\Nette\DI\Container $context)
+    public function __construct(\NDBF\Repository $user)
     {
-        $this->context = $context;
+        $this->users = $user;
     }
 
     /**
@@ -36,9 +36,7 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
     {
         list($email, $password) = $credentials;
 
-        $users = $this->context->repositoryManager->User;
-
-        $user = $users->find(array('email' => $email))->fetch();
+        $user = $this->users->find(array('email' => $email))->fetch();
 
         if ($user === null || $user['password'] !== self::hashPassword($email, $password))
             throw new \Nette\Security\AuthenticationException('Email or password is incorrect.');

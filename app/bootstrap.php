@@ -10,7 +10,6 @@ Application\Configurator::setupDebugger();
 // Configuration
 $config = new Application\Configurator(LIBS_DIR, APP_DIR);
 
-$config->setupServices();
 $config->setupRouting();
 
 $container = $config->getContainer();

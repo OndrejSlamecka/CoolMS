@@ -14,9 +14,10 @@ use \Nette\Diagnostics\Debugger;
 
 class Configurator extends \Nette\Config\Configurator
 {
+
     /** @var \SystemContainer */
     private $container;
-    
+
     /* STATIC - container independent */
 
     public static function setupDebugger()
@@ -45,41 +46,29 @@ class Configurator extends \Nette\Config\Configurator
         // Define parameters and add config
         $this->addParameters(array('libsDir' => $libsDir, 'appDir' => $appDir, 'tempDir' => $tempDir));
         $this->addConfig($appDir . '/config/config.neon');
-        
+
+        // RobotLoader
+        $robotLoader = $this->createRobotLoader();
+        $robotLoader->addDirectory($libsDir);
+        $robotLoader->addDirectory($appDir);
+        $robotLoader->register(); // Load _ALL_ the classes
+
         // Create container
         $this->container = $this->createContainer();
+
+        // Add RobotLoader as a service
+        $this->container->addService('robotLoader', $robotLoader);
 
         // Start session
         $this->container->session->start();
     }
-    
+
     /**
      * @return \SystemContainer
      */
     public function getContainer()
     {
         return $this->container;
-    }
-
-    public function setupServices()
-    {
-        // Robot Loader
-        $robotLoader = $this->createRobotLoader();
-        $robotLoader->addDirectory($this->container->parameters['libsDir']);
-        $robotLoader->addDirectory($this->container->parameters['appDir']);
-        $robotLoader->register();
-
-        $this->container->addService('robotLoader', $robotLoader);
-
-        // Other services
-        $this->container->addService('authenticator', new \Backend\Authenticator($this->container));
-        $this->container->addService('presenterTree', new \Kdyby\PresenterTree($this->container));
-        $this->container->addService('moduleManager', new ModuleManager($this->container));
-
-        list($dsn, $user, $password) = $this->container->parameters['database'];
-        $this->container->addService('database', \NDBF\Factory::createService($dsn, $user, $password, $this->container->cacheStorage));
-
-        $this->container->addService('repositoryManager', new \NDBF\RepositoryManager($this->container));
     }
 
     public function setupApplication()

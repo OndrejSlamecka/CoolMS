@@ -6,4 +6,9 @@
 #
 
 parameters:
-        database: ['mysql:host=localhost;dbname=cms', 'root', 'root']
+	database:
+		driver: mysql
+		host: localhost
+		dbname: cms
+		user: root
+		password: root
