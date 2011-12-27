@@ -165,12 +165,12 @@ class BackendPresenter extends \Backend\BasePresenter
 
         $i = 1;
         foreach ($structure as $p_id => $children) {
-            $p_id = (int) preg_replace("~^mi-([0-9]+)~", "$1", $p_id);
+            $p_id = (int) \Nette\Utils\Strings::replace($p_id, "~^mi-([0-9]+)~", "$1");
             $newOrder[$p_id] = $i;
 
             $j = 1;
             foreach ($children as $ch_id => $null) {
-                $ch_id = (int) preg_replace("~^mi-([0-9]+)~", "$1", $ch_id);
+                $ch_id = (int) \Nette\Utils\Strings::replace($ch_id, "~^mi-([0-9]+)~", "$1");
                 $newOrder[$ch_id] = $j;
                 $childrenParents[$ch_id] = $p_id;
                 $j++;

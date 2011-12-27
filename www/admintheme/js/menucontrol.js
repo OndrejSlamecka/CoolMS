@@ -43,31 +43,36 @@ $().ready(function() {
     });
 
     /* Form type */
-    $('#frm-menuitemForm input[type="radio"]').live( 'change' , function(){
+    $('#frm-menuitemForm input[type="radio"]').live( 'change' , function(){      
       $.ajax({ url : '/admin/menu/?do=changeFormMenuitemType&type='+$(this).attr( 'value' ),
-                success : successSortablePayload
-            });
+                success : jQuery.nette.success
+            });                        
     }); 
     
     // Module views
     $('select[name="module_name"]').live( 'change' , function(){
+      var $title = $("#frmmenuitemForm-module_caption");
+      var titleBackup = $title.val();
+      
       $.ajax({ url : '/admin/menu/?do=changeFormChooseModule&name='+$(this).attr( 'value' ),
-                success : successSortablePayload
+                success : function(payload){ 
+                     jQuery.nette.success(payload);
+                     $title = $("#frmmenuitemForm-module_caption");
+                     $title.attr( 'value',titleBackup); }
             });
     }); 
 
     // View's params
     $('select[name="module_view"]').live( 'change' , function(){
       $.ajax({ url : '/admin/menu/?do=changeFormChooseModuleView&name='+$(this).attr( 'value' ),
-                success : successSortablePayload
+                success : jQuery.nette.success
             });
     });     
     
     // Ajaxed forms
     $("form#menuEditForm").live("submit", function (el) {        
         el.preventDefault();
-        $(this).ajaxSubmit( successSortablePayload );         
-              
+        $(this).ajaxSubmit( successSortablePayload ); 
     });    
 
 });

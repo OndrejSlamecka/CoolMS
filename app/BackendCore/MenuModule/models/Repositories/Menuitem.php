@@ -168,9 +168,9 @@ class Menuitem extends \NDBF\Repository
     public function getMaxOrder($parent)
     {
         if ($parent === NULL)
-            return $this->table()->max('order');
+            return $this->table()->max('`order`');
         else
-            return $this->table()->where('parent', $parent)->max('order');
+            return $this->table()->where('parent', $parent)->max('`order`');
     }
 
     /**
