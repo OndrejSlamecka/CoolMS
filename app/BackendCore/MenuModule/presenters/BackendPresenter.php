@@ -10,10 +10,7 @@
 
 namespace MenuModule;
 
-use Nette\Environment;
 use Application\Entity\Menuitem;
-use Application\Repository\Menuitems;
-use Application\Repository\Pages;
 
 /**
  * Menu manager
@@ -22,13 +19,17 @@ use Application\Repository\Pages;
  */
 class BackendPresenter extends \Backend\BasePresenter
 {
-    /* STARTUP */
+
+    /** @var bool */
+    public $editingMode;
+
+    /* ------------------------------- STARTUP ------------------------------ */
 
     public function startup()
     {
         parent::startup();
-        if (!isset($this->template->editing))
-            $this->template->editing = false;
+        if (!isset($this->editingMode))
+            $this->editingMode = false;
 
         if (!isset($this->template->menuitemtype))
             $this->template->menuitemtype = Menuitem::TYPE_MODULE;
@@ -49,7 +50,7 @@ class BackendPresenter extends \Backend\BasePresenter
         }
     }
 
-    /* ACTIONS */
+    /* ------------------------------- ACTIONS ------------------------------ */
 
     public function actionDelete($id)
     {
@@ -71,13 +72,13 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->redirect('default');
     }
 
-    /* HANDLES */
+    /* ------------------------------ HANDLES ------------------------------- */
 
     public function handleEdit($id)
     {
         $menuitems = $this->repositories->Menuitem;
 
-        $this->template->editing = true;
+        $this->editingMode = true;
         $menuitem = $menuitems->find(array('id' => $id))->fetch();
 
         if ($menuitem['type'] === Menuitem::TYPE_MODULE) {
@@ -97,7 +98,6 @@ class BackendPresenter extends \Backend\BasePresenter
     }
 
     /* Dependency: function name at docroot/admintheme/js/main.js */
-
     public function handleChangeFormMenuitemType($type)
     {
         $this->template->menuitemtype = $type;
@@ -125,7 +125,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->invalidateControl('MenuitemFormSnippet');
     }
 
-    /* RENDERING */
+    /* ------------------------------ RENDERING ------------------------------ */
 
     public function renderDefault()
     {
@@ -133,10 +133,10 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->template->menuitems = $menu->fetchStructured();
     }
 
-    /* MENU DESIGNER CONTROL - STRUCTURE */
+    /* ----------------- MENU DESIGNER CONTROL - STRUCTURE ------------------ */
 
     /* menuDesignerControlForm */
-
+    
     public function createComponentMenuDesignerControlForm($name)
     {
         $form = new \Application\Form($this, $name);
@@ -151,18 +151,15 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function menudesignerSubmit($form)
     {
-        /* TODO: This method is relict from old version: REWORK, its ugly */
-
         $structure = $form->getValues();
         $structure = $structure['structure'];
 
         $structure = json_decode($structure, true);
 
-
         $newOrder = array();
         $childrenParents = array();
 
-
+        // TODO: Wouldn't it be better to iterate using for?
         $i = 1;
         foreach ($structure as $p_id => $children) {
             $p_id = (int) \Nette\Utils\Strings::replace($p_id, "~^mi-([0-9]+)~", "$1");
@@ -182,9 +179,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $menuitems = $this->repositories->Menuitem;
 
         try {
-
             $menuitems->orderUpdate($newOrder);
-
             $menuitems->parentsUpdate($childrenParents);
 
             $menuitems->cleanCache();
@@ -197,7 +192,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->redirect('default');
     }
 
-    /* MENU ITEM FORM */
+    /* --------------------------- MENU ITEM FORM --------------------------- */
 
     /* Menu items */
 
@@ -210,7 +205,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $form->addHidden('id');
         $form->addHidden('order');
 
-        if ($this->template->editing) {
+        if ($this->editingMode) {
             $labels = array(
                 'type' => 'Link is a',
                 'module_name' => 'It\'s linking to the module',
@@ -299,7 +294,6 @@ class BackendPresenter extends \Backend\BasePresenter
         }else
             $menuitem['name'] = $menuitem['submenu_caption'];
 
-
         unset($menuitem['submenu_caption']);
         unset($menuitem['module_caption']);
 
@@ -318,6 +312,7 @@ class BackendPresenter extends \Backend\BasePresenter
                 $this->flashMessage('Item changed');
             else
                 $this->flashMessage('Item added');
+            
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');
         }

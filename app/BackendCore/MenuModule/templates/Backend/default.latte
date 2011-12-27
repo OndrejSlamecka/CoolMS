@@ -83,8 +83,8 @@
 {snippet MenuitemFormSnippet}
 
 <div class="floatingContentContainer">
-    <h2 class="asidebutton">{if $editing}Edit an item in the menu{else}Add an item to the menu{/if}</h1> 
-    {if $editing}<div class="asideheader low"><a href="{link default}" class="button">Cancel editing</a></div>{/if}
+    <h2 class="asidebutton">{if $presenter->editingMode}Edit an item in the menu{else}Add an item to the menu{/if}</h1> 
+    {if $presenter->editingMode}<div class="asideheader low"><a href="{link default}" class="button">Cancel editing</a></div>{/if}
 </div>
 
 {control menuitemForm begin}
@@ -102,7 +102,7 @@
     {* ModuleLink *}
     {if $menuitemtype === 'modulelink'}    
     <tr class="option">
-        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}{if !$editing} <small>(e.g. 'Articles')</small>{/if}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}{if !$presenter->editingMode} <small>(e.g. 'Articles')</small>{/if}</th>
         <td>{$presenter['menuitemForm']['module_caption']->control}</td>
     </tr>      
     
