@@ -87,8 +87,8 @@ em{ font-style: italic; }
 #content ul{ list-style: disc; list-style-position: inside; margin: 1.4em 0 2em .8em; }    
 #content ol{ list-style: decimal; list-style-position: inside; margin: 1.4em 0 2em .8em; }
 
-#content ul h3{ display: inline }
-#content ul ul{ margin: .4em 0 1em 2em }
+#content ul h2{ display: inline-block }
+#content ul ul{ margin: .4em 0 1em 2em }  
 
 hr{
     border: 0;
