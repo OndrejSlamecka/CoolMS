@@ -1,3 +1,8 @@
+/**
+ * Author: Ondrej Slamecka, www.slamecka.cz
+ * Package: CoolMS
+ */
+
 $(document).ready(function(){  
     
     // Ajaxed buttons
