@@ -68,11 +68,11 @@
 </ul>
 {/snippet}
 
-{control menuDesignerControlForm begin}
-{control menuDesignerControlForm errors}
-{$presenter['menuDesignerControlForm']['structure']->control}
-<p>{$presenter['menuDesignerControlForm']['save']->control}</p>
-{control menuDesignerControlForm end}
+{form designerControlForm}
+{control designerControlForm errors}
+{input structure}
+<p>{input save}</p>
+{/form designerControlForm}
 
 {/if}
 
@@ -83,8 +83,8 @@
 {snippet MenuitemFormSnippet}
 
 <div class="floatingContentContainer">
-    <h2 class="asidebutton">{if $presenter->editingMode}Edit an item in the menu{else}Add an item to the menu{/if}</h1> 
-    {if $presenter->editingMode}<div class="asideheader low"><a href="{link default}" class="button">Cancel editing</a></div>{/if}
+    <h2 class="asidebutton">{if $presenter['menuitemForm']->editingMode}Edit an item in the menu{else}Add an item to the menu{/if}</h1> 
+    {if $presenter['menuitemForm']->editingMode}<div class="asideheader low"><a href="{link default}" class="button">Cancel editing</a></div>{/if}
 </div>
 
 {control menuitemForm begin}
@@ -100,9 +100,9 @@
 
 
     {* ModuleLink *}
-    {if $menuitemtype === 'modulelink'}    
+    {if $presenter['menuitemForm']->menuitemType === 'modulelink'}    
     <tr class="option">
-        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}{if !$presenter->editingMode} <small>(e.g. 'Articles')</small>{/if}</th>
+        <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['module_caption']->label}{if !$presenter['menuitemForm']->editingMode} <small>(e.g. 'Articles')</small>{/if}</th>
         <td>{$presenter['menuitemForm']['module_caption']->control}</td>
     </tr>      
     
@@ -136,7 +136,7 @@
     {/if} {* /modulelink *}           
 
     {* SubmenuLink *}
-    {if $menuitemtype === 'submenu'}
+    {if $presenter['menuitemForm']->menuitemType === 'submenu'}
         <tr class="option">
             <th><h2>{$nStep++})</h2> {$presenter['menuitemForm']['submenu_caption']->label}</th>
             <td>{$presenter['menuitemForm']['submenu_caption']->control}</td>

@@ -201,8 +201,8 @@ td.folderabove { height:31px }
                                        color:#FFF; cursor:move; padding:0.5em 0.5em 0.5em 1em }
 .ui-state-highlight { height:29px; background-color:#AFA; border:2px green dashed }
 
-#frm-menuDesignerControlForm { margin:4em 0 2em }
-#frm-menuDesignerControlForm input { padding:6px 12px }
+#frm-designerControlForm { margin:3em 0 2em }
+#frm-designerControlForm input { padding:6px 12px }
 
 /* Menuitem Form */
 #frm-menuitemForm h2 { display:inline; font-weight:700; font-size:100% }

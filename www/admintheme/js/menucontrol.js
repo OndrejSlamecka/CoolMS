@@ -65,9 +65,9 @@ $().ready(function() {
     });
 
     // Submit
-    $( "#frm-menuDesignerControlForm" ).submit(function(){
+    $( "#frm-designerControlForm" ).submit(function(){
         var structure = fetchStructure($('ul#menu-designer-control'));
-        $('#frm-menuDesignerControlForm input[name="structure"]').attr( 'value', JSON.stringify(structure) );    
+        $('#frm-designerControlForm input[name="structure"]').attr( 'value', JSON.stringify(structure) );    
     });
 
     /* Form type */
