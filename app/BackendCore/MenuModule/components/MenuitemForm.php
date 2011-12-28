@@ -47,21 +47,20 @@ class MenuitemForm extends \Application\Form
         $this->editingMode = false;
         $this->menuitemType = Menuitem::TYPE_MODULE;
 
-
         /* Set default values to module preferences */
         if (empty($this->chosenModule)) {
             $m = $moduleManager->getLinkableModules();
             reset($m);
-            $this->chosenModule = key($m);
+            $this->session->chosenModule = key($m); // DON'T use setter!!
         }
 
         if (empty($this->chosenModuleView)) {
             $views = $moduleManager->getModuleViews($this->chosenModule);
             $views = array_keys($views);
-            $this->chosenModuleView = array_shift($views);
+            $this->session->chosenModuleView = array_shift($views); // DON'T use setter!!
         }
 
-        parent::__construct($parent, 'menuitemForm'); // calls setup
+        parent::__construct($parent, 'menuitemForm'); // calls setup       
     }
 
     /* --------------------------- GENERAL METHODS -------------------------- */
