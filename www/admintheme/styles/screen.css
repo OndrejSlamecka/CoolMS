@@ -195,7 +195,7 @@ td.folderabove { height:31px }
 #menu-designer-control span { float:right; display:block; margin:.15em 0 0 .3em }
 .ui-state-highlight-top { height:40px; background-color:#aabeff; border:2px blue dashed }
 
-#menu-designer-control ul { min-height:1.5em; margin:0.5em 0 }
+#menu-designer-control ol { min-height:1.5em; margin:0.5em 0 }
 #menu-designer-control li li { width:400px; margin:0.25em 0 0 50px }
 #menu-designer-control .mi-container { background-color:#00154b; font-size:90%; border:3px solid #163672;
                                        color:#FFF; cursor:move; padding:0.5em 0.5em 0.5em 1em }

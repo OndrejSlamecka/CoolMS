@@ -9,7 +9,7 @@ function fetchStructure(ul) {
     lis.each(function(i, li) {
         var id = $(li).attr('id'); //.substr(3);
         if( id != "" && typeof id !== "undefined" ){
-            obj[id] = fetchStructure($('> ul', li));      
+            obj[id] = fetchStructure($('> ol', li));      
             //opera.postError( id );
         }
     });
@@ -30,8 +30,8 @@ function makeSortable(){
         /*cursor: 'hand',*/
         placeholder: 'ui-state-highlight-top'
     }).disableSelection();
-    $('#menu-designer-control ul').sortable({
-        connectWith: '#menu-designer-control ul', 
+    $('#menu-designer-control ol').sortable({
+        connectWith: '#menu-designer-control ol', 
         placeholder: 'ui-state-highlight', 
         dropOnEmpty: false
     }).disableSelection();
@@ -66,7 +66,7 @@ $().ready(function() {
 
     // Submit
     $( "#frm-designerControlForm" ).submit(function(){
-        var structure = fetchStructure($('ul#menu-designer-control'));
+        var structure = fetchStructure($('ol#menu-designer-control'));
         $('#frm-designerControlForm input[name="structure"]').attr( 'value', JSON.stringify(structure) );    
     });
 
@@ -88,7 +88,7 @@ $().ready(function() {
             success : function(payload){ 
                 jQuery.nette.success(payload);
                 $title = $("#frmmenuitemForm-module_caption");
-                $title.attr( 'value',titleBackup);
+                $title.attr('value', titleBackup);
             }
         });
     }); 
