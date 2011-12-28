@@ -81,7 +81,7 @@ class ModuleManager extends \Nette\Object
     }
 
     /**
-     * Returns array. Key is an actual name of a presenter and value is its formal name
+     * Returns array. Key is an actual name of a presenter and value is its public name
      * @return array
      */
     public function buildLinkableModulesCache()
@@ -108,18 +108,18 @@ class ModuleManager extends \Nette\Object
     }
 
     /**
-     * Returns array. Key is name, value is array with key 'name' (formal name) and 'methods' - again array name=>formal_name
+     * Returns array. Key is name, value is array with key 'name' (public name) and 'methods' - again array name=>public_name
      */
     public function buildModulesInfoCache()
     {
         $modules = $this->getLinkableModules();
         $modules_names = array();
 
-        foreach ($modules as $module => $formal_name) {
+        foreach ($modules as $module => $public_name) {
 
             // Write down basic information
             $modules_names[$module] = array();
-            $modules_names[$module]['name'] = $formal_name;
+            $modules_names[$module]['name'] = $public_name;
 
             // Get presenter reflection
             $presenter_name = $module . 'Module\\FrontendPresenter';
@@ -134,11 +134,11 @@ class ModuleManager extends \Nette\Object
                 $method_reflection = $presenter_reflection->getMethod($method);
 
                 // If method has 'view' annotation with parameter name
-                if ($method_reflection->hasAnnotation('view') && ($method_formal_name = $method_reflection->getAnnotation('view')->name)) {
+                if ($method_reflection->hasAnnotation('view') && ($method_public_name = $method_reflection->getAnnotation('view')->name)) {
                     $method = \Nette\Utils\Strings::replace($method, '~^render~');
                     $method = lcfirst($method);
 
-                    $modules_names[$module]['methods'][$method] = $method_formal_name;
+                    $modules_names[$module]['methods'][$method] = $method_public_name;
                 }
             }
         }

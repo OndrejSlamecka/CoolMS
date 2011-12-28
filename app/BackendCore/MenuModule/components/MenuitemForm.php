@@ -48,13 +48,13 @@ class MenuitemForm extends \Application\Form
         $this->menuitemType = Menuitem::TYPE_MODULE;
 
         /* Set default values to module preferences */
-        if (empty($this->chosenModule)) {
+        if (empty($this->session->chosenModule)) {
             $m = $moduleManager->getLinkableModules();
             reset($m);
             $this->session->chosenModule = key($m); // DON'T use setter!!
         }
 
-        if (empty($this->chosenModuleView)) {
+        if (empty($this->session->chosenModuleView)) {
             $views = $moduleManager->getModuleViews($this->chosenModule);
             $views = array_keys($views);
             $this->session->chosenModuleView = array_shift($views); // DON'T use setter!!
