@@ -156,10 +156,10 @@ class RouteManager extends \Nette\Object
     {
         $index = $this->menu->getIndex();
 
-        if (empty($index['module_view_param']))
+        if (empty($index['module_view_argument']))
             return;
 
-        $viewParams = $index['module_view_param'];
+        $viewParams = $index['module_view_argument'];
 
         if (!empty($viewParams)) {
             $paramsPairs = explode(';', $viewParams);

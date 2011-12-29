@@ -49,8 +49,8 @@ abstract class BasePresenter extends \BasePresenter
     {
         $path = ':' . $mi['module_name'] . ":Frontend:" . $mi['module_view'];
         $aParams = array();
-        if (!empty($mi['module_view_param'])) {
-            $params = explode(';', $mi['module_view_param']);
+        if (!empty($mi['module_view_argument'])) {
+            $params = explode(';', $mi['module_view_argument']);
             foreach ($params as $param) {
                 $param = explode('=', $param);
                 $aParams[$param[0]] = $param[1];

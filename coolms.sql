@@ -44,7 +44,7 @@ CREATE TABLE `menuitem` (
   `order` smallint(6) NOT NULL,
   `module_name` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `module_view` varchar(128) COLLATE utf8_bin DEFAULT NULL,
-  `module_view_param` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `module_view_argument` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `strict_link_comparison` tinyint(1) DEFAULT '1',
   `name` varchar(256) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
@@ -52,7 +52,7 @@ CREATE TABLE `menuitem` (
   CONSTRAINT `menuitem_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `menuitem` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-INSERT INTO `menuitem` (`id`, `parent`, `type`, `order`, `module_name`, `module_view`, `module_view_param`, `strict_link_comparison`, `name`) VALUES
+INSERT INTO `menuitem` (`id`, `parent`, `type`, `order`, `module_name`, `module_view`, `module_view_argument`, `strict_link_comparison`, `name`) VALUES
 (1,	NULL,	'modulelink',	3,	'Page',	'default',	'name=page-1',	1,	'Page 1'),
 (2,	NULL,	'modulelink',	1,	'Article',	'default',	'',	1,	'Articles'),
 (3,	NULL,	'modulelink',	4,	'Page',	'default',	'name=contact',	1,	'Contact page'),
@@ -88,4 +88,4 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `password`, `role`, `token`, `token_created`, `name`) VALUES
 (1,	'admin@example.com',	'0ce94d16aee929e03ee138283cc06cb017c591341c6d10e93194e1efde747551',	'admin',	NULL,	NULL,	'Admin');
 
--- 2011-12-25 21:27:36
+-- 2011-12-29 03:11:37

@@ -113,10 +113,10 @@
         <td>{input module_view}</td>
     </tr>           
 
-    {if !($presenter['menuitemForm']['module_view_param'] instanceof  Nette\Forms\Controls\HiddenField)}
+    {if !($presenter['menuitemForm']['module_view_argument'] instanceof  Nette\Forms\Controls\HiddenField)}
     <tr class="option"> <!-- style="display: none;" -->
-        <th><h2>{$nStep++})</h2> {label module_view_param /}</th>
-        <td>{input module_view_param}</td>
+        <th><h2>{$nStep++})</h2> {label module_view_argument /}</th>
+        <td>{input module_view_argument}</td>
     </tr>
     {/if}
     
