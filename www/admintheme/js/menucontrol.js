@@ -10,7 +10,7 @@ function fetchStructure(ul) {
         var id = $(li).attr('id'); //.substr(3);
         if( id != "" && typeof id !== "undefined" ){
             obj[id] = fetchStructure($('> ol', li));      
-            //opera.postError( id );
+        //opera.postError( id );
         }
     });
     
@@ -70,41 +70,41 @@ $().ready(function() {
         $('#frm-designerControlForm input[name="structure"]').attr( 'value', JSON.stringify(structure) );    
     });
 
-    /* Form type */
-    $('#frm-menuitemForm input[type="radio"]').live( 'change' , function(){      
+    // Form type
+    $('#frm-menuitemForm input[type="radio"]').live( 'change' , function(){
         $.ajax({
             url : '/admin/menu/?do=changeFormMenuitemType&type='+$(this).attr( 'value' ),
             success : jQuery.nette.success
-        });                        
-    }); 
+        });
+    });
+    /***/
+    var module_title_name = "#frmmenuitemForm-module_caption";    
     
-    // Module views
-    $('select[name="module_name"]').live( 'change' , function(){
-        var $title = $("#frmmenuitemForm-module_caption");
-        var titleBackup = $title.val();
-      
+    var ajaxChangeForm = function(url){
+        var $module_title = $(module_title_name);
+        var moduleTitleBackup = $module_title.val();        
         $.ajax({
-            url : '/admin/menu/?do=changeFormChooseModule&name='+$(this).attr( 'value' ),
-            success : function(payload){ 
+            url : url,
+            success : function(payload){
                 jQuery.nette.success(payload);
-                $title = $("#frmmenuitemForm-module_caption");
-                $title.attr('value', titleBackup);
+                var $module_title = $(module_title_name);
+                $module_title.attr('value', moduleTitleBackup);
             }
         });
-    }); 
-
+    };
+    // Module views
+    $('select[name="module_name"]').live( 'change' , function(){
+        ajaxChangeForm('/admin/menu/?do=changeFormChooseModule&name='+$(this).attr( 'value' ));
+    });
     // View's params
     $('select[name="module_view"]').live( 'change' , function(){
-        $.ajax({
-            url : '/admin/menu/?do=changeFormChooseModuleView&name='+$(this).attr( 'value' ),
-            success : jQuery.nette.success
-        });
-    });     
-    
+        ajaxChangeForm('/admin/menu/?do=changeFormChooseModuleView&name='+$(this).attr( 'value' ));
+    });
     // Ajaxed forms
-    $("form#menuEditForm").live("submit", function (el) {        
+    $("form#menuEditForm").live("submit", function (el) {
         el.preventDefault();
-        $(this).ajaxSubmit( successSortablePayload ); 
-    });    
+        $(this).ajaxSubmit( successSortablePayload );
+    });
+
 
 });

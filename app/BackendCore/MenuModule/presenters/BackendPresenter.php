@@ -58,19 +58,19 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function handleChangeFormMenuitemType($type)
     {
-        $this['menuitemForm']->menuitemType = $type;
+        $this['menuitemForm']->setMenuitemType($type);
         $this->invalidateControl('MenuitemFormSnippet');
     }
 
     public function handleChangeFormChooseModule($name)
     {
-        $this['menuitemForm']->chosenModule = $name;
+        $this['menuitemForm']->setChosenModule($name);
         $this->invalidateControl('MenuitemFormSnippet');
     }
 
     public function handleChangeFormChooseModuleView($name)
     {
-        $this['menuitemForm']->chosenModuleView = $name;
+        $this['menuitemForm']->setChosenModuleView($name);
         $this->invalidateControl('MenuitemFormSnippet');
     }
 

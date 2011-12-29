@@ -44,20 +44,19 @@ class MenuitemForm extends \Application\Form
         $this->moduleManager = $moduleManager;
         $this->menuitems = $menuitemRepository;
 
-        $this->editingMode = false;
         $this->menuitemType = Menuitem::TYPE_MODULE;
 
         /* Set default values to module preferences */
-        if (empty($this->session->chosenModule)) {
+        if (empty($this->chosenModule)) {
             $m = $moduleManager->getLinkableModules();
             reset($m);
-            $this->session->chosenModule = key($m); // DON'T use setter!!
+            $this->setChosenModule(key($m), FALSE);
         }
 
-        if (empty($this->session->chosenModuleView)) {
+        if (empty($this->chosenModuleView)) {
             $views = $moduleManager->getModuleViews($this->chosenModule);
             $views = array_keys($views);
-            $this->session->chosenModuleView = array_shift($views); // DON'T use setter!!
+            $this->setChosenModuleView(array_shift($views), FALSE);
         }
 
         parent::__construct($parent, 'menuitemForm'); // calls setup       
@@ -78,7 +77,7 @@ class MenuitemForm extends \Application\Form
             'type' => 'Link is a',
             'module_name' => 'It\'s linking to the module',
             'module_view' => 'and it\'s view',
-            'module_view_argument' => 'with parameter',
+            'module_view_argument' => 'with argument',
             'module_caption' => 'titled',
             'submenu_caption' => 'titled',
             'parent' => 'Should it be in a submenu?',
@@ -96,7 +95,7 @@ class MenuitemForm extends \Application\Form
         if ($menuitem['type'] === Menuitem::TYPE_MODULE) {
             $menuitem['module_caption'] = $menuitem['name'];
 
-            $this->chosenModule = $menuitem['module_name'];
+            $this->setChosenModule($menuitem['module_name'], FALSE);
             $this->chosenModuleView = $menuitem['module_view'];
         } else {
             $menuitem['submenu_caption'] = $menuitem['name'];
@@ -113,9 +112,9 @@ class MenuitemForm extends \Application\Form
     {
         $module_view_arguments = $this->moduleManager->getModuleViewParams($this->chosenModule, $this->chosenModuleView);
         if (is_array($module_view_arguments))
-            $this->addSelect('module_view_argument', 'with parameter', $module_view_arguments);
+            $this->addSelect('module_view_argument', 'with argument', $module_view_arguments);
         elseif (is_string($module_view_arguments))
-            $this->addText('module_view_argument', 'with parameter');
+            $this->addText('module_view_argument', 'with argument');
         else
             $this->addHidden('module_view_argument');
     }
@@ -197,25 +196,35 @@ class MenuitemForm extends \Application\Form
         $this->parent->redirect('default');
     }
 
-    /* ------------------------ PROPERTY OVERLOADING ------------------------ */
+    /* -------------------------- GETTERS, SETTERS -------------------------- */
 
-    public function setChosenModule($name)
+    /**
+     * Changes chosenModule and corresponding inputs (if were defined)
+     * @param string $name
+     * @param bool $presetView Set default module_view?
+     */
+    public function setChosenModule($name, $presetView = TRUE)
     {
         $this->session->chosenModule = $name;
 
-        // Get possible views and set it to the selectbox
-        $views = $this->moduleManager->getModuleViews($name);
-        $this['module_view']->setItems($views);
+        if ((isset($this['module_name']) && isset($this['module_view'])) || $presetView)
+            $views = $this->moduleManager->getModuleViews($name); // Possible views for this module
 
-        // Default chosen view
-        $views_keys = array_keys($views);
-        $this->chosenModuleView = array_shift($views_keys);
+        if (isset($this['module_name']) && isset($this['module_view'])) {
+            $this->setDefaults(array('module_name' => $name));
 
-        $this->setDefaults(array('module_name' => $name));
+            // Set possible views to their input
+            $this['module_view']->setItems($views);
+        }
+
+        if ($presetView) {
+            // Default chosen view
+            $views_keys = array_keys($views);
+            $this->chosenModuleView = array_shift($views_keys);
+        }
     }
 
     /**
-     *
      * @return string
      */
     public function getChosenModule()
@@ -223,18 +232,26 @@ class MenuitemForm extends \Application\Form
         return $this->session->chosenModule;
     }
 
-    public function setChosenModuleView($name)
+    /**
+     * Changes chosenModuleView and corresponding inputs (if were defined)
+     * @param string $name
+     * @param bool $presetArgument Set default module_view?
+     */
+    public function setChosenModuleView($name, $presetArgument = TRUE)
     {
         $this->session->chosenModuleView = $name;
-        $this->setDefaults(array('module_view' => $name));
 
-        // Renew view's parameters input
-        unset($this['module_view_argument']);
-        $this->addModuleViewParametersInput();
+        if (isset($this['module_view']))
+            $this->setDefaults(array('module_view' => $name));
+
+        if ($presetArgument) {
+            // Renew view's parameters input
+            unset($this['module_view_argument']);
+            $this->addModuleViewParametersInput();
+        }
     }
 
     /**
-     *
      * @return string
      */
     public function getChosenModuleView()
@@ -249,7 +266,7 @@ class MenuitemForm extends \Application\Form
         elseif ($type === Menuitem::TYPE_SUBMENU)
             $this->menuitemType = $type;
         else
-            throw new \Nette\InvalidArgumentException('Invalid argument supplied to ' . get_class($this) . '::$menuitemType.');
+            throw new \Nette\InvalidArgumentException('Invalid argument supplied to ' . get_class($this) . '::setMenuitemType.');
 
         $this->setDefaults(array('type' => $this->menuitemType));
     }
