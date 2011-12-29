@@ -70,36 +70,11 @@ $().ready(function() {
         $('#frm-designerControlForm input[name="structure"]').attr( 'value', JSON.stringify(structure) );    
     });
 
-    // Form type
-    $('#frm-menuitemForm input[type="radio"]').live( 'change' , function(){
-        $.ajax({
-            url : '/admin/menu/?do=changeFormMenuitemType&type='+$(this).attr( 'value' ),
-            success : jQuery.nette.success
-        });
+    // Changes of mode, module name and module view
+    $('input[type="radio"], select', $("#frm-menuitemForm")).live( 'change', function(){
+        $(this).parents('form:first').ajaxSubmit();
     });
-    /***/
-    var module_title_name = "#frmmenuitemForm-module_caption";    
     
-    var ajaxChangeForm = function(url){
-        var $module_title = $(module_title_name);
-        var moduleTitleBackup = $module_title.val();        
-        $.ajax({
-            url : url,
-            success : function(payload){
-                jQuery.nette.success(payload);
-                var $module_title = $(module_title_name);
-                $module_title.attr('value', moduleTitleBackup);
-            }
-        });
-    };
-    // Module views
-    $('select[name="module_name"]').live( 'change' , function(){
-        ajaxChangeForm('/admin/menu/?do=changeFormChooseModule&name='+$(this).attr( 'value' ));
-    });
-    // View's params
-    $('select[name="module_view"]').live( 'change' , function(){
-        ajaxChangeForm('/admin/menu/?do=changeFormChooseModuleView&name='+$(this).attr( 'value' ));
-    });
     // Ajaxed forms
     $("form#menuEditForm").live("submit", function (el) {
         el.preventDefault();

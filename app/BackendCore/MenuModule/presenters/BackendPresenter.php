@@ -54,42 +54,11 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->invalidateControl('MenuitemFormSnippet');
     }
 
-    /* Dependency: function name at docroot/admintheme/js/main.js */
-
-    public function handleChangeFormMenuitemType($type)
-    {
-        $this['menuitemForm']->setMenuitemType($type);
-        $this->invalidateControl('MenuitemFormSnippet');
-    }
-
-    public function handleChangeFormChooseModule($name)
-    {
-        $this['menuitemForm']->setChosenModule($name);
-        $this->invalidateControl('MenuitemFormSnippet');
-    }
-
-    public function handleChangeFormChooseModuleView($name)
-    {
-        $this['menuitemForm']->setChosenModuleView($name);
-        $this->invalidateControl('MenuitemFormSnippet');
-    }
-
     public function createComponentMenuitemForm($name)
     {
-        $session = $this->getSession('MenuitemForm');
         $moduleManager = $this->getService('moduleManager');
         $menuitemRepository = $this->getService('repositoryManager')->Menuitem;
-        return new MenuitemForm($this, $session, $moduleManager, $menuitemRepository);
-    }
-    
-    /**
-     * Called from MenuitemForm
-     * @param type $message 
-     */
-    public function menuitemFormSubmit($message)
-    {
-        $this->flashMessage($message);
-        $this->redirect('default');
+        return new MenuitemForm($this, $moduleManager, $menuitemRepository);
     }
 
     /* ----------------- MENU DESIGNER CONTROL (STRUCTURE) ------------------ */
@@ -97,16 +66,6 @@ class BackendPresenter extends \Backend\BasePresenter
     public function createComponentDesignerControlForm($name)
     {
         return new DesignerForm($this, $name, $this->getService('repositoryManager')->Menuitem);
-    }
-
-    /**
-     * Called from DesignerForm
-     * @param type $message 
-     */
-    public function designerFormSubmit($message)
-    {
-        $this->flashMessage($message);
-        $this->redirect('default');
     }
 
 }

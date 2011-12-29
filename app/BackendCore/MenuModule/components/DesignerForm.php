@@ -71,10 +71,12 @@ class DesignerForm extends \Application\Form
 
             $this->menuitems->cleanCache();
 
-            $this->parent->designerFormSubmit('Changes saved');
+            $this->parent->flashMessage('Changes saved');
         } catch (Exception $e) {
-            $this->parent->designerFormSubmit('Saving changes was not successful, please try again');
+            $this->parent->flashMessage('Saving of changes was not successful, please try again');
         }
+        
+        $this->parent->redirect('default');
     }
 
 }
