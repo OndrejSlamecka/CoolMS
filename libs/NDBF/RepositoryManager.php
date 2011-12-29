@@ -16,14 +16,18 @@ class RepositoryManager
     /** @var Nette\DI\Container */
     private $container;
 
+    /** @var Nette\Database\Connection */
+    private $connection;
+
     /** @var array */
     private $instantiated_repositories;
 
-    /************************** CONSTRUCTOR, DESIGN ***************************/
+    /* ------------------------ CONSTRUCTOR, DESIGN ------------------------- */
 
-    public function __construct(\Nette\DI\Container $container)
+    public function __construct(\Nette\DI\Container $container, \Nette\Database\Connection $connection)
     {
         $this->container = $container;
+        $this->connection = $connection;
     }
 
     /**
@@ -37,9 +41,9 @@ class RepositoryManager
             $class = 'Application\\Repository\\' . $name;
 
             if (class_exists($class)) {
-                $instance = new $class($this->container, $name);
+                $instance = new $class($this->container, $this->connection, $name);
             } else {
-                $instance = new Repository($this->container, $name);
+                $instance = new Repository($this->container, $this->connection, $name);
             }
             $this->instantiated_repositories[$name] = $instance;
         }

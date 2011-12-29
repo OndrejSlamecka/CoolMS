@@ -15,7 +15,7 @@ namespace NDBF;
  */
 class Repository extends \Nette\Object
 {
-    /****************************** VARIABLES *********************************/
+    /* ---------------------------- VARIABLES ------------------------------- */
 
     /** @var \Nette\DI\Container */
     protected $container;
@@ -27,12 +27,12 @@ class Repository extends \Nette\Object
     protected $table_name;
 
 
-    /************************** CONSTRUCTOR, DESIGN ***************************/
+    /* ------------------------ CONSTRUCTOR, DESIGN ------------------------- */
 
-    public function __construct(\Nette\DI\Container $container, $table_name = null)
+    public function __construct(\Nette\DI\Container $container, \Nette\Database\Connection $connection, $table_name = null)
     {
         $this->container = $container;
-        $this->connection = $container->database;
+        $this->connection = $connection;
 
         // DATABASE TABLE NAME
         if ($table_name === null) {
@@ -69,7 +69,7 @@ class Repository extends \Nette\Object
         return $this->db->table($this->table_name);
     }
 
-    /****************************** DATA METHODS ******************************/
+    /* --------------------------- DATA METHODS ----------------------------- */
 
     /**
      * 
