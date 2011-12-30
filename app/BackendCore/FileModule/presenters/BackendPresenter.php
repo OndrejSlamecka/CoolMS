@@ -110,13 +110,14 @@ class BackendPresenter extends \Backend\BasePresenter
         } else {
 
             if (is_file($fullpath)) {
-                $this->flashMessage('File deleted');
-            } elseif (is_dir($fullpath)) {
-                $this->flashMessage('Folder deleted');
+                $message = 'File deleted';
             } else {
-                $this->flashMessage('File/folder not found.');
+                $message = 'Folder deleted';
             }
+
             Files::remove($fullpath);
+
+            $this->flashMessage($message);
         }
 
         $this->redirect("default", array('path' => dirname($path)));
@@ -215,9 +216,9 @@ class BackendPresenter extends \Backend\BasePresenter
 
         $newName = Paths::sanitize($form['new_name']);
         $oldName = Paths::sanitize($form['old_name']);
-        
+
         $newName = dirname($oldName) . '/' . $newName;
-        
+
         $newName = $fhandler->getFullPath($newName);
         $oldName = $fhandler->getFullPath($oldName);
         Files::rename($oldName, $newName);
