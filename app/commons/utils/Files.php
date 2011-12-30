@@ -16,8 +16,8 @@ class Files extends \Nette\Object
 {
 
     /**
-     * If path is file removes it. If it is dir, it removes dir and its contents.
-     * @param type $dir 
+     * If $path is a file removes it. If it is a dir, it removes dir and its contents.
+     * @param type $path Path to file or directory
      */
     public static function remove($path)
     {
