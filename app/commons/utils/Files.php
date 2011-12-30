@@ -28,16 +28,16 @@ class Files extends \Nette\Object
         } elseif (is_dir($path)) {
             $objects = scandir($path);
 
-            if (is_array($objects)) // scandir returns false for empty folders
+            if (is_array($objects)) { // scandir returns false for empty folders
                 foreach ($objects as $object) {
-                    if ($object !== "." && $object !== "..")
-                        if (filetype($path . "/" . $object) === "dir")
-                            self::remove($path . "/" . $object);
-                        else
-                            unlink($path . "/" . $object);
+                    if ($object !== "." && $object !== "..") {
+                        self::remove($path . "/" . $object);
+                    }
                 }
+            }
+
             rmdir($path);
-        }else {
+        } else {
             throw new \Nette\InvalidArgumentException('There is no file or directory at given path');
         }
     }
@@ -49,7 +49,7 @@ class Files extends \Nette\Object
      * @return bool True on success, false on failure
      */
     public static function rename($oldName, $newName)
-    {       
+    {
         if (file_exists($oldName)) {
             if (!rename($oldName, $newName))
                 throw new \Nette\IOException('Renaming failed');
