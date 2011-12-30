@@ -35,24 +35,4 @@ class Paths extends \Nette\Object
         return $path;
     }
 
-    /**
-     * Returns folder above given path
-     * @param string $path
-     * @return string 
-     */
-    public static function getFolderAbove($path)
-    {
-        // If not base folder
-        if ($path !== '/') {
-            $folder_above = Strings::match($path, "~(.*)/.*$~");
-            if (is_array($folder_above))
-                $folder_above = array_pop($folder_above);
-            else // If it is not array, it is empty - just one dir over base                
-                $folder_above = '/';
-        }else
-            $folder_above = '/';
-
-        return $folder_above;
-    }
-
 }

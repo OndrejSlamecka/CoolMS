@@ -79,7 +79,7 @@ class BackendPresenter extends \Backend\BasePresenter
         } else {
             $this->template->path = $path = Paths::sanitize($path);
             $this->template->fullpath = $fullpath = $this->pathHandler->getFullPath($path);
-            $this->template->folder_above = Paths::getFolderAbove($path);
+            $this->template->folder_above = dirname($path);
             $this->template->breadcrumbs = $this->prepareBreadcrumbs($path);
             $this->template->items = \Nette\Utils\Finder::find('*')->in($fullpath);
         }
@@ -90,7 +90,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $this->template->editingItem = $path;
 
         // We want to show folder above
-        $path = Paths::getFolderAbove($path);
+        $path = dirname($path);
 
         $this->setTemplateVariables($path);
 
@@ -119,7 +119,7 @@ class BackendPresenter extends \Backend\BasePresenter
             Files::remove($fullpath);
         }
 
-        $this->redirect("default", array('path' => Paths::getFolderAbove($path)));
+        $this->redirect("default", array('path' => dirname($path)));
     }
 
     public function renderDefault($path)
@@ -209,14 +209,14 @@ class BackendPresenter extends \Backend\BasePresenter
     public function renameFormSubmit($form)
     {
         $fhandler = $this->pathHandler;
-        $showpath = Paths::sanitize(Paths::getFolderAbove($this->getParam('path')));
+        $showpath = Paths::sanitize(dirname($this->getParam('path')));
 
         $form = $form->getValues();
 
         $newName = Paths::sanitize($form['new_name']);
         $oldName = Paths::sanitize($form['old_name']);
         
-        $newName = Paths::getFolderAbove($oldName) . '/' . $newName;
+        $newName = dirname($oldName) . '/' . $newName;
         
         $newName = $fhandler->getFullPath($newName);
         $oldName = $fhandler->getFullPath($oldName);
