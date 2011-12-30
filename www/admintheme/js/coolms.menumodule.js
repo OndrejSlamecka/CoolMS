@@ -4,7 +4,8 @@
  */
 
 /* --------------- Functions --------------- */
-function fetchStructure(ul) {
+function fetchStructure(ul) 
+{
     var lis = ul.children(), obj = {};
     lis.each(function(i, li) {
         var id = $(li).attr('id'); //.substr(3);
@@ -17,39 +18,41 @@ function fetchStructure(ul) {
     return obj;
 }
 
-function successSortablePayload(payload){
+function successSortablePayload(payload)
+{
     jQuery.nette.success(payload); 
     if( $('#menu-designer-control').length > 0 )
         makeSortable();        
 }
 
-function makeSortable(){
-    /* Menu designer */
+function makeSortable()
+{
+    
     $('#menu-designer-control').sortable({
         handle: '.tmi-handler', 
         /*cursor: 'hand',*/
         placeholder: 'ui-state-highlight-top'
     }).disableSelection();
+    
     $('#menu-designer-control ol').sortable({
         connectWith: '#menu-designer-control ol', 
         placeholder: 'ui-state-highlight', 
         dropOnEmpty: false
     }).disableSelection();
-      
 }
 
 /* ------------- Document Ready ------------- */
 
 $().ready(function() {
 
-    makeSortable();
+    makeSortable();                
 
     $(".edit.ajax").click(function(){
         location.href="#snippet--MenuitemFormSnippet";
         
         $this = $(this);
         $parent = $this.closest( ".mi-container,.tmi-handler" ); // It isn't real parent, it's the closest sortable item
-        $parent.css( 'opacity', 0.3 );
+        $parent.css('opacity', 0.3);
         $parent.animate({
             opacity:1
         },{
@@ -60,18 +63,18 @@ $().ready(function() {
     });
 
     // Changes highlight height according to currently moved object
-    $( "#menu-designer-control" ).bind( "sort", function(event, ui){
-        $('.ui-state-highlight-top').css( 'margin-bottom', parseInt( $(".ui-sortable-helper").height() ) -30 + 'px' );
+    $( "#menu-designer-control" ).on( "sort", function(event, ui){
+        $('.ui-state-highlight-top').css('margin-bottom', parseInt( $(".ui-sortable-helper").height() ) -30 + 'px');
     });
 
-    // Submit
+    // Submit of the designer
     $( "#frm-designerControlForm" ).submit(function(){
         var structure = fetchStructure($('ol#menu-designer-control'));
-        $('#frm-designerControlForm input[name="structure"]').attr( 'value', JSON.stringify(structure) );    
+        $('#frm-designerControlForm input[name="structure"]').attr('value', JSON.stringify(structure));    
     });
 
     // Changes of mode, module name and module view
-    $('input[type="radio"], select', $("#frm-menuitemForm")).live( 'change', function(){
+    $('input[type="radio"], select', $("#frm-menuitemForm")).live('change', function(){
         $(this).parents('form:first').ajaxSubmit();
     });
     
@@ -80,6 +83,5 @@ $().ready(function() {
         el.preventDefault();
         $(this).ajaxSubmit( successSortablePayload );
     });
-
 
 });
