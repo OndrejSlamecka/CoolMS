@@ -21,7 +21,7 @@ abstract class BasePresenter extends \BasePresenter
     public function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
-        $template->loggedUser = $this->context->user;
+        $template->loggedUser = $this->getUser();
         $template->themePath = $template->basePath . '/admintheme';
 
         return $template;
@@ -48,7 +48,7 @@ abstract class BasePresenter extends \BasePresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $modules = $this->context->moduleManager;
+        $modules = $this->getService('moduleManager');
         $this->template->modules = $modules->getLinkableModules();
     }
 
