@@ -4,9 +4,9 @@
  */
 
 /* --------------- Functions --------------- */
-function fetchStructure(ul) 
+function fetchStructure(ol) 
 {
-    var lis = ul.children(), obj = {};
+    var lis = ol.children(), obj = {};
     lis.each(function(i, li) {
         var id = $(li).attr('id'); //.substr(3);
         if( id != "" && typeof id !== "undefined" ){
