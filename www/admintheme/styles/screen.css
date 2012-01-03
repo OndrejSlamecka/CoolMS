@@ -66,7 +66,7 @@ a { text-decoration:underline; color:#0000ef; padding:0 0.15em }
 a:active { position:relative; top:1px }
 a:visited { color:#0000d2 }
 
-a.img { margin:0 0 0 -4px; padding:5px 0.25em 0 }
+a.img { margin:0 0 0 -4px; padding:5px 0.25em 0; display: inline-block; }
 table a.img { margin:0 0 0 -2px; padding:0 3px 2px }
 
 a.delete:hover { background-color:#cd1818; color:#FFF }
@@ -101,7 +101,7 @@ table.data th { border:1px #e3e3e3 solid; background-color:#454545; color:#FFF; 
 table.data td { border:1px #e3e3e3 solid; padding:0.2em 0.5em }
 
 table.data td.padded { padding:0.2em 1em }
-table.data td.name { min-width:200px; padding:5px 10px 6px }
+table.data td.name { min-width:290px; padding:5px 10px 6px }
 table.data td.name.editing { padding-bottom:5px }
 table.data td.name small { float:right; margin:3px 0 0 10px }
 
@@ -192,7 +192,7 @@ td.folderabove { height:31px }
 #menu-designer-control h2,#menu-designer-control h3 { display:inline; font-size:inherit }
 #menu-designer-control h2 img,#menu-designer-control h3 img { vertical-align:middle; padding:0 0.5em }
 #menu-designer-control div.menuitemOptions { float:right; display:inline }
-#menu-designer-control span { float:right; display:block; margin:.15em 0 0 .3em }
+#menu-designer-control span { float:right; display:block; margin: -0.2em 0 0 .3em }
 .ui-state-highlight-top { height:40px; background-color:#aabeff; border:2px blue dashed }
 
 #menu-designer-control ol { min-height:1.5em; margin:0.5em 0 }
@@ -240,6 +240,6 @@ a.edit.img:hover, td input[type="image"]:hover{background-color:#FFF}
 table.files .name, .textFormatForm input.large, .textFormatForm textarea{width:100%}
 .flright th, #frm-languageChooseForm th{padding-top:0}
 td input.low, body.authentication #content, .textFormatForm td input, #frm-menuitemForm td input[type="submit"], #frm-menuitemForm td input[type="text"]{margin:0}
-h2 form, h2 form div, h3 form, h3 form div, #menu-designer-control table{display:inline}
+h2 form, h2 form div, h3 form, h3 form div, #menu-designer-control table{display:block; float: right; margin-right: 6px;}
 #header, .toolbox{margin:1em 0 0}
 #menu li:last-of-type, .submitButtonRow, .submitButtonRow td{border:0}

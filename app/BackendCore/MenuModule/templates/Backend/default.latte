@@ -27,17 +27,17 @@
                     {$tmi['name']}
                 </h2>
 
+                <span>
+                    <a n:href="edit!, $tmi['id']" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
+                    <a n:href="delete, $tmi['id']" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
+                </span>                    
                 <div class="menuitemOptions">
                     <table n:if="$tmi['type'] !== \Application\Entity\Menuitem::TYPE_SUBMENU"> 
                         <tr>
                             <td>{$tmi['module_name_verbalname']} &rarr;&nbsp;</td>
                             <td>{$tmi['module_view_verbalname']}</td>                    
                         </tr>
-                    </table>
-                    <span>
-                        <a n:href="edit!, $tmi['id']" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
-                        <a n:href="delete, $tmi['id']" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
-                    </span>                                       
+                    </table>                                   
                 </div>
             </div> <!-- /.tmi-handler -->
             {if $tmi['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
@@ -52,7 +52,15 @@
                             <span>
                                 <a n:href="edit!, $mi->id" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
                                 <a n:href="delete, $mi->id" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
-                            </span>     
+                            </span>    
+                            <div class="menuitemOptions">
+                                <table n:if="$mi['type'] !== \Application\Entity\Menuitem::TYPE_SUBMENU"> 
+                                    <tr>
+                                        <td>{$mi['module_name_verbalname']} &rarr;&nbsp;</td>
+                                        <td>{$mi['module_view_verbalname']}</td>                    
+                                    </tr>
+                                </table>                                   
+                            </div>                            
                         </div>
                     </li>
                 {/foreach}		    
