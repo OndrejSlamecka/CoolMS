@@ -243,6 +243,8 @@ class MenuitemForm extends \Application\Form
                 // Renew view's parameters input
                 unset($this['module_view_argument']);
                 $this->addModuleViewArgumentsInput($menuitem['module_name'], $menuitem['module_view']);
+            } else {
+                $this['strict_link_comparison']->setValue(true); // set default checked
             }
 
             // Preserve type
@@ -257,9 +259,10 @@ class MenuitemForm extends \Application\Form
             unset($menuitem['editing']);
 
             try {
+                $id = $menuitem['id'];
                 $this->menuitems->save($menuitem, 'id');
 
-                if ($menuitem['id'] !== null)
+                if ($id !== null)
                     $this->parent->flashMessage('Item changed');
                 else
                     $this->parent->flashMessage('Item added');
