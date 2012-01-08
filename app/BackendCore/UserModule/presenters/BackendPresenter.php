@@ -49,7 +49,7 @@ class BackendPresenter extends \Backend\BasePresenter
         if ($loggedUser->isInRole('admin')) {
             $form = $form->getValues();
 
-            $enteredPasswordHash = Authenticator::hashPassword($loggedUser->getIdentity()->data['email'], $form['password']);
+            $enteredPasswordHash = Authenticator::calculateHash($form['password'], $loggedUser->getIdentity()->data['salt']);
             $isRightPassword = $loggedUser->getIdentity()->data['password'] === $enteredPasswordHash;
 
             if ($isRightPassword) {
@@ -133,9 +133,9 @@ class BackendPresenter extends \Backend\BasePresenter
                 $this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
                 $this->redirect('new');
             }
-
-            // Generate some noise just for sure
-            $user['password'] = md5(uniqid(rand(10, 19), true));
+            
+            $user['password'] = mt_rand(); // some noise...
+            $user['salt'] = mt_rand();
 
             // Create token for future verification
             $token = Authenticator::createToken();
@@ -155,6 +155,7 @@ class BackendPresenter extends \Backend\BasePresenter
             $mail->setFrom("Account creation <cms@$host>")
                     ->addTo($user['email'])
                     ->setHtmlBody($template);
+
 
             try {
                 $mail->send();
@@ -217,7 +218,7 @@ class BackendPresenter extends \Backend\BasePresenter
             if ($form['password'] === "")
                 unset($form['password']);
             else
-                $form['password'] = Authenticator::hashPassword($this->getUser()->getIdentity()->email, $form['password']);
+                $form['password'] = Authenticator::calculateHash($form['password'], $this->getUser()->getIdentity()->salt);
 
             $users = $this->repositories->User;
             $user = $users->find(array('id' => $form['id']))->fetch()->toArray();

@@ -218,7 +218,7 @@ class BackendPresenter extends \Backend\BasePresenter
         }
 
         $user = $user->toArray();
-        $user['password'] = Authenticator::hashPassword($user['email'], $form['password']);
+        $user['password'] = Authenticator::calculateHash($form['password'], $user['salt']);
         $user['token'] = null;
         $user['token_created'] = null;
         $users->save($user, 'email');
