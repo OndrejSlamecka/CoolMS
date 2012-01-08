@@ -37,6 +37,10 @@ abstract class BasePresenter extends \BasePresenter
                 $this->redirect(':Authentication:Backend:login');
             }
         } else {
+
+            if ($this->getName() === 'Authentication:Backend' && $this->getAction() === 'createPassword')
+                $this->getUser()->logout(TRUE); // Creator and new user can use the same client
+
             if ($this->getName() === 'Authentication:Backend' && $this->getAction() !== 'logout') {
                 $this->redirect(':Dashboard:Backend:');
             }
