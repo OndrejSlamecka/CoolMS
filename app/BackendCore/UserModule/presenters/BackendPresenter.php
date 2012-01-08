@@ -29,43 +29,43 @@ class BackendPresenter extends \Backend\BasePresenter
         if ($this->getUser()->isInRole('admin')) {
             $users = $this->repositories->User;
             $this->template->user = $users->find(array('id' => $id))->fetch();
-            $this['confirmDeleteForm']->setDefaults(array('id' => $id));
+            $this['confirmIdentityForm']->setDefaults(array('id' => $id));
+            $this['confirmIdentityForm']->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
         }
     }
 
-    public function createComponentConfirmDeleteForm($name)
+    /**
+     * Don't call without setting onSuccess
+     * @param type $name
+     * @return \Application\Form 
+     */
+    public function createComponentConfirmIdentityForm($name)
     {
         $form = new \Application\Form($this, $name);
         $form->addHidden('id');
         $form->addPassword('password', 'Password');
         $form->addSubmit('send', 'Confirm');
-        $form->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
         return $form;
     }
 
     public function confirmDeleteFormSuccess($form)
     {
-        $loggedUser = $this->getUser();
-        if ($loggedUser->isInRole('admin')) {
-            $form = $form->getValues();
+        $user = $this->getUser();
+        if (!$user->getAuthenticator()->authenticateAdmin($user, $form['password']->getValue())) {
+            $this->flashMessage('Password verification was not successful.');
+        } else {
+            $user_to_delete_id = $form['id']->getValue();
+            if ($user_to_delete_id != $user->getId()) {
 
-            $enteredPasswordHash = Authenticator::calculateHash($form['password'], $loggedUser->getIdentity()->data['salt']);
-            $isRightPassword = $loggedUser->getIdentity()->data['password'] === $enteredPasswordHash;
+                $users = $this->repositories->User;
+                $users->remove(array('id' => $user_to_delete_id));
 
-            if ($isRightPassword) {
-                if ($form['id'] != $loggedUser->getId()) {
-
-                    $users = $this->repositories->User;
-                    $users->remove(array('id' => $form['id']));
-
-                    $this->flashMessage('User was deleted.');
-                } else {
-                    $this->flashMessage('I\'m curious why are people trying to delete their own account… seriously, tell me.');
-                }
+                $this->flashMessage('User was deleted.');
             } else {
-                $this->flashMessage('Password verification was not successful.');
+                $this->flashMessage('I\'m curious why are people trying to delete their own account… seriously, tell me.');
             }
         }
+
 
         $this->redirect('default');
     }
@@ -133,7 +133,7 @@ class BackendPresenter extends \Backend\BasePresenter
                 $this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
                 $this->redirect('new');
             }
-            
+
             $user['password'] = mt_rand(); // some noise...
             $user['salt'] = mt_rand();
 

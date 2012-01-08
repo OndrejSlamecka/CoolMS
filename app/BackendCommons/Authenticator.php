@@ -85,4 +85,22 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
             return true;
     }
 
+    /**
+     * Returns true if given $user is in admin role and provided correct password, false otherwise
+     * @param \Nette\Http\User $user
+     * @param string $password
+     * @return bool 
+     */
+    public function authenticateAdmin(\Nette\Http\User $user, $password)
+    {
+        if ($user->isInRole('admin')) {
+            $enteredPasswordHash = Authenticator::calculateHash($password, $user->getIdentity()->data['salt']);
+            $isRightPassword = $user->getIdentity()->data['password'] === $enteredPasswordHash;
+
+            if ($isRightPassword)
+                return true;
+        }
+        return false;
+    }
+
 }
