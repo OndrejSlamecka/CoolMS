@@ -28,7 +28,7 @@ You should be familiar with installation of the sandbox from the Nette Framework
 - Execute app/coolms.sql (located in the app/ folder of downloaded package) on your mysql server
 - Run from browser (default login - change ASAP - is email: admin@example.com, password: admin)
 
-\* Please note that package in [Downloads](https://github.com/OndrejSlamecka/CoolMS/downloads) contains Nette Framework. Repository does not - download it from [http://nette.org](http://nette.org)
+* Please note that package in [Downloads](https://github.com/OndrejSlamecka/CoolMS/downloads) contains Nette Framework. Repository does not - download it from [http://nette.org](http://nette.org)
 
 ---
 
