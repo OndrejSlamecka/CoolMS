@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace Frontend;
@@ -29,7 +29,7 @@ abstract class BasePresenter extends \BasePresenter
     {
         /** MENU * */
         $template->registerFilter($latte = new \Nette\Latte\Engine);
-        $set = \Nette\Latte\Macros\MacroSet::install($latte->parser);
+        $set = \Nette\Latte\Macros\MacroSet::install($latte->compiler);
         $set->addMacro('menulink', 'echo $presenter->menulink(%node.word);');
         $set->addMacro('isMenulinkCurrent', 'if($presenter->isMenulinkCurrent(%node.word)):', 'endif');
     }

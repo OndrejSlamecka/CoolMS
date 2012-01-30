@@ -5,21 +5,28 @@
 # http://nette.org/security-warning
 #
 common:
+	nette:
+		debugger:
+			strictMode: true
+		session:
+			autoStart: true
+			expiration: +14days
+		application:
+			errorPresenter: Error
+		database:
+			default:
+				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
+				user: %database.user%
+				password: %database.password%
+		xhtml: no
+
 	php:
 		date.timezone: Europe/Prague
 		# session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
 	services:
-		database:
-			class: Nette\Database\Connection(
-				'%database.driver%:host=%database.host%;dbname=%database.dbname%'
-				%database.user%
-				%database.password%
-			)
-			setup:
-				- setCacheStorage(...)
-				#- setDatabaseReflection( Nette\Database\Reflection\DiscoveredReflection() )
-		
+		database: @nette.database.default
+
 		repositoryManager: NDBF\RepositoryManager(...)
 		authenticator: Backend\Authenticator( @repositoryManager::getRepository(User) )
 		presenterTree: Kdyby\PresenterTree(...)
