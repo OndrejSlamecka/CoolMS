@@ -38,9 +38,7 @@ abstract class BasePresenter extends \BasePresenter
     {
         /** MENU * */
         $menu = $this->repositories->Menuitem;
-        $this->template->topMenu = $menu->find(array('parent' => null,
-            'type != ?' => \Application\Entity\Menuitem::TYPE_SUBMENU,)
-                , '`order` ASC');
+        $this->template->topMenu = $menu->select()->where('menuitem_id', null)->where('type != ?', \Application\Entity\Menuitem::TYPE_SUBMENU)->order('`order` ASC');
     }
 
     /* ------------------------------- MENU --------------------------------- */

@@ -45,7 +45,7 @@ class Menuitem extends \NDBF\Repository
                 $mi['module_view_verbalname'] = $modulesNames[$mi['module_name']]['methods'][$mi['module_view']];
             }
 
-            if ($mi['parent'] === null) {
+            if ($mi['menuitem_id'] === null) {
                 // Is a top level item
                 // If wasn't already created (in following section), copy into final menuitems
                 if (!isset($structuredMis[$mi['id']])) {
@@ -55,12 +55,12 @@ class Menuitem extends \NDBF\Repository
             } else {
                 // Is child
                 // If its parent wasn't initialized yet do:
-                if (!isset($structuredMis[$mi['parent']]['children'])) {
-                    $structuredMis[$mi['parent']] = $mis[$mi['parent']]->toArray();
-                    $structuredMis[$mi['parent']]['children'] = array();
+                if (!isset($structuredMis[$mi['menuitem_id']]['children'])) {
+                    $structuredMis[$mi['menuitem_id']] = $mis[$mi['menuitem_id']]->toArray();
+                    $structuredMis[$mi['menuitem_id']]['children'] = array();
                 }
 
-                $structuredMis[$mi['parent']]['children'][$mi['id']] = $mi;
+                $structuredMis[$mi['menuitem_id']]['children'][$mi['id']] = $mi;
 
                 unset($mis[$mi['id']]);
             }
@@ -82,7 +82,7 @@ class Menuitem extends \NDBF\Repository
     public function save(&$mi, $table_id = 'id')
     {
         if (!isset($mi['order']))
-            $mi['order'] = $this->getMaxOrder($mi['parent']) + 1;
+            $mi['order'] = $this->getMaxOrder($mi['menuitem_id']) + 1;
         parent::save($mi, $table_id);
         $this->cleanCache();
     }
@@ -99,7 +99,7 @@ class Menuitem extends \NDBF\Repository
     {
         $index = $this->getCache()->load('index');
         if ($index === null) {
-            $index = $this->find(array('parent' => null, 'order' => 1))->fetch();
+            $index = $this->find(array('menuitem_id' => null, 'order' => 1))->fetch();
             $index = $index->toArray();
             $this->getCache()->save('index', $index, array(Cache::TAGS => array('ApplicationFrontMenu')));
         }
@@ -161,7 +161,7 @@ class Menuitem extends \NDBF\Repository
         $this->db->beginTransaction();
 
         foreach ($parents as $id => $parent) {
-            $record = array('parent' => $parent);
+            $record = array('menuitem_id' => $parent);
             $this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
         }
 
@@ -178,7 +178,7 @@ class Menuitem extends \NDBF\Repository
         if ($parent === NULL)
             return $this->table()->max('`order`');
         else
-            return $this->table()->where('parent', $parent)->max('`order`');
+            return $this->table()->where('menuitem_id', $parent)->max('`order`');
     }
 
     /**

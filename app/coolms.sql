@@ -39,7 +39,7 @@ CREATE TABLE `article_draft` (
 DROP TABLE IF EXISTS `menuitem`;
 CREATE TABLE `menuitem` (
   `id` smallint(6) NOT NULL AUTO_INCREMENT,
-  `parent` smallint(6) DEFAULT NULL,
+  `menuitem_id` smallint(6) DEFAULT NULL,
   `type` enum('modulelink','submenu') COLLATE utf8_bin NOT NULL,
   `order` smallint(6) NOT NULL,
   `module_name` varchar(128) COLLATE utf8_bin DEFAULT NULL,
@@ -48,11 +48,11 @@ CREATE TABLE `menuitem` (
   `strict_link_comparison` tinyint(1) DEFAULT '1',
   `name` varchar(256) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `parent` (`parent`),
-  CONSTRAINT `menuitem_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `menuitem` (`id`) ON DELETE CASCADE
+  KEY `menuitem_id` (`menuitem_id`),
+  CONSTRAINT `menuitem_ibfk_1` FOREIGN KEY (`menuitem_id`) REFERENCES `menuitem` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-INSERT INTO `menuitem` (`id`, `parent`, `type`, `order`, `module_name`, `module_view`, `module_view_argument`, `strict_link_comparison`, `name`) VALUES
+INSERT INTO `menuitem` (`id`, `menuitem_id`, `type`, `order`, `module_name`, `module_view`, `module_view_argument`, `strict_link_comparison`, `name`) VALUES
 (1,	NULL,	'modulelink',	3,	'Page',	'default',	'name=page-1',	1,	'Page 1'),
 (2,	NULL,	'modulelink',	1,	'Article',	'default',	'',	1,	'Articles'),
 (3,	NULL,	'modulelink',	4,	'Page',	'default',	'name=contact',	1,	'Contact page'),
@@ -89,4 +89,4 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `password`, `salt`, `role`, `token`, `token_created`, `name`) VALUES
 (1,	'admin@example.com',	'dad29ce262b1e6800c899b4a25366cc3fa83292ceae460b16cd758f3a8f49b82',	548268735,	'admin',	NULL,	NULL,	'Admin');
 
--- 2012-01-08 22:08:57
+-- 2012-02-10 15:30:20
