@@ -28,10 +28,10 @@
 
                             {if $mi->related('menuitem')->count()}
                             <ul class="submenu">
-                                <li n:foreach="$mi->related('menuitem') as $smi">
+                                <li n:foreach="$mi->related('menuitem')->order('order') as $smi">
                                     <a href="{menulink $smi}">{$smi['name']}</a>
                                 </li>
-                            <ul>
+                            </ul>
                             {/if}
                         {else}
                             <a href="{menulink $mi}">{$mi['name']}</a>
