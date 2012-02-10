@@ -1,5 +1,5 @@
 <?php
-// Load nette and setup
+// Load Nette
 require LIBS_DIR . '/Nette/loader.php';
 
 // Set up configurator and debugging
