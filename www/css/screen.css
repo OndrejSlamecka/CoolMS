@@ -1,118 +1,52 @@
 /* Layout */
-
 html{ background: url(../img/bg.jpg); overflow-y:scroll; }
+body{ color: #111; font-size: 16px; line-height: 1.55; 
+	  font-family: Georgia, "New York CE", utopia, sans-serif; /*font-family: Verdana,"Geneva CE",lucida,sans-serif;*/ }	  
 
-body{
-    color: #111;
-    font-size: 16px;
-    line-height: 1.55;
-    font-family: Georgia, "New York CE", utopia, sans-serif;
-    /*font-family: Verdana,"Geneva CE",lucida,sans-serif;*/
-}
+#panel, footer { margin: 0 auto; width: 724px; 
+				 padding: 1.5em 2em; /* Same as menu negative margin */ }
 
-#panel, footer{
-    margin: 0 auto;
-    width: 724px;
-    padding: 1.5em 2em; /* Same as menu negative margin */
-}
+#panel { margin: 1.5em auto 0; border: 1px solid #EEE; background: #FFF; }
 
-#panel{
-    margin: 1.5em auto 0;
-    border: 1px solid #EEE;
-    background: #FFF;
-}
-
-#menu{
-    margin: 1.5em -2em; /* The same width as body padding */
-    padding: 0 1.5em; /* 1.5 + 0.5 (#menu a) = 2 (body padding) */
-    height: 34px;
-
-    border: 1px solid #c4c4c4;
-        border-left: none;
-        border-right: none;
-    background: #e4e4e4;
-
-    font-family: sans-serif;
-}
+#menu { margin: 1.5em -2em; /* The same width as body padding */
+    	padding: 0 1.5em; /* 1.5 + 0.5 (#menu a) = 2 (body padding) */
+    	height: 34px; border: 1px solid #c4c4c4; border-left: none; border-right: none; background: #e4e4e4; font-family: sans-serif; }
 
 #menu li { display: inline; position:relative; float: left; }
 
-#menu a{
-    display: block;
-    padding: .3em .5em;
-    color: #333;
-    text-decoration: none;
-}
+#menu a{ display: block; padding: .3em .5em; color: #333; text-decoration: none; }
+#menu li#nav-active a { font-weight: bold; }
+#menu a:hover{ color: #000; background-color: #F7F7F7; box-shadow: 0 0 3px #888; text-decoration: underline; }
 
-    #menu li#nav-active a{ font-weight: bold; }
-
-#menu a:hover{
-    color: #000;
-    background-color: #F7F7F7;
-    box-shadow: 0 0 3px #888;
-    text-decoration: underline;
-}
-
-#menu ul.submenu
-{
-    display: none;
-    position: absolute;
-    border: 1px solid #c4c4c4;
-    left: -1px;
-    top: 2em;
-    background-color:#e4e4e4;
-    width: 10em;
-}
-
+#menu ul.submenu { display: none; position: absolute; left: -1px; top: 2em; width: 10em; background-color:#e4e4e4; border: 1px solid #c4c4c4; }
 #menu li:hover .submenu { display:block; }
+#menu .submenu li { list-style:none; display:list-item; width: 100%; }
 
-#menu .submenu li { list-style:none; display:list-item; width: 100% }
+/* Typo */                                                          
+a#logo { color: #000; text-decoration: none; font-size: 2em; text-shadow: 1px 1px 1px #777;
+    margin: 0 0 .75em; /* .75 * 2 = 1.5 as in body */ }
 
-/* Typo */
+h1 { font-size: 1.8em; margin: 0 0 .7em; text-shadow: 1px 1px 1px #999; color: #252525; }
+h2 { font-size: 1.45em; margin: 0 0 .5em; text-shadow: 1px 1px 1px #999; }
+h3 { font-size: 1.1em; margin: 0 0 .3em; font-weight: bold; }
 
-a#logo{
-    color: #000;
-    text-decoration: none;
-    font-size: 2em;
-    margin: 0 0 .75em; /* .75 * 2 = 1.5 as in body */
-    text-shadow: 1px 1px 1px #777;
-}
+a { color: blue; }
+a:hover { text-decoration: none; }
+a:visited { color: purple; }
 
-h1{
-    font-size: 1.8em;
-    margin: 0 0 .7em;
-    text-shadow: 1px 1px 1px #999;
-    color: #252525;
-}
-
-h2{ font-size: 1.45em; margin: 0 0 .5em; text-shadow: 1px 1px 1px #999; }
-
-h3{ font-size: 1.1em; margin: 0 0 .3em; font-weight: bold; }
-
-a{ color: blue; }
-a:hover{ text-decoration: none; }
-a:visited{ color: purple; }
-
-p{ margin: 0 0 1.6em; }
+p { margin: 0 0 1.6em; }
 
 strong, em { padding: 0 .05em; color: #3d171e; }
-strong{ font-weight: bold; }
-em{ font-style: italic; }
+strong { font-weight: bold; }
+em { font-style: italic; }
 
-#content ul{ list-style: disc; list-style-position: inside; margin: 1.4em 0 2em .8em; }
-#content ol{ list-style: decimal; list-style-position: inside; margin: 1.4em 0 2em .8em; }
+#content ul { list-style: disc; list-style-position: inside; margin: 1.4em 0 2em .8em; }
+#content ol { list-style: decimal; list-style-position: inside; margin: 1.4em 0 2em .8em; }
 
-#content ul h2{ display: inline-block }
-#content ul ul{ margin: .4em 0 1em 2em }
+#content ul h2 { display: inline-block }
+#content ul ul { margin: .4em 0 1em 2em }
 
-hr{
-    border: 0;
-    border-bottom: 2px solid rgba(0,0,0,0.7);
-    border-width: 2px;
-    height: 1px;
-    margin: 2em 0;
-}
-
+hr { border: 0; border-bottom: 2px solid rgba(0,0,0,0.7); border-width: 2px; height: 1px; margin: 2em 0; }
 
 /* General */
 
