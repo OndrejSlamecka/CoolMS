@@ -2,19 +2,16 @@
 /**
  * This file is a part of the NDBF library
  *
- * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ * @copyright (c) Ondrej Slamecka (http://www.slamecka.cz)
+ *
  * License can be found within the file license.txt in the root folder.
- * 
+ *
  */
 
 namespace NDBF;
 
 class RepositoryManager
 {
-
-    /** @var Nette\DI\Container */
-    private $container;
 
     /** @var Nette\Database\Connection */
     private $connection;
@@ -24,9 +21,8 @@ class RepositoryManager
 
     /* ------------------------ CONSTRUCTOR, DESIGN ------------------------- */
 
-    public function __construct(\Nette\DI\Container $container, \Nette\Database\Connection $connection)
+    public function __construct(\Nette\Database\Connection $connection)
     {
-        $this->container = $container;
         $this->connection = $connection;
     }
 
@@ -41,11 +37,12 @@ class RepositoryManager
             $class = 'Application\\Repository\\' . $name;
 
             if (class_exists($class)) {
-                $instance = new $class($this->container, $this->connection, $name);
+                $instance = new $class($this, $this->connection, $name);
             } else {
-                $instance = new Repository($this->container, $this->connection, $name);
+                $instance = new Repository($this, $this->connection, $name);
             }
             $this->instantiated_repositories[$name] = $instance;
+            $this->onRepositoryCreated($instance);
         }
         return $this->instantiated_repositories[$name];
     }
@@ -58,6 +55,15 @@ class RepositoryManager
     public function __get($name)
     {
         return $this->getRepository($name);
+    }
+
+    /**
+     * Called after repository was created
+     * @param Repository $instance
+     */
+    protected function onRepositoryCreated(Repository $instance)
+    {
+
     }
 
 }

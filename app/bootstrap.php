@@ -1,23 +1,54 @@
 <?php
-
-// Load nette and setup
+// Load Nette
 require LIBS_DIR . '/Nette/loader.php';
-require APP_DIR . '/config/Configurator.php';
 
-// Debugging
-Application\Configurator::setupDebugger();
+// Set up configurator and debugging
+$configurator = new \Nette\Config\Configurator();
+$configurator->setTempDirectory(APP_DIR . '/../temp');
+$configurator->enableDebugger(__DIR__ . '/../log');
 
-// Configuration
-$config = new Application\Configurator(LIBS_DIR, APP_DIR);
+// (Auto)Load _ALL_ the classes
+$robotLoader = $configurator->createRobotLoader()
+        ->addDirectory(LIBS_DIR)
+        ->addDirectory(APP_DIR)
+        ->register();
 
-$config->setupRouting();
+// Add configuration file to configurator and create container
+$configurator->addConfig(APP_DIR . '/config/config.neon');
+$container = $configurator->createContainer();
 
-$container = $config->getContainer();
+// Register RobotLoader as a service
+$container->addService('robotLoader', $robotLoader);
 
-if (!$container->parameters['consoleMode']) {
+/* --- ROUTING --- */
+/*
+ * Console mode
+ *    - SimpleRouter
+ *
+ * Development / Production mode
+ *    - Backend
+ *       - One universal route is enough
+ *    - Frontend
+ *       - Routes defined in RouteManager
+ */
+$router = $container->router;
 
-    $config->setupApplication();
+if ($container->parameters['consoleMode']) {
+    $router = new \Nette\Application\Routers\SimpleRouter();
+} else {
 
-    // Run the app
-    $container->application->run();
+    // Backend module
+    $router[] = new \Nette\Application\Routers\Route('admin/<module>/<action>[/<id>]', array(
+                'module' => 'Dashboard',
+                'presenter' => 'Backend',
+                'action' => 'default'
+            ));
+
+    // Frontend
+    $frontRoutemanager = new \Frontend\RouteManager($container);
+    $frontRoutemanager->addRoutes($router);
 }
+
+/* --- RUN THE APP --- */
+if (!$container->parameters['consoleMode'])
+    $container->application->run();

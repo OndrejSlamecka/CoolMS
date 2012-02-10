@@ -38,21 +38,22 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
 
         $user = $this->users->find(array('email' => $email))->fetch();
 
-        if ($user === null || $user['password'] !== self::hashPassword($email, $password))
+        if ($user === null || $user['password'] !== self::calculateHash($password, $user->salt))
             throw new \Nette\Security\AuthenticationException('Email or password is incorrect.');
 
         return new \Nette\Security\Identity($user->id, $user->role, $user->toArray());
     }
 
     /**
-     * Hashes combination of password and email
-     * @param string $name
-     * @param string $passw
+     * Computes salted password hash.
+     * @param  string
      * @return string
      */
-    public static function hashPassword($email, $passw)
+    public static function calculateHash($password, $salt=NULL)
     {
-        return hash("sha256", $email . $passw);
+        if ($salt === NULL)
+            $salt = mt_rand();
+        return hash_hmac('sha256', $password, $salt);
     }
 
     /**
@@ -72,8 +73,8 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
     public static function isTokenValid($token_age)
     {
         // Current setting: 1 day
-        
-        if( is_string($token_age) )
+
+        if (is_string($token_age))
             $token_age = new \DateTime($token_age);
         $allowed_interval = new \DateTime();
         $allowed_interval->add(new \DateInterval('P0Y1DT0H0M'));
@@ -82,6 +83,24 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
             return false;
         else
             return true;
+    }
+
+    /**
+     * Returns true if given $user is in admin role and provided correct password, false otherwise
+     * @param \Nette\Http\User $user
+     * @param string $password
+     * @return bool 
+     */
+    public function authenticateAdmin(\Nette\Http\User $user, $password)
+    {
+        if ($user->isInRole('admin')) {
+            $enteredPasswordHash = Authenticator::calculateHash($password, $user->getIdentity()->data['salt']);
+            $isRightPassword = $user->getIdentity()->data['password'] === $enteredPasswordHash;
+
+            if ($isRightPassword)
+                return true;
+        }
+        return false;
     }
 
 }

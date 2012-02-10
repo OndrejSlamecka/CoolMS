@@ -77,6 +77,7 @@ CREATE TABLE `user` (
   `id` smallint(6) NOT NULL AUTO_INCREMENT,
   `email` varchar(254) COLLATE utf8_bin NOT NULL,
   `password` varchar(64) COLLATE utf8_bin NOT NULL,
+  `salt` int(11) NOT NULL,
   `role` enum('user','admin') COLLATE utf8_bin NOT NULL DEFAULT 'user',
   `token` varchar(23) COLLATE utf8_bin DEFAULT NULL,
   `token_created` datetime DEFAULT NULL,
@@ -85,7 +86,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-INSERT INTO `user` (`id`, `email`, `password`, `role`, `token`, `token_created`, `name`) VALUES
-(1,	'admin@example.com',	'0ce94d16aee929e03ee138283cc06cb017c591341c6d10e93194e1efde747551',	'admin',	NULL,	NULL,	'Admin');
+INSERT INTO `user` (`id`, `email`, `password`, `salt`, `role`, `token`, `token_created`, `name`) VALUES
+(1,	'admin@example.com',	'dad29ce262b1e6800c899b4a25366cc3fa83292ceae460b16cd758f3a8f49b82',	548268735,	'admin',	NULL,	NULL,	'Admin');
 
--- 2011-12-29 03:11:37
+-- 2012-01-08 22:08:57

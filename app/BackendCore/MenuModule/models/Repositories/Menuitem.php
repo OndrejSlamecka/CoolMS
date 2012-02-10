@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace Application\Repository;
@@ -15,8 +15,16 @@ use \Nette\Caching\Cache;
 class Menuitem extends \NDBF\Repository
 {
 
+    /** @var Nette\DI\Container */
+    private $container;
+
     /** @var Nette\Caching\Cache */
     private $cache;
+
+    public function setContainer(\Nette\DI\Container $container)
+    {
+        $this->container = $container;
+    }
 
     /* FETCHING and usual database access */
 
@@ -25,7 +33,7 @@ class Menuitem extends \NDBF\Repository
         $mis = $this->find(null, '`order` ASC');
         $structuredMis = array();
 
-        // I got to create new array, because when tried to modify the original one 
+        // I got to create new array, because when tried to modify the original one
         // this popped up "Indirect modification of overloaded element of Nette\Database\Table\Selection has no effect"
         // Caching
         $modulesNames = $this->container->moduleManager->getModulesInfo();
