@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace MenuModule;
@@ -32,7 +32,7 @@ class BackendPresenter extends \Backend\BasePresenter
         }
 
         try {
-            $menuitems->remove(array('id' => $id));
+            $menuitems->delete(array('id' => $id));
             $this->flashMessage('Item removed');
         } catch (Exception $e) {
             $this->flashMessage('Something went wrong, please try again');

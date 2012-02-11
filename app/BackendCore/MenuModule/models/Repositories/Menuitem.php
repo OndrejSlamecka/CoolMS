@@ -89,7 +89,7 @@ class Menuitem extends \NDBF\Repository
 
     public function remove($conditions)
     {
-        parent::remove($conditions);
+        parent::delete($conditions);
         $this->fixOrder();
     }
 

@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace ArticleModule;
@@ -35,7 +35,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         }
 
         try {
-            $articles->remove(array('id' => $id));
+            $articles->delete(array('id' => $id));
 
             // Save for reverse
             $this->sessionSection->reversableItem = $article->toArray();
@@ -182,7 +182,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 
             if ($isPublishing) {
                 $articles->save($article, 'id');
-                $articles_drafts->remove(array('id' => $draft_id));
+                $articles_drafts->delete(array('id' => $draft_id));
             } else {
                 $articles_drafts->save($article, 'id');
             }
