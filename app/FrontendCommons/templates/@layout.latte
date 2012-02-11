@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    
-    <meta charset=UTF-8 >
+<head>
+    <meta charset="UTF-8" >
 
     <link rel=stylesheet href="{$basePath}/css/reset.css" >
     <link rel=stylesheet href="{$basePath}/css/screen.css" media="screen,projection" >
@@ -14,7 +14,7 @@
 <body>
 
     <div id="panel">
-    
+
         <header>
 
             <a href="{$basePath}/" id="logo">Default CoolMS web</a>
@@ -22,8 +22,22 @@
             <nav>
             <ul id="menu" class="cf">
                 {foreach $topMenu as $mi}
-                    <li id="{isMenulinkCurrent $mi}nav-active{/isMenulinkCurrent}"><a href="{menulink $mi}">{$mi['name']}</a></li>			
-                {/foreach}  
+                    <li id="{isMenulinkCurrent $mi}nav-active{/isMenulinkCurrent}">
+                        {if $mi->type === \Application\Entity\Menuitem::TYPE_SUBMENU}
+                            <a href="#">{$mi['name']}</a>
+
+                            {if $mi->related('menuitem')->count()}
+                            <ul class="submenu">
+                                <li n:foreach="$mi->related('menuitem')->order('order') as $smi">
+                                    <a href="{menulink $smi}">{$smi['name']}</a>
+                                </li>
+                            </ul>
+                            {/if}
+                        {else}
+                            <a href="{menulink $mi}">{$mi['name']}</a>
+                        {/if}
+                    </li>
+                {/foreach}
             </ul>
             </nav>
 
@@ -40,7 +54,7 @@
         </div> <!-- #content -->
 
     </div> <!-- #panel -->
-        
+
     <footer>
         Powered by <a href="http://coolms.slamecka.cz">CoolMS</a> <br>
         <a href="{$basePath}/admin">Administration</a>

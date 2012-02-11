@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace UserModule;
@@ -15,7 +15,7 @@ use Backend\Authenticator;
 
 /**
  * Class responsible for handling all logged users' requests
- * 
+ *
  * @author Ondrej Slamecka
  */
 class BackendPresenter extends \Backend\BasePresenter
@@ -37,7 +37,7 @@ class BackendPresenter extends \Backend\BasePresenter
     /**
      * Don't call without setting onSuccess
      * @param type $name
-     * @return \Application\Form 
+     * @return \Application\Form
      */
     public function createComponentConfirmIdentityForm($name)
     {
@@ -58,7 +58,7 @@ class BackendPresenter extends \Backend\BasePresenter
             if ($user_to_delete_id != $user->getId()) {
 
                 $users = $this->repositories->User;
-                $users->remove(array('id' => $user_to_delete_id));
+                $users->delete(array('id' => $user_to_delete_id));
 
                 $this->flashMessage('User was deleted.');
             } else {

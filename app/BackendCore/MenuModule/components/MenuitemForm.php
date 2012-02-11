@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace MenuModule;
@@ -42,7 +42,7 @@ class MenuitemForm extends \Application\Form
 
         $this->menuitemType = Menuitem::TYPE_MODULE;
 
-        parent::__construct($parent, 'menuitemForm'); // calls setup       
+        parent::__construct($parent, 'menuitemForm'); // calls setup
     }
 
     /* --------------------------- GENERAL METHODS -------------------------- */
@@ -62,7 +62,7 @@ class MenuitemForm extends \Application\Form
             'module_view_argument' => 'with argument',
             'module_caption' => 'titled',
             'submenu_caption' => 'titled',
-            'parent' => 'Should it be in a submenu?',
+            'menuitem_id' => 'Should it be in a submenu?',
             'strict_link_comparison' => 'Strict link comparison *',
             'save' => 'Save'
         );
@@ -74,7 +74,7 @@ class MenuitemForm extends \Application\Form
 
     /**
      * Turns the form into editing mode and sets item of given id as edited item
-     * @param int $id Item id 
+     * @param int $id Item id
      */
     public function toggleEditing($id)
     {
@@ -138,7 +138,7 @@ class MenuitemForm extends \Application\Form
     {
         $linkableModules = $this->moduleManager->getLinkableModules();
 
-        // Default values                
+        // Default values
         reset($linkableModules);
         $defaultModule = key($linkableModules);
 
@@ -147,7 +147,7 @@ class MenuitemForm extends \Application\Form
         $defaultView = array_keys($defaultModuleViews);
         $defaultView = array_shift($defaultView);
 
-        // Form        
+        // Form
         $this->addHidden('id');
         $this->addHidden('order');
         $this->addHidden('editing');
@@ -168,7 +168,7 @@ class MenuitemForm extends \Application\Form
         $storedsubmenus = $this->menuitems->fetchSubmenusPairs();
         if (is_array($storedsubmenus))
             $submenus = $submenus + $storedsubmenus;
-        $this->addSelect('parent', 'Should it be in a submenu?', $submenus);
+        $this->addSelect('menuitem_id', 'Should it be in a submenu?', $submenus);
 
         $this->addCheckbox('strict_link_comparison', 'Strict link comparison *');
 
@@ -201,8 +201,8 @@ class MenuitemForm extends \Application\Form
         unset($menuitem['submenu_caption']);
         unset($menuitem['module_caption']);
 
-        if ($menuitem['parent'] === '0')
-            $menuitem['parent'] = null;
+        if ($menuitem['menuitem_id'] === '0')
+            $menuitem['menuitem_id'] = null;
 
         if (empty($menuitem['id']))
             $menuitem['id'] = null;

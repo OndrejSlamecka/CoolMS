@@ -174,4 +174,10 @@ class Repository extends \Nette\Object
         return $this->connection;
     }
 
+    /** @deprecated */
+    public function remove($conditions)
+    {
+        return $this->delete($conditions);
+    }
+
 }
