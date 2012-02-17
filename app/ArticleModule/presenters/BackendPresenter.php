@@ -73,12 +73,6 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $this->redirect("default");
     }
 
-    public function beforeRender()
-    {
-        parent::beforeRender();
-        $this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
-    }
-
     public function renderEdit($id, $draft)
     {
         if ($draft)
@@ -121,10 +115,11 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $form->addHidden('article_id');
         $form->addHidden('user_id');
 
-        $form->addText('name_webalized', 'Name in URL');
+        $form->addText('name_webalized', 'Name in URL', 30)
+                ->getControlPrototype()->class('name_webalized');
 
-        $form->addText('name', 'Name');
-        $form['name']->getControlPrototype()->class('short');
+        $form->addText('name', 'Název')
+                ->getControlPrototype()->class('name_webalized_source short');
 
         $form->addTextarea('text', 'Text', 60, 30);
         $form['text']->getControlPrototype()->class('wysiwyg');
@@ -177,6 +172,8 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 
         if ($article['name_webalized'] === '')
             $article['name_webalized'] = \Nette\Utils\Strings::webalize($article['name']);
+        else
+            $article['name_webalized'] = \Nette\Utils\Strings::webalize($article['name_webalized']); // Never trust user input
 
         try {
 

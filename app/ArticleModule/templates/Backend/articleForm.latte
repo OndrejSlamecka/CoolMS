@@ -2,7 +2,7 @@
         <h1>{$header}</h1>
 
             {control articleForm errors}
-        
+
             <p class="notdisplay errorMessage" id="continualSaveError">
                 <strong>Autosave backup is not working</strong>. Please check your internet connection.
             </p>
@@ -14,7 +14,7 @@
                     <td>
                         {input name}
                         {input publish}
-                        {input save}                        
+                        {input save}
                     </td>
                 </tr>
 
@@ -23,7 +23,7 @@
                     <td>{input text}</td>
                 </tr>
 
-            </table>                
+            </table>
 
         <div class="toolbox">
 
@@ -32,10 +32,7 @@
                 <table>
                     <tr>
                         <th>{label name_webalized /}</th>
-                        <td>
-                            {input name_webalized}                  
-                            <small>If left empty, it will fill itself</small>
-                        </td>
+                        <td>{input name_webalized}</td>
                     </tr>
                 </table>
             </div>

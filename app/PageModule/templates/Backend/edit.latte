@@ -1,6 +1,6 @@
-    {block #title}Editing "{$page['name']}"{/block}
-    {block #content}
-    
-    {? $header = "Editing page"}
+{block #title}Editing "{$page['name']}"{/block}
+{block #content}
 
-    {include 'pageForm.latte' "header" => $header}
+{? $header = "Editing page"}
+
+{include 'pageForm.latte' "header" => $header}

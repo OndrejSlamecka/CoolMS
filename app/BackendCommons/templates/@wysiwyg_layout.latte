@@ -45,6 +45,26 @@ $().ready(function() {
         });
 });
 </script>
+
+{* Webalized name autofill in forms *}
+<script n:syntax="double">
+$().ready(function() {
+    $name_webalized = $('input.name_webalized');
+
+    $('form').on('change', 'input.name_webalized_source', function() {   
+        var name = $(this).val();        
+
+        if (name.length > 0){
+            var params = 'name=' + name;
+            $.ajax({{plink webalizeName!}} + "&" + encodeURI(params), {
+                success : function(payload){
+                    $name_webalized.val(payload.name_webalized);
+                }
+            });
+        }
+    });
+});
+</script>
 {/block}   
  
 {include #content}

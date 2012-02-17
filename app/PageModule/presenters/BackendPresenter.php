@@ -62,12 +62,6 @@ class BackendPresenter extends \Backend\BaseItemPresenter
         $this->redirect("default");
     }
 
-    public function beforeRender()
-    {
-        parent::beforeRender();
-        $this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@wysiwyg_layout.latte');
-    }
-
     public function renderEdit($id, $autosave=false)
     {
         $pages = $this->repositories->Page;
@@ -104,15 +98,16 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 
         $form->addHidden('id');
 
-        $form->addText('name_webalized', 'Name in URL');
+        $form->addText('name_webalized', 'Name in URL', 30)
+                ->getControlPrototype()->class('name_webalized');
 
-        $form->addText('name', 'Název');
-        $form['name']->getControlPrototype();
+        $form->addText('name', 'Název')
+                ->getControlPrototype()->class('name_webalized_source');
 
         $form->addTextarea('text', 'Text', 60, 30);
         $form['text']->getControlPrototype()->class('wysiwyg');
 
-        $form->addText('template', 'Template');
+        $form->addText('template', 'Template', 30);
 
         $form->addSubmit('save', 'Save')
                 ->getControlPrototype()->class('emphasized');
@@ -130,6 +125,8 @@ class BackendPresenter extends \Backend\BaseItemPresenter
             $page['id'] = null;
         if ($page['name_webalized'] === '')
             $page['name_webalized'] = \Nette\Utils\Strings::webalize($page['name']);
+        else
+            $page['name_webalized'] = \Nette\Utils\Strings::webalize($page['name_webalized']); // Never trust user input
 
         $pages = $this->repositories->Page;
 
