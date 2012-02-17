@@ -3,16 +3,16 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace Backend;
 
 /**
  * User authenticator
- * 
+ *
  * @author Ondrej Slamecka
  */
 class Authenticator extends \Nette\Object implements \Nette\Security\IAuthenticator
@@ -36,9 +36,9 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
     {
         list($email, $password) = $credentials;
 
-        $user = $this->users->find(array('email' => $email))->fetch();
+        $user = $this->users->select()->where('email', $email)->fetch();
 
-        if ($user === null || $user['password'] !== self::calculateHash($password, $user->salt))
+        if ($user === FALSE || $user['password'] !== self::calculateHash($password, $user->salt))
             throw new \Nette\Security\AuthenticationException('Email or password is incorrect.');
 
         return new \Nette\Security\Identity($user->id, $user->role, $user->toArray());
@@ -89,7 +89,7 @@ class Authenticator extends \Nette\Object implements \Nette\Security\IAuthentica
      * Returns true if given $user is in admin role and provided correct password, false otherwise
      * @param \Nette\Http\User $user
      * @param string $password
-     * @return bool 
+     * @return bool
      */
     public function authenticateAdmin(\Nette\Http\User $user, $password)
     {
