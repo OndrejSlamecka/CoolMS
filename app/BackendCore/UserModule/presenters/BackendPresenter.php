@@ -20,19 +20,6 @@ use Backend\Authenticator;
  */
 class BackendPresenter extends \Backend\BasePresenter
 {
-    /* -------------------------- DELETING USER ----------------------------- */
-
-    public function actionConfirmDelete($id)
-    {
-        $this->template->user = null;
-
-        if ($this->getUser()->isInRole('admin')) {
-            $users = $this->repositories->User;
-            $this->template->user = $users->find(array('id' => $id))->fetch();
-            $this['confirmIdentityForm']->setDefaults(array('id' => $id));
-            $this['confirmIdentityForm']->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
-        }
-    }
 
     /**
      * Don't call without setting onSuccess
@@ -46,6 +33,71 @@ class BackendPresenter extends \Backend\BasePresenter
         $form->addPassword('password', 'Password');
         $form->addSubmit('send', 'Confirm');
         return $form;
+    }
+
+    /* -------------------------- EMAIL CHANGE ------------------------------ */
+
+    // Users can only change their own emails
+
+    public function createComponentChangeEmailForm($name)
+    {
+        /** @var $form Nette\Application\UI\Form */
+        $form = new \Application\Form($this, $name);
+
+        $form->addEmail('email', 'New email')
+                ->addRule(Form::EMAIL, 'Email has to be in proper format.');
+        $form->addPassword('password', 'Confirm password');
+
+        $form->addSubmit('save', 'Change');
+
+        $form->onSuccess[] = callback($this, 'changeEmailFormSuccess');
+        return $form;
+    }
+
+    public function changeEmailFormSuccess($form)
+    {
+        /* Authentication */
+        try {
+            $loggedUser = $this->getUser();
+            $loggedUser->getAuthenticator()->authenticate(array($loggedUser->getIdentity()->email, $form['password']->getValue()));
+        } catch (Nette\Security\AuthenticationException $e) {
+            $this->flashMessage('Password verification was not successful.');
+            $this->redirect('default');
+        }
+
+        /* Email change */
+        $users = $this->repositories->User;
+        $user = array(
+            'id' => $loggedUser->getIdentity()->getId(),
+            'email' => $form['email']->getValue(),
+        );
+
+        try {
+            $loggedUser->getIdentity()->email = $user['email'];
+            $users->save($user, 'id');
+            $this->flashMessage('Your email change was successful.');
+        } catch (\Nette\InvalidStateException $e) {
+            $this->flashMessage('Your email change was not successful, sorry.');
+        }
+
+
+        $this->redirect('default');
+    }
+
+    /* -------------------------- DELETING USER ----------------------------- */
+
+    // Only supreme admin can delete user
+
+    public function actionConfirmDelete($id)
+    {
+        $this->template->user = null;
+
+        if ($this->getUser()->isInRole('admin')) {
+            $users = $this->repositories->User;
+            $this->template->user = $users->find(array('id' => $id))->fetch();
+            $this['confirmIdentityForm']->setDefaults(array('id' => $id));
+            $this['confirmIdentityForm']->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
+        }
     }
 
     public function confirmDeleteFormSuccess($form)
@@ -65,7 +117,6 @@ class BackendPresenter extends \Backend\BasePresenter
                 $this->flashMessage('I\'m curious why are people trying to delete their own account… seriously, tell me.');
             }
         }
-
 
         $this->redirect('default');
     }

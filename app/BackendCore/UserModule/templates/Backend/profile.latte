@@ -15,41 +15,44 @@
     </ul>
 
     <table>
-        
+
         {*** Base parameters - email, password ***}
-        
+
         <tr>
             <th>Email</th>
             <td>
-                <div class="padlikeinput">{$user['email']}</div>
+                <div class="padlikeinput">
+                    {$user['email']}
+                    {if $user['id'] == $loggedUser->getIdentity()->getId()}<a n:href="changeEmail">Change email</a>{/if}
+                </div>
             </td>
         </tr>
-        
+
         {if $hasEditingRight}
         <tr>
             <th>{label password /}</th>
             <td>{input password}</td>
         </tr>
         {/if}
-        
+
         {*** Usual parameters ***}
-        
+
         <tr>
             <th>{label name /}</th>
             <td>{if $hasEditingRight}   {input name}
                 {else}                  <div class="padlikeinput">{$user['name']}</div>{/if}
             </td>
-        </tr>       
-        
+        </tr>
+
         {*** Submit button ***}
 
-        {if $hasEditingRight}        
+        {if $hasEditingRight}
         <tr>
             <th>&nbsp;</th>
             <td>{input save}</td>
         </tr>
         {/if}
-        
+
     </table>
 
 {/form userForm}
