@@ -23,8 +23,8 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
     public function startup()
     {
         parent::startup();
-        $this->filesPathHandler = new PathHandler($this->context->parameters['wwwDir'], '/files');
-        $this->cachePathHandler = new PathHandler($this->context->parameters['wwwDir'], '/imgbrowser_cached_thumbnails');
+        $this->filesPathHandler = $this->getService('userFilesPathHandler');
+        $this->cachePathHandler = $this->getService('userImagesCachePathHandler');
     }
 
     public function createTemplate($class = NULL)

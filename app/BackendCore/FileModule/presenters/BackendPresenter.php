@@ -32,7 +32,7 @@ class BackendPresenter extends \Backend\BasePresenter
     public function startup()
     {
         parent::startup();
-        $this->pathHandler = new PathHandler($this->context->parameters['wwwDir'], '/files');
+        $this->pathHandler = $this->getService('userFilesPathHandler');
     }
 
     public function createTemplate($class = NULL)
@@ -151,7 +151,7 @@ class BackendPresenter extends \Backend\BasePresenter
         $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
-        $cacheFileHandler = new PathHandler($this->context->parameters['wwwDir'], '/imgbrowser_cached_thumbnails');
+        $cacheFileHandler = $this->getService('userImagesCachePathHandler');
 
         foreach ($form['files'] as $file) {
             Files::move($this->pathHandler->getFullPath($path), $file);
