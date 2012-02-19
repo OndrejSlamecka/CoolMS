@@ -1,4 +1,5 @@
 <?php
+use \Nette\Application\Routers\Route;
 // Load Nette
 require LIBS_DIR . '/Nette/loader.php';
 
@@ -27,7 +28,7 @@ $container->addService('robotLoader', $robotLoader);
  *
  * Development / Production mode
  *    - Backend
- *       - One universal route is enough
+ *       - One universal route + image browser route are enough
  *    - Frontend
  *       - Routes defined in RouteManager
  */
@@ -37,12 +38,15 @@ if ($container->parameters['consoleMode']) {
     $router = new \Nette\Application\Routers\SimpleRouter();
 } else {
 
-    // Backend module
-    $router[] = new \Nette\Application\Routers\Route('admin/<module>/<action>[/<id>]', array(
-                'module' => 'Dashboard',
-                'presenter' => 'Backend',
-                'action' => 'default'
-            ));
+    // Backend module - image-browser + universal
+    $router[] = new Route('imgbrowser_cached_thumbnails/<url .+>',
+                    array('module' => 'File', 'presenter' => 'ImageBrowser', 'action' => 'cache',
+                        'url' => array( Route::FILTER_IN => NULL, Route::FILTER_OUT => NULL, ),
+                        ));
+    $router[] = new Route('admin/file/image-browser',
+                    array('module' => 'File', 'presenter' => 'ImageBrowser', 'action' => 'default'));
+    $router[] = new Route('admin/<module>/<action>[/<id>]',
+                    array('module' => 'Dashboard', 'presenter' => 'Backend', 'action' => 'default'));
 
     // Frontend
     $frontRoutemanager = new \Frontend\RouteManager($container);

@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace FileModule;
@@ -16,7 +16,7 @@ use \Nette\Utils\Strings,
 
 /**
  * File manager's presenter
- * 
+ *
  * @author Ondrej Slamecka
  */
 class BackendPresenter extends \Backend\BasePresenter
@@ -151,8 +151,14 @@ class BackendPresenter extends \Backend\BasePresenter
         $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
+        $cacheFileHandler = new PathHandler($this->context->parameters['wwwDir'], '/imgbrowser_cached_thumbnails');
+
         foreach ($form['files'] as $file) {
             Files::move($this->pathHandler->getFullPath($path), $file);
+
+            $cached_file = $cacheFileHandler->getFullPath($path) . Strings::webalize($file->name, '.');
+            if (file_exists($cached_file))
+                unlink($cached_file);
         }
 
         if ($this->isAjax()) {

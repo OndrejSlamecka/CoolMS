@@ -4,8 +4,30 @@
 {* TinyMCE *}
 <script type="text/javascript" src="{$themePath}/tiny_mce/jquery.tinymce.js"></script>
 <script type="text/javascript" n:syntax="double">
-$().ready(function() {
+function coolmsFileBrowser (field_name, url, type, win)
+{
+    var cmsURL = {{link //:File:ImageBrowser:default}};
+    if (cmsURL.indexOf("?") < 0) {
+        cmsURL = cmsURL + "?type=" + type;
+    } else {
+        cmsURL = cmsURL + "&type=" + type;
+    }
 
+    tinyMCE.activeEditor.windowManager.open({
+        file : cmsURL,
+        width : 530,
+        height : 400,
+        resizable : "yes",
+        // inline : "yes", // This parameter only has an effect if you use the inlinepopups plugin!
+        close_previous : "yes"
+    }, {
+        window : win,
+        input : field_name
+    });
+    return false;
+}
+
+$().ready(function() {
     $('textarea.wysiwyg').tinymce({
         /* --- GENERAL --- */
 
@@ -31,7 +53,8 @@ $().ready(function() {
         theme_advanced_blockformats : "p,div,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
         /* Used plugins: */
-        plugins : "",
+        plugins : "advimage",
+        file_browser_callback : "coolmsFileBrowser",
 
         /* List of all plugins */
         //plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",

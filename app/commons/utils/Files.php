@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace Application\Utils;
@@ -60,7 +60,8 @@ class Files extends \Nette\Object
 
     /**
      * Sanitizes path and moves file to path/filename
-     * @param \Nette\Http\FileUpload $file 
+     * @param \Nette\Http\FileUpload $file
+     * @return string File location
      */
     public static function move($path, \Nette\Http\FileUpload $file)
     {
@@ -69,6 +70,8 @@ class Files extends \Nette\Object
         $filepath = Paths::sanitize($path) . '/' . $filename;
         // Move
         $file->move($filepath, $filename);
+
+        return $filepath;
     }
 
 }
