@@ -151,8 +151,12 @@ class BackendPresenter extends \Backend\BasePresenter
         $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
-        $cacheFileHandler = $this->getService('userImagesCachePathHandler');
+        if ($path === '/' && count(glob($this->pathHandler->getFullpath() . '*')) === 0)
+            $wasEmpty = true;
+        else
+            $wasEmpty = false;
 
+        $cacheFileHandler = $this->getService('userImagesCachePathHandler');
         foreach ($form['files'] as $file) {
             Files::move($this->pathHandler->getFullPath($path), $file);
 
@@ -161,7 +165,7 @@ class BackendPresenter extends \Backend\BasePresenter
                 unlink($cached_file);
         }
 
-        if ($this->isAjax()) {
+        if ($this->isAjax() && !$wasEmpty) {
             // $this->invalidateControl('flash'); // Uncomment if you want to show some flash messages
             $this->invalidateControl('FileList');
         } else {
