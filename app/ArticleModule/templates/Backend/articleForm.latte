@@ -1,45 +1,40 @@
-    {form articleForm}
-        <h1>{$header}</h1>
+{form articleForm}
+    <h1>{$header}</h1>
 
-            {control articleForm errors}
+        {control articleForm errors}
 
-            <p class="notdisplay errorMessage" id="continualSaveError">
-                <strong>Autosave backup is not working</strong>. Please check your internet connection.
-            </p>
+        <p class="notdisplay errorMessage" id="continualSaveError">
+            <strong>Autosave backup is not working</strong>. Please check your internet connection.
+        </p>
 
-            <table class="textFormatForm">
+        <table class="textFormatForm">
 
-                <tr class="required">
-                    <th class="hidden">{label name /}</th>
-                    <td>
-                        {input name}
-                        {input publish}
-                        {input save}
-                    </td>
-                </tr>
+            <tr class="required">
+                <th class="hidden">{label name /}</th>
+                <td>
+                    {input name}
+                    {input publish}
+                    {input save}
+                </td>
+            </tr>
 
+            <tr>
+                <th class="hidden">{label text /}</th>
+                <td>{input text}</td>
+            </tr>
+
+        </table>
+
+    <div class="toolbox">
+
+        <h2>Options</h2>
+        <div class="body">
+            <table>
                 <tr>
-                    <th class="hidden">{label text /}</th>
-                    <td>{input text}</td>
+                    <th>{label name_webalized /}</th>
+                    <td>{input name_webalized}</td>
                 </tr>
-
             </table>
-
-        <div class="toolbox">
-
-            <h2>Options</h2>
-            <div class="body">
-                <table>
-                    <tr>
-                        <th>{label name_webalized /}</th>
-                        <td>{input name_webalized}</td>
-                    </tr>
-                </table>
-            </div>
-        </div> <!-- /.toolbox -->
-
-    {* Although https://github.com/nette/nette/issues/400 was closed, the problem remains. TODO: Find out why *}
-    {input article_id}
-    {input user_id}
-    {input id}
-    {/form articleForm}
+        </div>
+    </div> <!-- /.toolbox -->
+{/form articleForm}
