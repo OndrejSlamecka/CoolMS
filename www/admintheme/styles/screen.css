@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License:none (public domain)
 */
@@ -93,7 +93,7 @@ small { color:#616161; font-size:85% }
 /* Abreviation, explanations */
 abbr,span.explain { border-bottom:1px #595959 dotted; cursor:help }
 
-/* Data tables */ 
+/* Data tables */
 table.data { margin:0.5em 0 1.5em }
 table.data tr.even { background-color:#FBFBFB }
 table.data tr:hover { background-color:#F8F8F8 !important }
@@ -130,10 +130,10 @@ td input { margin:.5em 0 0 }
     td.radioinput { padding:.4em 0 0 }
     input[type="radio"] { vertical-align:middle; margin:-0.2em 0.2em 0 0 }
 
-    input[type="submit"].big { padding:6px 10px }    
+    input[type="submit"].big { padding:6px 10px }
     input[type="submit"].emphasized { vertical-align:middle; font-weight:700; width:72px; margin:0 0 6px; padding:6px 12px }
     html.opera input[type="submit"].emphasized { margin-bottom:2px; padding:8px 12px }
-    
+
 /* General elements
  * ================
 -------------------*/
@@ -157,7 +157,7 @@ body{ width:1040px; background:#4a92c0 url(body-bg.png) repeat-x; margin:0 auto 
 
 #content { margin:0 0 0 200px; padding:1em 3em 2em }
 
-.toolbox h2 { background:url(../img/sidebar-header-bg.png) repeat-x 0 0; letter-spacing:.02em; font-size:110%;
+.toolbox h2 { letter-spacing:.02em; font-size:110%;
               background-color:#284a89; margin-bottom:0; width:715px; border:1px solid #AAA; color:#FFF; font-weight:700;
               box-shadow:0 0 1px #999; padding:0.2em 15px }
 .toolbox .body { width:725px; border:1px solid #AAA; border-top:0; margin:0 0 16px; padding:10px }
@@ -165,7 +165,7 @@ body{ width:1040px; background:#4a92c0 url(body-bg.png) repeat-x; margin:0 auto 
 #footer { text-indent:0; text-align:right; color:#EEE; margin:0.5em 20px 0.75em }
 #footer a { color:#EEE }
 
-                                                                            
+
 /* Modules
  * =======
 ----------*/
