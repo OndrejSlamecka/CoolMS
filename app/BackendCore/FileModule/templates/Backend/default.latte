@@ -7,25 +7,23 @@
 
 <h1>File manager</h1>
 
-{if !file_exists( $fullpath )} 
+{if !file_exists( $fullpath )}
     <p>Requested folder does not exist. Try to find it <a href="{link default}">among all the files</a>.</p> {* TODO: Correct english? *}
 {else}
-    
+
     {* Are there some files? *}
     {if (iterator_count($items->getIterator()) < 1 && $path === '/' && $mode !== $presenter::MODE_SEARCH )}
-        <p>There aren't any files yet.</p> 
-    {else}   
-        
+        <p>There aren't any files yet.</p>
+    {else}
+
         {* Print path and search form *}
         <div class="floatingContentContainer">
             {if $mode !== $presenter::MODE_SEARCH }
-            <span class="flleft" id="breadcrumbs">Path:             
-                {foreach $breadcrumbs as $addr => $piece}
-                {block |trim}
-                    {? if($iterator->isFirst()) $addr = substr( $addr, 1 ); }
-                    <a href="{link default path => $addr}">{$piece}</a>{if !$iterator->isFirst()}{sep}/{/sep}{/if}
-                {/block}
-                {/foreach}            
+            <span class="flleft" id="breadcrumbs">Path:
+                {foreach $breadcrumbs as $addr => $piece}{block |trim}
+                    <?php if($iterator->isFirst()){ $addr = substr( $addr, 1 ); $piece = 'root'; } ?>
+                    {if !$iterator->isLast()}<a href="{link default path => $addr}">{/if}{$piece}{if !$iterator->isLast()}</a>{/if}{sep}/{/sep}
+                {/block}{/foreach}
             </span>
             {/if}
 
@@ -37,8 +35,8 @@
             {? if (!isset( $editingItem )) $editingItem = null;}
 
             {if iterator_count($items->getIterator()) < 1 && $mode === $presenter::MODE_SEARCH}
-                <p>Sorry, no files were found.</p> 
-            {/if}        
+                <p>Sorry, no files were found.</p>
+            {/if}
 
             {* Table of files *}
             <table class="data files">
@@ -57,7 +55,7 @@
                     </tr>
                 {/if}
 
-                {* FILE LIST *}    
+                {* FILE LIST *}
                 {foreach $items as $key => $item}
 
                     {* Preparation *}
@@ -65,7 +63,7 @@
                         $editingThis = false;
                         if ($mode === $presenter::MODE_SEARCH) {
                             $fullFilename = str_replace($fullpath, '', \Application\Utils\Paths::sanitize('/'.$item->getPathname()));
-                        } else {            
+                        } else {
                             $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();
                         }
                         if($editingItem === $fullFilename) $editingThis = true;
@@ -84,26 +82,26 @@
                         </td>
 
                         {* Name / rename form *}
-                        <td class="name{if $editingThis} editing{/if}">   
+                        <td class="name{if $editingThis} editing{/if}">
                             {if !$editingThis}
                                 {if $item->isDir()}
                                     <a href="{link default path => $fullFilename}">
                                 {else}
-                                    <a href="{$baseUri}{$presenter->pathHandler->getRelativePath($fullFilename)}">                            
+                                    <a href="{$baseUri}{$presenter->pathHandler->getRelativePath($fullFilename)}">
                                 {/if}
                                         {if $mode === $presenter::MODE_SEARCH}
-                                            {$fullFilename}   
+                                            {$fullFilename}
                                         {else}
                                             {$item->getFileName()}
                                         {/if}
                                     </a>
                             {else}
-                                {form renameForm}                        
+                                {form renameForm}
                                     {label new_name class => 'hidden' /}
                                     {input new_name value => $item->getFileName()}
 
                                     {input send}
-                                {/form renameForm}                            
+                                {/form renameForm}
                             {/if}
                         </td>
 
@@ -114,21 +112,21 @@
 
                 {/foreach}
                 </tbody>
-            </table>       
-        {/snippet}            
-    {/if} {* if there are files *}   
+            </table>
+        {/snippet}
+    {/if} {* if there are files *}
 {/if} {* if path exists *}
-        
-<hr>    
-    
-<h2>Upload file</h2>    
 
-{control fileUploadForm}   
-<div id="status" class="meter"><span></span></div>   
+<hr>
+
+<h2>Upload file</h2>
+
+{control fileUploadForm}
+<div id="status" class="meter"><span></span></div>
 <p><small>You can select multiple files by holding Ctrl key and clicking.<br />All files can be selected by using key combination Ctrl-A.</small></p>
 
-<hr>    
-    
-<h2>Create folder</h2>    
+<hr>
 
-{control folderCreationForm}    
+<h2>Create folder</h2>
+
+{control folderCreationForm}
