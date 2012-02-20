@@ -24,10 +24,10 @@ class Paths extends \Nette\Object
     {
         // Use just '/' everywhere
         $path = str_replace('\\', '/', $path); // Strings::replace($path, '~\\\~', '/');
-        // Use just one separator...
-        $path = str_replace('//', '/', $path); // Strings::replace($path, '~\/\/~', '/');
         // Remove ..
         $path = str_replace('..', '', $path); // Strings::replace($path, '~\.\.~', '');
+        // Use just one separator...
+        $path = preg_replace('~/+~', '/', $path); // Strings::replace($path, '~/+~', '/');
 
         if ($path === '')
             $path = '/';
