@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace FileModule;
@@ -25,7 +25,7 @@ class PathHandler extends \Nette\Object
     /**
      *
      * @param string $baseDir
-     * @param string $relativePath 
+     * @param string $relativePath
      */
     public function __construct($baseDir, $relativePath='/')
     {
@@ -43,7 +43,7 @@ class PathHandler extends \Nette\Object
      */
     public function getRelativePath($path = null)
     {
-        return $this->relativePath . Paths::sanitize($path);
+        return Paths::sanitize($this->relativePath . Paths::sanitize($path));
     }
 
     /**
@@ -53,7 +53,7 @@ class PathHandler extends \Nette\Object
      */
     public function getFullPath($path = null)
     {
-        return $this->baseDir . $this->getRelativePath($path);
+        return Paths::sanitize($this->baseDir . $this->getRelativePath($path));
     }
 
 }
