@@ -28,8 +28,8 @@ class FilesystemPath extends \Nette\Object
 
     /**
      *
-     * @param string $absolutePathToRoot Absolute path to PathHandler's working directory
-     * @param string $relativePath Relative path within PathHandler's working directory
+     * @param string $absolutePathToRoot Absolute path to FilesystemPath's working directory
+     * @param string $relativePath Relative path within FilesystemPath's working directory
      */
     public function __construct($absolutePathToRoot, $relativePath='/')
     {
@@ -41,7 +41,7 @@ class FilesystemPath extends \Nette\Object
     }
 
     /**
-     * Returns <pathhandler relative path>/<path> for given path.
+     * Returns <filesystempath relative path>/<path> for given path.
      * @param string $path
      * @return string
      */
@@ -51,7 +51,7 @@ class FilesystemPath extends \Nette\Object
     }
 
     /**
-     * Returns <pathhandler absolute path>/<pathhandler relative path>/<path> for given path.
+     * Returns <filesystempath absolute path>/<filesystempath relative path>/<path> for given path.
      * @param string $path
      * @return string
      */
