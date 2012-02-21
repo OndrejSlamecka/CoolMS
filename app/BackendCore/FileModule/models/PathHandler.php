@@ -10,8 +10,8 @@
 
 namespace FileModule;
 
-use \Nette\Utils\Strings;
-use \Application\Utils\Paths;
+use \Nette\Utils\Strings,
+    \Application\Utils\Paths;
 
 /**
  * Class responsible for determining paths
@@ -41,21 +41,21 @@ class PathHandler extends \Nette\Object
     }
 
     /**
-     * Returns <pathhandler relative dir>/<path> for given path.
+     * Returns <pathhandler relative path>/<path> for given path.
      * @param string $path
      * @return string
      */
-    public function getRelativePath($path = null)
+    public function getRelativePath($path = NULL)
     {
         return str_replace('//', '/', $this->relativePath . Paths::sanitize($path));
     }
 
     /**
-     * Returns <filesystem path>/<relative path>/<path> for given path.
+     * Returns <pathhandler absolute path>/<pathhandler relative path>/<path> for given path.
      * @param string $path
      * @return string
      */
-    public function getFullPath($path = null)
+    public function getFullPath($path = NULL)
     {
         return str_replace('//', '/', $this->absolutePathToRoot . $this->getRelativePath($path));
     }
