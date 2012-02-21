@@ -117,6 +117,9 @@ class BackendPresenter extends \Backend\BasePresenter
 
             Files::remove($fullpath);
 
+            $cachePath = $this->getService('userImagesCachePath');
+            Files::remove($cachePath->getFullPath()); // Flush cache; TODO: Find finer way to do this
+
             $this->flashMessage($message);
         }
 
