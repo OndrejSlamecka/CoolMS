@@ -266,10 +266,6 @@ class BackendPresenter extends \Backend\BasePresenter
             $this->template->mode = self::MODE_SEARCH;
 
             $this->setTemplateVariables($form['q']);
-
-            // TODO: Implement search without AJAX
-            /* if (!$this->isAjax())
-              $this->redirect('search', array('path' => $showpath)); */
         }
 
         $this->invalidateControl('FileList');
