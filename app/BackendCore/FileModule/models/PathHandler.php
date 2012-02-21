@@ -32,8 +32,8 @@ class PathHandler extends \Nette\Object
         $this->baseDir = $baseDir;
         $this->relativePath = $relativePath;
 
-        if (!file_exists($this->baseDir . $this->relativePath))
-            throw new \Nette\InvalidArgumentException('Given relative path must be an existing folder under the given base directory.');
+        if (!file_exists($this->baseDir . $this->relativePath) && !mkdir($this->baseDir . $this->relativePath, 0777))
+            throw new \Nette\InvalidArgumentException("Creation of directory " . $this->baseDir . $this->relativePath . " was not successful");
     }
 
     /**
