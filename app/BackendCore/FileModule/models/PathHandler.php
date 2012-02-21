@@ -15,35 +15,39 @@ use \Application\Utils\Paths;
 
 /**
  * Class responsible for determining paths
+ *
+ * $pathHandler = new PathHandler('e:/www', '/example');
+ * $pathHandler->getFullPath(); // "e:/www/example"
+ * $pathHandler->getRelativePath('/subdir'); // "/example/subdir"
  */
 class PathHandler extends \Nette\Object
 {
 
-    private $baseDir;
+    private $absolutePathToRoot;
     private $relativePath;
 
     /**
      *
-     * @param string $baseDir
-     * @param string $relativePath
+     * @param string $absolutePathToRoot Absolute path to PathHandler's working directory
+     * @param string $relativePath Relative path within PathHandler's working directory
      */
-    public function __construct($baseDir, $relativePath='/')
+    public function __construct($absolutePathToRoot, $relativePath='/')
     {
-        $this->baseDir = $baseDir;
+        $this->absolutePathToRoot = $absolutePathToRoot;
         $this->relativePath = $relativePath;
 
-        if (!file_exists($this->baseDir . $this->relativePath) && !mkdir($this->baseDir . $this->relativePath, 0777))
-            throw new \Nette\InvalidArgumentException("Creation of directory " . $this->baseDir . $this->relativePath . " was not successful");
+        if (!file_exists($this->absolutePathToRoot . $this->relativePath) && !mkdir($this->absolutePathToRoot . $this->relativePath, 0777))
+            throw new \Nette\InvalidArgumentException("Creation of directory " . $this->absolutePathToRoot . $this->relativePath . " was not successful");
     }
 
     /**
-     * Returns <filehandler work dir>/<path> for given path.
+     * Returns <pathhandler relative dir>/<path> for given path.
      * @param string $path
      * @return string
      */
     public function getRelativePath($path = null)
     {
-        return Paths::sanitize($this->relativePath . Paths::sanitize($path));
+        return str_replace('//', '/', $this->relativePath . Paths::sanitize($path));
     }
 
     /**
@@ -53,7 +57,7 @@ class PathHandler extends \Nette\Object
      */
     public function getFullPath($path = null)
     {
-        return Paths::sanitize($this->baseDir . $this->getRelativePath($path));
+        return str_replace('//', '/', $this->absolutePathToRoot . $this->getRelativePath($path));
     }
 
 }
