@@ -17,25 +17,25 @@ use \Nette\Utils\Strings,
 class ImageBrowserPresenter extends \Backend\BasePresenter
 {
 
-    private $filesPathHandler;
-    private $cachePathHandler;
+    private $filesPath;
+    private $cachePath;
 
     public function startup()
     {
         parent::startup();
-        $this->filesPathHandler = $this->getService('userFilesPathHandler');
-        $this->cachePathHandler = $this->getService('userImagesCachePathHandler');
+        $this->filesPath = $this->getService('userFilesPath');
+        $this->cachePath = $this->getService('userImagesCachePath');
     }
 
     public function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
 
-        $cachePathHandler = $this->cachePathHandler;
-        $template->registerHelper('cache', function($url) use ($cachePathHandler) {
-                    return $cachePathHandler->getRelativePath() . $url;
+        $cachePath = $this->cachePath;
+        $template->registerHelper('cache', function($url) use ($cachePath) {
+                    return $cachePath->getRelativePath() . $url;
                 });
-        $template->filesPathHandler = $this->filesPathHandler;
+        $template->filesPath = $this->filesPath;
         return $template;
     }
 
@@ -44,15 +44,15 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
         $url = \Application\Utils\Paths::sanitize($url);
 
         try {
-            $img_path = $this->filesPathHandler->getFullPath() . $url;
+            $img_path = $this->filesPath->getFullPath() . $url;
             $img = \Nette\Image::fromFile($img_path);
             $img->resize(100, 100);
-            $cache_path = $this->cachePathHandler->getFullPath() . $url;
+            $cache_path = $this->cachePath->getFullPath() . $url;
 
             // Make sure all folders exist
             $chunks = explode('/', $url);
             array_pop($chunks); // Last item is the file
-            $recomposed_path = $this->cachePathHandler->getFullPath();
+            $recomposed_path = $this->cachePath->getFullPath();
             foreach ($chunks as $chunk) {
                 $recomposed_path .= '/' . $chunk;
                 if (!is_dir($recomposed_path))
@@ -77,7 +77,7 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
                 ->filter(function($file) {
                             return $file->isDir() || (bool) @getimagesize($file->getPathname()); // intentionally @
                         })
-                ->in($this->filesPathHandler->getFullPath() . $path);
+                ->in($this->filesPath->getFullPath() . $path);
 
         // cache dir imgbrowser_cached_thumbnails
     }

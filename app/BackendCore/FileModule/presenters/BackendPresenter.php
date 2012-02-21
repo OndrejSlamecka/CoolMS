@@ -26,13 +26,13 @@ class BackendPresenter extends \Backend\BasePresenter
 
     private $mode;
 
-    /** @var FileModule/PathHandler */
-    private $pathHandler;
+    /** @var FileModule/FilesystemPath */
+    private $filesPath;
 
     public function startup()
     {
         parent::startup();
-        $this->pathHandler = $this->getService('userFilesPathHandler');
+        $this->filesPath = $this->getService('userFilesPath');
     }
 
     public function createTemplate($class = NULL)
@@ -42,9 +42,9 @@ class BackendPresenter extends \Backend\BasePresenter
         return $template;
     }
 
-    public function getPathHandler()
+    public function getFilesPath()
     {
-        return $this->pathHandler;
+        return $this->filesPath;
     }
 
     public function prepareBreadcrumbs($path)
@@ -70,15 +70,15 @@ class BackendPresenter extends \Backend\BasePresenter
     {
         if ($this->mode === self::MODE_SEARCH) {
             $this->template->path = '/';
-            $this->template->fullpath = $this->pathHandler->getFullPath();
+            $this->template->fullpath = $this->filesPath->getFullPath();
             $this->template->folder_above = '/';
             $this->template->breadcrumbs = null;
 
             // In search mode path is filename
-            $this->template->items = \Nette\Utils\Finder::findFiles('*' . $path . '*')->from($this->pathHandler->getFullPath());
+            $this->template->items = \Nette\Utils\Finder::findFiles('*' . $path . '*')->from($this->filesPath->getFullPath());
         } else {
             $this->template->path = $path = Paths::sanitize($path);
-            $this->template->fullpath = $fullpath = $this->pathHandler->getFullPath($path);
+            $this->template->fullpath = $fullpath = $this->filesPath->getFullPath($path);
             $this->template->folder_above = dirname($path);
             $this->template->breadcrumbs = $this->prepareBreadcrumbs($path);
             $this->template->items = \Nette\Utils\Finder::find('*')->in($fullpath);
@@ -102,7 +102,7 @@ class BackendPresenter extends \Backend\BasePresenter
     public function actionDelete($path)
     {
         $path = Paths::sanitize($path);
-        $fullpath = $this->pathHandler->getFullPath($path);
+        $fullpath = $this->filesPath->getFullPath($path);
 
 
         if (!file_exists($fullpath)) {
@@ -151,16 +151,16 @@ class BackendPresenter extends \Backend\BasePresenter
         $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
-        if ($path === '/' && count(glob($this->pathHandler->getFullpath() . '*')) === 0)
+        if ($path === '/' && count(glob($this->filesPath->getFullpath() . '*')) === 0)
             $wasEmpty = true;
         else
             $wasEmpty = false;
 
-        $cacheFileHandler = $this->getService('userImagesCachePathHandler');
+        $cachePath = $this->getService('userImagesCachePath');
         foreach ($form['files'] as $file) {
-            Files::move($this->pathHandler->getFullPath($path), $file);
+            Files::move($this->filesPath->getFullPath($path), $file);
 
-            $cached_file = $cacheFileHandler->getFullPath($path) . Strings::webalize($file->name, '.');
+            $cached_file = $cachePath->getFullPath($path) . Strings::webalize($file->name, '.');
             if (file_exists($cached_file))
                 unlink($cached_file);
         }
@@ -194,7 +194,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
         $folder = $form['folder'];
 
-        mkdir($this->pathHandler->getFullPath($path . '/' . $form['folder']));
+        mkdir($this->filesPath->getFullPath($path . '/' . $form['folder']));
 
         $this->redirect('default', array('path' => $path));
     }
@@ -219,7 +219,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function renameFormSubmit($form)
     {
-        $fhandler = $this->pathHandler;
+        $fhandler = $this->filesPath;
         $showpath = Paths::sanitize(dirname($this->getParam('path')));
 
         $form = $form->getValues();

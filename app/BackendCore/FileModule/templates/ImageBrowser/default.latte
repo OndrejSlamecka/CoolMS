@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Image browser</title>
 
-    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/imagebrowser.css" />  
+    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/imagebrowser.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="{$themePath}/tiny_mce/tiny_mce_popup.js"></script>
     <script type="text/javascript">
@@ -24,8 +24,8 @@
     	});
 
         // Previews
-        function hidePreview() { 
-            $(this).hide('slideUp'); 
+        function hidePreview() {
+            $(this).hide('slideUp');
         }
 
         var $document = $(document),
@@ -38,23 +38,23 @@
         $preview
             .appendTo($body)
             .on('mouseleave', hidePreview)
-            .on('click', hidePreview); ;        
+            .on('click', hidePreview); ;
 
         $(".preview_icon").on('click', function(event) {
             event.preventDefault();
-            
-            $preview_img.attr('src', $(this).attr('href'));            
+
+            $preview_img.attr('src', $(this).attr('href'));
             if ($document.height() > $document.width())
                 $preview_img.css('width', $document.width() -10);
             else
                 $preview_img.css('height', $document.height() -10);
-        
+
             $preview.show('slideDown');
         });
     }
     </script>
 </head>
-<body>   
+<body>
     {if iterator_count($items->getIterator()) < 1 && $path === '/'}
         <p>You haven't uploaded any files yet. Please upload them using file manager.</p>
     {else}
@@ -73,8 +73,8 @@
                         <span>{$item->getFilename()}</span>
                     </a>
                 {else}
-                    <a href="{$filesPathHandler->getRelativePath().$itemUrl}" class="select_img"><img src="{$itemUrl|cache}" alt="{$itemUrl}"></a>
-                    <a href="{$filesPathHandler->getRelativePath().$itemUrl}" class="preview_icon"><img alt="Preview" src="{$themePath}/icons/zoom.png" /></a>
+                    <a href="{$filesPath->getRelativePath() . $itemUrl}" class="select_img"><img src="{$itemUrl|cache}" alt="{$itemUrl}"></a>
+                    <a href="{$filesPath->getRelativePath() . $itemUrl}" class="preview_icon"><img alt="Preview" src="{$themePath}/icons/zoom.png" /></a>
                 {/if}
             </li>
         </ul>

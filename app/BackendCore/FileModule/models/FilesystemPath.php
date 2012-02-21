@@ -16,11 +16,11 @@ use \Nette\Utils\Strings,
 /**
  * Class responsible for determining paths
  *
- * $pathHandler = new PathHandler('e:/www', '/example');
- * $pathHandler->getFullPath(); // "e:/www/example"
- * $pathHandler->getRelativePath('/subdir'); // "/example/subdir"
+ * $filesystemPath = new FilesystemPath('e:/www', '/example');
+ * $filesystemPath->getFullPath(); // "e:/www/example"
+ * $filesystemPath->getRelativePath('/subdir'); // "/example/subdir"
  */
-class PathHandler extends \Nette\Object
+class FilesystemPath extends \Nette\Object
 {
 
     private $absolutePathToRoot;
