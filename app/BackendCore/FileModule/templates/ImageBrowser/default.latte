@@ -49,7 +49,9 @@
             else
                 $preview_img.css('height', $document.height() -10);
 
-            $preview.show('slideDown');
+            $preview_img.load(function() {
+                $preview.show('slideDown');
+            });
         });
     }
     </script>
