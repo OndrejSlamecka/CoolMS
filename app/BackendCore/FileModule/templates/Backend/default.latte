@@ -62,7 +62,7 @@
                     <?php
                         $editingThis = false;
                         if ($mode === $presenter::MODE_SEARCH) {
-                            $fullFilename = str_replace($fullpath, '', \Application\Utils\Paths::sanitize('/'.$item->getPathname()));
+                            $fullFilename = str_replace($fullpath, '', \Application\Utils\Paths::sanitize($item->getPathname()));
                         } else {
                             $fullFilename = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName();
                         }
@@ -87,7 +87,7 @@
                                 {if $item->isDir()}
                                     <a href="{link default path => $fullFilename}">
                                 {else}
-                                    <a href="{$baseUri}{$presenter->filesPath->getRelativePath($fullFilename)}">
+                                    <a href="{$baseUri}{$presenter->fileModel->getRelativePath() . $fullFilename}">
                                 {/if}
                                         {if $mode === $presenter::MODE_SEARCH}
                                             {$fullFilename}

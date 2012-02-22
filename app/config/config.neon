@@ -34,8 +34,9 @@ common:
 		authenticator: Backend\Authenticator( @repositoryManager::getRepository(User) )
 		presenterTree: Kdyby\PresenterTree(...)
 		moduleManager: Application\ModuleManager(...)
-		userFilesPath: FileModule\FilesystemPath(%wwwDir%, /files)
-		userImagesCachePath: FileModule\FilesystemPath(%wwwDir%, /imgbrowser_cached_thumbnails)
+
+		userFiles: FileModel(%wwwDir%, /files)
+		userImagesCache: FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
 
 production < common:
 	includes:

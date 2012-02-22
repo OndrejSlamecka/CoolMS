@@ -21,6 +21,15 @@ $container = $configurator->createContainer();
 // Register RobotLoader as a service
 $container->addService('robotLoader', $robotLoader);
 
+// Create user files directories
+$userFiles = $container->getService('userFiles');
+if(!$userFiles->exists())
+    $userFiles->createFolder();
+
+$userImagesCache = $container->getService('userImagesCache');
+if(!$userImagesCache->exists())
+    $userImagesCache->createFolder();
+
 /* --- ROUTING --- */
 /*
  * Console mode

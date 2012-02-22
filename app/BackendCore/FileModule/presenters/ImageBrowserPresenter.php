@@ -17,25 +17,25 @@ use \Nette\Utils\Strings,
 class ImageBrowserPresenter extends \Backend\BasePresenter
 {
 
-    private $filesPath;
-    private $cachePath;
+    private $fileModel;
+    private $imageCacheModel;
 
     public function startup()
     {
         parent::startup();
-        $this->filesPath = $this->getService('userFilesPath');
-        $this->cachePath = $this->getService('userImagesCachePath');
+        $this->fileModel = $this->getService('userFiles');
+        $this->imageCacheModel = $this->getService('userImagesCache');
     }
 
     public function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
 
-        $cachePath = $this->cachePath;
-        $template->registerHelper('cache', function($url) use ($cachePath) {
-                    return $cachePath->getRelativePath() . $url;
+        $imageCacheModel = $this->imageCacheModel;
+        $template->registerHelper('cache', function($url) use ($imageCacheModel) {
+                    return $imageCacheModel->getRelativePath() . $url;
                 });
-        $template->filesPath = $this->filesPath;
+        $template->fileModel = $this->fileModel;
         return $template;
     }
 
@@ -44,22 +44,22 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
         $url = \Application\Utils\Paths::sanitize($url);
 
         try {
-            $img_path = $this->filesPath->getFullPath() . $url;
+            $img_path = $this->fileModel->getAbsolutePath() . '/' . $url;
             $img = \Nette\Image::fromFile($img_path);
             $img->resize(100, 100);
-            $cache_path = $this->cachePath->getFullPath() . $url;
+            $cached_file_path = $this->imageCacheModel->getAbsolutePath() . '/' . $url;
 
             // Make sure all folders exist
             $chunks = explode('/', $url);
             array_pop($chunks); // Last item is the file
-            $recomposed_path = $this->cachePath->getFullPath();
+            $recomposed_path = $this->imageCacheModel->getAbsolutePath();
             foreach ($chunks as $chunk) {
                 $recomposed_path .= '/' . $chunk;
                 if (!is_dir($recomposed_path))
                     mkdir($recomposed_path);
             }
 
-            $img->save($cache_path, 80);
+            $img->save($cached_file_path, 80);
             $this->redirect('this');
         } catch (\Nette\UnknownImageFileException $e) {
             $this->terminate();
@@ -77,9 +77,7 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
                 ->filter(function($file) {
                             return $file->isDir() || (bool) @getimagesize($file->getPathname()); // intentionally @
                         })
-                ->in($this->filesPath->getFullPath() . $path);
-
-        // cache dir imgbrowser_cached_thumbnails
+                ->in($this->fileModel->getAbsolutePath() . $path);
     }
 
 }

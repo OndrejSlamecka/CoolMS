@@ -3,17 +3,22 @@
  * Package: CoolMS
  */
 
-$(document).ready(function(){  
-    
+$(document).ready(function(){
+
     // Ajaxed buttons
     $("a.ajax").live("click", function (event) {
         event.preventDefault();
         $.get(this.href);
-    });        
+    });
 
     // Ajaxed forms
     $("form.ajax").live("submit", function () {
-        $(this).ajaxSubmit();    
+        $(this).ajaxSubmit({
+            success : function(payload) {
+                    jQuery.nette.success(payload);
+                    $('.delete.confirm').confirmdialog();
+                }
+        });
         return false;
     });
 
@@ -21,8 +26,8 @@ $(document).ready(function(){
     $savableForm = $('form.savable');
     $continualSaveError = $('#continualSaveError');
     $inputId = $("#frmarticleForm-id");
-   
-    var fncSaveContinually = function(){        
+
+    var fncSaveContinually = function(){
         setTimeout(function()
         {
             // Ajax submit to server
@@ -32,7 +37,7 @@ $(document).ready(function(){
                     fncSaveContinually();
                     if(!payload)
                         return false;
-                    
+
                     if(payload.error){
                         $continualSaveError.show();
                     }else{
@@ -40,18 +45,18 @@ $(document).ready(function(){
                         if(payload.draft_id)
                             $inputId.val(payload.draft_id);
                     }
-                
+
                     return false;
                 },
                 error: function(){ // includes timeout
                     $continualSaveError.show();
                 }
-            });             
+            });
         }, 10 * 1000 );
     };
-   
+
     if ($savableForm.length) {
         fncSaveContinually();
-    }    
+    }
 
 });

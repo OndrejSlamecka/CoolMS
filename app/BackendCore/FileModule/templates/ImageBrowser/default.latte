@@ -75,8 +75,8 @@
                         <span>{$item->getFilename()}</span>
                     </a>
                 {else}
-                    <a href="{$filesPath->getRelativePath() . $itemUrl}" class="select_img"><img src="{$itemUrl|cache}" alt="{$itemUrl}"></a>
-                    <a href="{$filesPath->getRelativePath() . $itemUrl}" class="preview_icon"><img alt="Preview" src="{$themePath}/icons/zoom.png" /></a>
+                    <a href="{$fileModel->getRelativePath() . $itemUrl}" class="select_img"><img src="{$itemUrl|cache}" alt="{$itemUrl}"></a>
+                    <a href="{$fileModel->getRelativePath() . $itemUrl}" class="preview_icon"><img alt="Preview" src="{$themePath}/icons/zoom.png" /></a>
                 {/if}
             </li>
         </ul>
