@@ -185,21 +185,18 @@ td.folderabove { height:31px }
 #breadcrumbs a { padding: 0 .05em }
 
 /* Menu Designer Control */
-#menu-designer-control { margin:1em 0 }
+#root { color:#FFF; font-weight:700; }
+#root .branch { margin: .7em 0 1.5em 3em; min-height: 1.5em }
 
-#menu-designer-control li { list-style:none; color:#FFF; font-weight:700; width:450px; margin:0 0 1em }
-#menu-designer-control .tmi-handler { border:3px #163672 solid; background:#284a89; cursor:move; margin:0 0 0.5em; padding:0.5em }
-#menu-designer-control h2,#menu-designer-control h3 { display:inline; font-size:inherit }
-#menu-designer-control h2 img,#menu-designer-control h3 img { vertical-align:middle; padding:0 0.5em }
-#menu-designer-control div.menuitemOptions { float:right; display:inline }
-#menu-designer-control span { float:right; display:block; margin: -0.2em 0 0 .3em }
-.ui-state-highlight-top { height:40px; background-color:#aabeff; border:2px blue dashed }
+.header { border:3px #163672 solid; background:#284a89; cursor:move; margin:0 0 1em; padding:0.5em }
+.header img { vertical-align:middle }
+.header .name { margin-left: .3em }
+.header .info { float:right; display:inline; font-weight: 400 }
+.header .options { float:right; display:block; margin: -0.2em 0 0 .6em }
+.header .options img { vertical-align: -1px }
 
-#menu-designer-control ol { min-height:1.5em; margin:0.5em 0 }
-#menu-designer-control li li { width:400px; margin:0.25em 0 0 50px }
-#menu-designer-control .mi-container { background-color:#00154b; font-size:90%; border:3px solid #163672;
-                                       color:#FFF; cursor:move; padding:0.5em 0.5em 0.5em 1em }
-.ui-state-highlight { height:29px; background-color:#AFA; border:2px green dashed }
+.ui-highlight { height:40px; background-color:#aabeff; border:2px blue dashed; margin-bottom: 1em; }
+
 
 #frm-designerControlForm { margin:3em 0 2em }
 #frm-designerControlForm input { padding:6px 12px }

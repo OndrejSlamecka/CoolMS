@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace MenuModule;
@@ -13,70 +13,83 @@ namespace MenuModule;
 class DesignerForm extends \Application\Form
 {
 
-    /** @var \Nette\ComponentModel\IContainer */
-    private $parent;
+	/** @var \Nette\ComponentModel\IContainer */
+	private $parent;
 
-    /** @var \Application\Repository\Menuitem */
-    private $menuitems;
+	/** @var \Application\Repository\Menuitem */
+	private $menuitems;
 
-    /**
-     * @param \Nette\ComponentModel\IContainer
-     * @param string
-     */
-    public function __construct(\Nette\ComponentModel\IContainer $parent, $name, \Application\Repository\Menuitem $menuitemRepository)
-    {
-        $this->parent = $parent;
-        $this->menuitems = $menuitemRepository;
-        parent::__construct($parent, $name);
-    }
+	/**
+	 * @param \Nette\ComponentModel\IContainer
+	 * @param string
+	 */
+	public function __construct(\Nette\ComponentModel\IContainer $parent, $name, \Application\Repository\Menuitem $menuitemRepository)
+	{
+		$this->parent = $parent;
+		$this->menuitems = $menuitemRepository;
+		parent::__construct($parent, $name);
+	}
 
-    public function setup()
-    {
-        $this->addHidden('structure');
-        $this->addSubmit('save', 'Save menu order');
+	public function setup()
+	{
+		$this->addHidden('structure');
+		$this->addSubmit('save', 'Save menu order');
 
-        $this->onSuccess[] = array($this, 'designerSubmit');
-    }
+		$this->onSuccess[] = array($this, 'designerSubmit');
+	}
 
-    public function designerSubmit($form)
-    {
-        $structure = $form->getValues();
-        $structure = $structure['structure'];
+	private function treeToArrayOfOrder($branch)
+	{
+		if (empty($branch))
+			return array();
 
-        $structure = json_decode($structure, true);
+		$order = array();
+		for ($i = 1; $i <= count($branch); $i++) {
+			list($itemId, $children) = each($branch);
+			$itemId = (int) \Nette\Utils\Strings::replace($itemId, "~^mi-([0-9]+)~", "$1");
+			$order[$itemId] = $i;
+			$order = $order + $this->{__FUNCTION__}($children);
+		}
+		return $order;
+	}
 
-        $newOrder = array();
-        $childrenParents = array();
+	private function treeToArrayOfRelations($branch, $parent = NULL)
+	{
+		if (empty($branch))
+			return array();
 
-        // TODO: Wouldn't it be better to iterate using for?
-        $i = 1;
-        foreach ($structure as $p_id => $children) {
-            $p_id = (int) \Nette\Utils\Strings::replace($p_id, "~^mi-([0-9]+)~", "$1");
-            $newOrder[$p_id] = $i;
+		$relations = array();
+		for ($i = 1; $i <= count($branch); $i++) {
+			list($itemId, $children) = each($branch);
+			$itemId = (int) \Nette\Utils\Strings::replace($itemId, "~^mi-([0-9]+)~", "$1");
+			$relations[$itemId] = $parent;
+			$relations = $relations + $this->{__FUNCTION__}($children, $itemId);
+		}
+		return $relations;
+	}
 
-            $j = 1;
-            foreach ($children as $ch_id => $null) {
-                $ch_id = (int) \Nette\Utils\Strings::replace($ch_id, "~^mi-([0-9]+)~", "$1");
-                $newOrder[$ch_id] = $j;
-                $childrenParents[$ch_id] = $p_id;
-                $j++;
-            }
+	public function designerSubmit($form)
+	{
+		$form = $form->getValues();
+		$tree = $form['structure'];
 
-            $i++;
-        }
+		$tree = json_decode($tree, true);
 
-        try {
-            $this->menuitems->orderUpdate($newOrder);
-            $this->menuitems->parentsUpdate($childrenParents);
+		try {
+			$order = $this->treeToArrayOfOrder($tree);
+			$this->menuitems->orderUpdate($order);
 
-            $this->menuitems->cleanCache();
+			$relations = $this->treeToArrayOfRelations($tree);
+			$this->menuitems->parentsUpdate($relations);
 
-            $this->parent->flashMessage('Changes saved');
-        } catch (Exception $e) {
-            $this->parent->flashMessage('Saving of changes was not successful, please try again');
-        }
-        
-        $this->parent->redirect('default');
-    }
+			$this->menuitems->cleanCache();
+
+			$this->parent->flashMessage('Changes saved');
+		} catch (Exception $e) {
+			$this->parent->flashMessage('Saving of changes was not successful, please try again');
+		}
+
+		$this->parent->redirect('default');
+	}
 
 }

@@ -5,72 +5,51 @@
 {block content}
 
 <h1>Order menu</h1>
-{if !count($menuitems)}
+{if !count($items)}
     <p>There aren't any items in the menu yet.</p>
 {else}
     <p><small>You can drag&amp;drop menu items using your mouse.</small></p>
 
     {snippet MenuDesignerControl}
-    <ol id="menu-designer-control">
-    {foreach $menuitems as $tmi}
-        <li id="mi-{$tmi['id']}">
-            <div class="tmi-handler">
-                <h2>
-                    {if $tmi['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
-                        <img src="{$themePath}/icons/table_link.png" alt="Submenu" title="Submenu" >
-                    {else}
-                        {*<a href="{link :Front:".$tmi['module_name'].":".$tmi['module_view']."}">*}
-                            <img src="{$themePath}/icons/link.png" alt="Link" title="Link" >
-                        {*</a>*}
-                    {/if}
+		{var $root = TRUE}
+		{block #branch}
+		<ol class="branch" {if $root}id="root"{/if}>
+			{if !$items}
+				<li><!-- Drop here --></li>
+			{else}
+				<li n:foreach="$items as $item" id="mi-{$item['id']}">
+					{var $isSubmenu = $item['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
+					{var $itemType = $isSubmenu ? 'Submenu' : 'Link'}
 
-                    {$tmi['name']}
-                </h2>
+					<div class="header">
+						<img src="{$themePath}/icons/{$itemType|lower}.png" alt="{$itemType}" title="{$itemType}">
 
-                <span>
-                    <a n:href="edit!, $tmi['id']" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
-                    <a n:href="delete, $tmi['id']" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
-                </span>
-                <div class="menuitemOptions">
-                    <table n:if="$tmi['type'] !== \Application\Entity\Menuitem::TYPE_SUBMENU">
-                        <tr>
-                            <td>{$tmi['module_name_verbalname']} &rarr;&nbsp;</td>
-                            <td>{$tmi['module_view_verbalname']}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div> <!-- /.tmi-handler -->
-            {if $tmi['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
-                <ol>
-                {if count($tmi['children'])}
-                {foreach $tmi['children'] as $mi}
-                    <li id="mi-{$mi['id']}">
-                        <div class="mi-container">
-                            <h3>
-                                {$mi['name']}
-                            </h3>
-                            <span>
-                                <a n:href="edit!, $mi->id" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
-                                <a n:href="delete, $mi->id" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
-                            </span>
-                            <div class="menuitemOptions">
-                                <table n:if="$mi['type'] !== \Application\Entity\Menuitem::TYPE_SUBMENU">
-                                    <tr>
-                                        <td>{$mi['module_name_verbalname']} &rarr;&nbsp;</td>
-                                        <td>{$mi['module_view_verbalname']}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </li>
-                {/foreach}
-                {/if}
-                    <li><!-- Drop here --></li>
-                </ol>
-            {/if}
-        </li>
-    {/foreach}
-    </ol>
+						<span class="name">{$item['name']}</span>
+
+						<span class="options">
+							<a n:href="edit!, $item['id']" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
+							<a n:href="delete, $item['id']" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
+						</span>
+
+						{if !$isSubmenu}
+							<div class="info">
+								<table>
+									<tr>
+										<td>{$item['module_name_verbalname']} &rarr;&nbsp;</td>
+										<td>{$item['module_view_verbalname']}</td>
+									</tr>
+								</table>
+							</div>
+						{/if}
+					</div>
+
+					{if $isSubmenu}
+							{include #branch, 'items' => $item['children'], 'root' => FALSE}
+					{/if}
+				</li>
+			{/if}
+		</ol>
+		{/block}
     {/snippet}
 
     {form designerControlForm}
@@ -128,12 +107,6 @@
     </tr>
     {/if}
 
-
-    <tr class="option">
-        <th><h2><span class="stepnumber">{$nStep++}</span>)</h2> {label menuitem_id /}</th>
-        <td>{input menuitem_id}</td>
-    </tr>
-
     <tr class="option">
         <th><h2>{$nStep++})</h2> {label strict_link_comparison /}</th>
         <td>{input strict_link_comparison}</td>
@@ -148,8 +121,12 @@
         </tr>
     {/if}
 
+	{* * *}
 
-    {* * *}
+    <tr class="option">
+        <th><h2><span class="stepnumber">{$nStep++}</span>)</h2> {label menuitem_id /}</th>
+        <td>{input menuitem_id}</td>
+    </tr>
 
     <tr>
         <th><h2><span class="stepnumber">{$nStep++}</span>)</h2> {label save /}</th>
