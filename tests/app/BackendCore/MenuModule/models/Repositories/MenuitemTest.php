@@ -40,7 +40,7 @@ class MenuitemTest extends \PHPUnit_Framework_TestCase
         // TODO: Check if children has key parent (probably use STUBBING... we need to fake database output from NDBF\Repository to Menuitem)
 
         self::assertInternalType('array', $res);
-        self::assertTrue(array_key_exists('children', array_shift($res)));
+        self::assertTrue(array_key_exists('id', array_shift($res)));
     }
 
     /**
