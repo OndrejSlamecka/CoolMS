@@ -1,64 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" >
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel=stylesheet href="{$basePath}/css/reset.css" >
+	<meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="{$basePath}/css/bootstrap.css" >
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap-responsive.css">
     <link rel=stylesheet href="{$basePath}/css/screen.css" media="screen,projection" >
     <link rel=stylesheet href="{$basePath}/css/print.css" media="print" >
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
     {block #head}{/block}
 
     <title>{block #title}Home{/block} &ndash; Your Web</title>
 </head>
 <body>
+	<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{$baseUri}">Default CoolMS web</a>
+          <div class="nav-collapse">
 
-    <div id="panel">
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
 
-        <header>
+	<div class="container">
 
-            <a href="{$basePath}/" id="logo">Default CoolMS web</a>
+		<div class="row">
+			{* Menu *}
+			<div class="span3">
+				<div class="well sidebar-nav">
+					{block #menu}
+					<ul class="nav nav-list">
+						{foreach $menuTree as $item}
+						{var $isSubmenu = $item->type === \Application\Entity\Menuitem::TYPE_SUBMENU}
+						<li n:class="$presenter->isMenuLinkCurrent($item) ? active, $isSubmenu ? nav-header">
 
-            <nav>
-            <ul id="menu" class="cf">
-                {foreach $topMenu as $mi}
-                    <li id="{isMenulinkCurrent $mi}nav-active{/isMenulinkCurrent}">
-                        {if $mi->type === \Application\Entity\Menuitem::TYPE_SUBMENU}
-                            <a href="#">{$mi['name']}</a>
+							{if $isSubmenu}
+								{$item['name']}
+							{else}
+								<a href="{menulink $item}">{$item['name']}</a>
+							{/if}
 
-                            {if $mi->related('menuitem')->count()}
-                            <ul class="submenu">
-                                <li n:foreach="$mi->related('menuitem')->order('order') as $smi">
-                                    <a href="{menulink $smi}">{$smi['name']}</a>
-                                </li>
-                            </ul>
-                            {/if}
-                        {else}
-                            <a href="{menulink $mi}">{$mi['name']}</a>
-                        {/if}
-                    </li>
-                {/foreach}
-            </ul>
-            </nav>
+							{if $isSubmenu && $item->related('menuitem')->count()}
+								{include #menu, 'menuTree' => $item->related('menuitem')}
+							{/if}
+						</li>
+						{/foreach}
+					</ul>
+					{/block}
+				</div><!--/.well -->
+			</div><!--/span-->
 
-        </header>
+			{* Content *}
+			<div class="span9">
+				{snippet flash}
+					{foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}
+				{/snippet}
 
-        <div id="content">
+				{include #content}
+			</div>
+		</div><!--/.row-->
 
-            {snippet flash}
-                {foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}
-            {/snippet}
+		{* Footer *}
+		<hr>
+		<footer>
+			<p>
+				Powered by <a href="http://coolms.slamecka.cz">CoolMS</a> <br>
+				Default template is <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a> <br>
+				<a href="{$basePath}/admin">Administration</a>
+			</p>
+		</footer>
 
-            {include #content}
+	</div><!--/.container-->
 
-        </div> <!-- #content -->
-
-    </div> <!-- #panel -->
-
-    <footer>
-        Powered by <a href="http://coolms.slamecka.cz">CoolMS</a> <br>
-        <a href="{$basePath}/admin">Administration</a>
-    </footer>
+	<!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="{$basePath}/js/bootstrap.js"></script>
 
 </body>
 </html>
