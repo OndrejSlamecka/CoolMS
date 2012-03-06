@@ -141,51 +141,9 @@ class BackendPresenter extends \Backend\BasePresenter
 		$this->template->hasEditingRight = ($loggedUser->isInRole('admin') || $loggedUser->getIdentity()->getId() == $user['id']);
 	}
 
-	public function createComponentUserForm($name)
+	public function createComponentUserForm()
 	{
-		$form = new \Application\Form($this, $name);
-
-		$form->addHidden('id');
-		/* $form->addText('email','Email')
-		  ->addRule(Form::EMAIL, 'Email is not correct.'); */
-		$form->addPassword('password', 'Password');
-
-		$form->addText('name', 'Name');
-
-		$form->addSubmit('save', 'Save');
-		$form->onSuccess[] = array($this, 'userFormSuccess');
-		return $form;
-	}
-
-	public function userFormSuccess($form)
-	{
-		$form = $form->getValues();
-
-		$hasEditingRight = ($this->getUser()->isInRole('admin') || $this->getUser()->getIdentity()->getId() == $form['id']);
-
-		if ($hasEditingRight) {
-
-			unset($form['email']); // Chaning an email is not possible for now, see /development_notes.txt
-
-			if ($form['password'] === "")
-				unset($form['password']);
-			else
-				$form['password'] = Authenticator::calculateHash($form['password'], $this->getUser()->getIdentity()->salt);
-
-			$users = $this->repositories->User;
-			$user = $users->find(array('id' => $form['id']))->fetch()->toArray();
-			foreach ($form as $key => $val) {
-				$user[$key] = $val;
-			}
-
-			try {
-				$users->save($user, 'id');
-				$this->flashMessage('User data changed.');
-			} catch (Exception $e) {
-				$this->flashMessage('User data changed was not successful.');
-			}
-			$this->redirect('default');
-		}
+		return new UserForm($this->repositories->User);
 	}
 
 }
