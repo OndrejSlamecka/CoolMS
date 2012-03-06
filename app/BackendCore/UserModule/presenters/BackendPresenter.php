@@ -121,66 +121,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
 	public function createComponentNewUserForm($name)
 	{
-		$form = new \Application\Form($this, $name);
-		$form->addText('email', 'Email')->addRule(Form::EMAIL, 'Email is not in the right format.');
-		$form->addSubmit('send', 'Create');
-		$form->onSuccess[] = array($this, 'newUserFormSuccess');
-		return $form;
-	}
-
-	public function newUserFormSuccess($form)
-	{
-		// Following action: (email, then) Authentication:createPassword
-		if ($this->getUser()->isInRole('admin')) {
-
-			$form = $form->getValues();
-			$users = $this->repositories->User;
-
-			$user = array();
-			$user['email'] = $form['email'];
-			$user['role'] = 'user';
-
-			if ($users->find(array('email' => $user['email']))->fetch()) {
-				$this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
-				$this->redirect('new');
-			}
-
-			$user['password'] = mt_rand(); // some noise...
-			$user['salt'] = mt_rand();
-
-			// Create token for future verification
-			$token = Authenticator::createToken();
-			$user['token'] = $token;
-			$user['token_created'] = new \DateTime();
-
-			// Prepare email
-			$template = new \Nette\Templating\FileTemplate($this->getTemplatesFolder() . "/email/newUser.latte");
-			$template->registerFilter(new \Nette\Latte\Engine);
-
-			$template->site = $this->getHttpRequest()->getUrl()->getHostUrl();
-			$template->link = $this->link('//:Authentication:Backend:createPassword', array('token' => $token, 'newuser' => 'true'));
-
-			$host = $this->getHttpRequest()->getUrl()->getHost();
-
-			$mail = new \Nette\Mail\Message();
-			$mail->setFrom("Account creation <cms@$host>")
-					->addTo($user['email'])
-					->setHtmlBody($template);
-
-
-			try {
-				$mail->send();
-				$users->save($user, 'id');
-				$this->flashMessage('New account created. Follow the instructions in the given email.');
-			} catch (\Nette\InvalidStateException $e) {
-				if (strpos($e->getMessage(), "Failed to connect to mailserver"))
-					$this->flashMessage('Failed to send email with instructions due to problems with SMTP. Please let your administrator know.');
-				else
-					throw $e;
-			}
-
-			$this->redirect('default');
-		} // if $loggedUser->isInRole('admin')
+		return new NewUserForm($this->repositories->User);
 	}
 
 	/* ---------------------- EDITING, RENDERING USER ----------------------- */
