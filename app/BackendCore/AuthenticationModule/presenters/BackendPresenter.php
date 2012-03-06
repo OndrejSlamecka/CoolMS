@@ -10,10 +10,6 @@
 
 namespace AuthenticationModule;
 
-use Nette\Environment;
-use Nette\Forms\Form;
-use Backend\Authenticator;
-
 /**
  * Class responsible for handling all not logged users' requests
  *
@@ -53,72 +49,9 @@ class BackendPresenter extends \Backend\BasePresenter
 
     /* ----------------------- REQUEST NEW PASSWORD ------------------------- */
 
-    public function createComponentRequestNewPasswordForm($name)
+    public function createComponentRequestNewPasswordForm()
     {
-        $form = new \Application\Form($this, $name);
-        $form->getElementPrototype()->class('ajax');
-
-        $form->addText('email', 'Email')->addRule(Form::EMAIL, 'You have to enter email');
-        $form->addSubmit('request', 'Send new password');
-
-        $form->onSuccess[] = array($this, 'requestNewPasswordFormSubmit');
-        return $form;
-    }
-
-    public function requestNewPasswordFormSubmit($form)
-    {
-        // Following action: (email, then:) createPassword
-
-        $form = $form->getValues();
-        $users = $this->repositories->User;
-
-        // Find user by provided email
-        $user = $users->find(array('email' => $form['email']))->fetch();
-
-        // Does user exist?
-        $userExists = empty($user);
-
-        if ($userExists) {
-            $this->template->emailSendingSuccessful = false;
-            $this->template->errorMessage = "You have probably entered a wrong email. Is your address really {$form['email']}?";
-        } else {
-
-            $user = $user->toArray();
-
-            // Create token for future verification
-            $token = Authenticator::createToken();
-            $user['token'] = $token;
-            $user['token_created'] = new \DateTime();
-
-            $users->save($user, 'id');
-
-            // Prepare email
-            $template = new \Nette\Templating\FileTemplate($this->getTemplatesFolder() . "/email/passwordRequest.latte");
-            $template->registerFilter(new \Nette\Latte\Engine);
-
-            $template->site = $this->getHttpRequest()->getUrl()->getHostUrl();
-            $template->link = $this->link('//createPassword', array('token' => $token));
-
-            $host = $this->getHttpRequest()->getUrl()->getHost();
-
-            $mail = new \Nette\Mail\Message();
-            $mail->setFrom("Password renewal <cms@{$host}>")
-                    ->addTo($user['email'])
-                    ->setHtmlBody($template);
-
-            try {
-                $mail->send();
-                $this->template->emailSendingSuccessful = true;
-            } catch (\Nette\InvalidStateException $e) {
-                if (strpos($e->getMessage(), "Failed to connect to mailserver")) {
-                    $this->template->errorMessage = 'Failed to send email with instructions due to problems with SMTP. Please let administrator know.';
-                    $this->template->emailSendingSuccessful = false;
-                } else
-                    throw $e;
-            }
-        } // if userExists
-
-        $this->invalidateControl('requestNewPassword');
+		return new RequestNewPasswordForm($this->repositories->User);
     }
 
     public function actionCreatePassword($token, $newuser = false)
