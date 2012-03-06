@@ -21,270 +21,230 @@ use Backend\Authenticator;
 class BackendPresenter extends \Backend\BasePresenter
 {
 
-    /**
-     * Don't call without setting onSuccess
-     * @param type $name
-     * @return \Application\Form
-     */
-    public function createComponentConfirmIdentityForm($name)
-    {
-        $form = new \Application\Form($this, $name);
-        $form->addHidden('id');
-        $form->addPassword('password', 'Password');
-        $form->addSubmit('send', 'Confirm');
-        return $form;
-    }
+	/**
+	 * Don't call without setting onSuccess
+	 * @param type $name
+	 * @return \Application\Form
+	 */
+	public function createComponentConfirmIdentityForm($name)
+	{
+		$form = new \Application\Form($this, $name);
+		$form->addHidden('id');
+		$form->addPassword('password', 'Password');
+		$form->addSubmit('send', 'Confirm');
+		return $form;
+	}
 
-    /* -------------------------- EMAIL CHANGE ------------------------------ */
+	/* -------------------------- EMAIL CHANGE ------------------------------ */
 
-    // Users can only change their own emails
+	// Users can only change their own emails
 
-    public function createComponentChangeEmailForm($name)
-    {
-        /** @var $form Nette\Application\UI\Form */
-        $form = new \Application\Form($this, $name);
+	public function createComponentChangeEmailForm($name)
+	{
+		return new ChangeEmailForm($this->repositories->User);
+	}
 
-        $form->addEmail('email', 'New email')
-                ->addRule(Form::EMAIL, 'Email has to be in proper format.');
-        $form->addPassword('password', 'Confirm password');
+	/* -------------------------- DELETING USER ----------------------------- */
 
-        $form->addSubmit('save', 'Change');
+	// Only supreme admin can delete user
 
-        $form->onSuccess[] = callback($this, 'changeEmailFormSuccess');
-        return $form;
-    }
+	public function actionConfirmDelete($id)
+	{
+		$this->template->user = null;
 
-    public function changeEmailFormSuccess($form)
-    {
-        /* Authentication */
-        try {
-            $loggedUser = $this->getUser();
-            $loggedUser->getAuthenticator()->authenticate(array($loggedUser->getIdentity()->email, $form['password']->getValue()));
-        } catch (Nette\Security\AuthenticationException $e) {
-            $this->flashMessage('Password verification was not successful.');
-            $this->redirect('default');
-        }
+		if ($this->getUser()->isInRole('admin')) {
+			$users = $this->repositories->User;
+			$this->template->user = $users->find(array('id' => $id))->fetch();
+			$this['confirmIdentityForm']->setDefaults(array('id' => $id));
+			$this['confirmIdentityForm']->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
+		}
+	}
 
-        /* Email change */
-        $users = $this->repositories->User;
-        $user = array(
-            'id' => $loggedUser->getIdentity()->getId(),
-            'email' => $form['email']->getValue(),
-        );
+	public function confirmDeleteFormSuccess($form)
+	{
+		$user = $this->getUser();
+		if (!$user->getAuthenticator()->authenticateAdmin($user, $form['password']->getValue())) {
+			$this->flashMessage('Password verification was not successful.');
+		} else {
+			$user_to_delete_id = $form['id']->getValue();
+			if ($user_to_delete_id != $user->getId()) {
 
-        try {
-            $loggedUser->getIdentity()->email = $user['email'];
-            $users->save($user, 'id');
-            $this->flashMessage('Your email change was successful.');
-        } catch (\Nette\InvalidStateException $e) {
-            $this->flashMessage('Your email change was not successful, sorry.');
-        }
+				$users = $this->repositories->User;
+				$users->delete(array('id' => $user_to_delete_id));
 
+				$this->flashMessage('User was deleted.');
+			} else {
+				$this->flashMessage('I\'m curious why are people trying to delete their own account… seriously, tell me.');
+			}
+		}
 
-        $this->redirect('default');
-    }
+		$this->redirect('default');
+	}
 
-    /* -------------------------- DELETING USER ----------------------------- */
+	/* ------------------------ CHANGE ADMINISTRATOR ------------------------ */
 
-    // Only supreme admin can delete user
+	public function actionMakeAdmin($id)
+	{
+		if ($this->getUser()->isInRole('admin')) {
+			$users = $this->repositories->User;
 
-    public function actionConfirmDelete($id)
-    {
-        $this->template->user = null;
+			$user = $users->find(array('id' => $id))->fetch();
+			$admin = $users->find(array('id' => $this->getUser()->getIdentity()->getId()))->fetch();
 
-        if ($this->getUser()->isInRole('admin')) {
-            $users = $this->repositories->User;
-            $this->template->user = $users->find(array('id' => $id))->fetch();
-            $this['confirmIdentityForm']->setDefaults(array('id' => $id));
-            $this['confirmIdentityForm']->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
-        }
-    }
+			if ($user) {
+				$user = $user->toArray();
+				$admin = $admin->toArray();
 
-    public function confirmDeleteFormSuccess($form)
-    {
-        $user = $this->getUser();
-        if (!$user->getAuthenticator()->authenticateAdmin($user, $form['password']->getValue())) {
-            $this->flashMessage('Password verification was not successful.');
-        } else {
-            $user_to_delete_id = $form['id']->getValue();
-            if ($user_to_delete_id != $user->getId()) {
+				$admin['role'] = 'user';
+				$user['role'] = 'admin';
 
-                $users = $this->repositories->User;
-                $users->delete(array('id' => $user_to_delete_id));
+				try {
+					$users->save($admin, 'id');
+					$users->save($user, 'id');
+					$this->flashMessage('Supreme administrator is now ' . $user['email'] . '. You have to re-login now.');
+				} catch (Exception $e) {
+					$this->flashMessage('Supreme administrator change was not successful.');
+				}
+				$this->redirect('Authentication:logout');
+			}
+		}
+	}
 
-                $this->flashMessage('User was deleted.');
-            } else {
-                $this->flashMessage('I\'m curious why are people trying to delete their own account… seriously, tell me.');
-            }
-        }
+	/* --------------------------- DEFAULT - list --------------------------- */
 
-        $this->redirect('default');
-    }
+	public function renderDefault()
+	{
+		$this->template->users = $user = $this->repositories->User->find();
+	}
 
-    /* ------------------------ CHANGE ADMINISTRATOR ------------------------ */
+	/* --------------------------- CREATING USER ---------------------------- */
 
-    public function actionMakeAdmin($id)
-    {
-        if ($this->getUser()->isInRole('admin')) {
-            $users = $this->repositories->User;
+	public function createComponentNewUserForm($name)
+	{
+		$form = new \Application\Form($this, $name);
+		$form->addText('email', 'Email')->addRule(Form::EMAIL, 'Email is not in the right format.');
+		$form->addSubmit('send', 'Create');
+		$form->onSuccess[] = array($this, 'newUserFormSuccess');
+		return $form;
+	}
 
-            $user = $users->find(array('id' => $id))->fetch();
-            $admin = $users->find(array('id' => $this->getUser()->getIdentity()->getId()))->fetch();
+	public function newUserFormSuccess($form)
+	{
+		// Following action: (email, then) Authentication:createPassword
+		if ($this->getUser()->isInRole('admin')) {
 
-            if ($user) {
-                $user = $user->toArray();
-                $admin = $admin->toArray();
+			$form = $form->getValues();
+			$users = $this->repositories->User;
 
-                $admin['role'] = 'user';
-                $user['role'] = 'admin';
+			$user = array();
+			$user['email'] = $form['email'];
+			$user['role'] = 'user';
 
-                try {
-                    $users->save($admin, 'id');
-                    $users->save($user, 'id');
-                    $this->flashMessage('Supreme administrator is now ' . $user['email'] . '. You have to re-login now.');
-                } catch (Exception $e) {
-                    $this->flashMessage('Supreme administrator change was not successful.');
-                }
-                $this->redirect('Authentication:logout');
-            }
-        }
-    }
+			if ($users->find(array('email' => $user['email']))->fetch()) {
+				$this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
+				$this->redirect('new');
+			}
 
-    /* --------------------------- DEFAULT - list --------------------------- */
+			$user['password'] = mt_rand(); // some noise...
+			$user['salt'] = mt_rand();
 
-    public function renderDefault()
-    {
-        $this->template->users = $user = $this->repositories->User->find();
-    }
+			// Create token for future verification
+			$token = Authenticator::createToken();
+			$user['token'] = $token;
+			$user['token_created'] = new \DateTime();
 
-    /* --------------------------- CREATING USER ---------------------------- */
+			// Prepare email
+			$template = new \Nette\Templating\FileTemplate($this->getTemplatesFolder() . "/email/newUser.latte");
+			$template->registerFilter(new \Nette\Latte\Engine);
 
-    public function createComponentNewUserForm($name)
-    {
-        $form = new \Application\Form($this, $name);
-        $form->addText('email', 'Email')->addRule(Form::EMAIL, 'Email is not in the right format.');
-        $form->addSubmit('send', 'Create');
-        $form->onSuccess[] = array($this, 'newUserFormSuccess');
-        return $form;
-    }
+			$template->site = $this->getHttpRequest()->getUrl()->getHostUrl();
+			$template->link = $this->link('//:Authentication:Backend:createPassword', array('token' => $token, 'newuser' => 'true'));
 
-    public function newUserFormSuccess($form)
-    {
-        // Following action: (email, then) Authentication:createPassword
-        if ($this->getUser()->isInRole('admin')) {
+			$host = $this->getHttpRequest()->getUrl()->getHost();
 
-            $form = $form->getValues();
-            $users = $this->repositories->User;
-
-            $user = array();
-            $user['email'] = $form['email'];
-            $user['role'] = 'user';
-
-            if ($users->find(array('email' => $user['email']))->fetch()) {
-                $this->flashMessage('An user with email ' . $user['email'] . ' already exists.');
-                $this->redirect('new');
-            }
-
-            $user['password'] = mt_rand(); // some noise...
-            $user['salt'] = mt_rand();
-
-            // Create token for future verification
-            $token = Authenticator::createToken();
-            $user['token'] = $token;
-            $user['token_created'] = new \DateTime();
-
-            // Prepare email
-            $template = new \Nette\Templating\FileTemplate($this->getTemplatesFolder() . "/email/newUser.latte");
-            $template->registerFilter(new \Nette\Latte\Engine);
-
-            $template->site = $this->getHttpRequest()->getUrl()->getHostUrl();
-            $template->link = $this->link('//:Authentication:Backend:createPassword', array('token' => $token, 'newuser' => 'true'));
-
-            $host = $this->getHttpRequest()->getUrl()->getHost();
-
-            $mail = new \Nette\Mail\Message();
-            $mail->setFrom("Account creation <cms@$host>")
-                    ->addTo($user['email'])
-                    ->setHtmlBody($template);
+			$mail = new \Nette\Mail\Message();
+			$mail->setFrom("Account creation <cms@$host>")
+					->addTo($user['email'])
+					->setHtmlBody($template);
 
 
-            try {
-                $mail->send();
-                $users->save($user, 'id');
-                $this->flashMessage('New account created. Follow the instructions in the given email.');
-            } catch (\Nette\InvalidStateException $e) {
-                if (strpos($e->getMessage(), "Failed to connect to mailserver"))
-                    $this->flashMessage('Failed to send email with instructions due to problems with SMTP. Please let your administrator know.');
-                else
-                    throw $e;
-            }
+			try {
+				$mail->send();
+				$users->save($user, 'id');
+				$this->flashMessage('New account created. Follow the instructions in the given email.');
+			} catch (\Nette\InvalidStateException $e) {
+				if (strpos($e->getMessage(), "Failed to connect to mailserver"))
+					$this->flashMessage('Failed to send email with instructions due to problems with SMTP. Please let your administrator know.');
+				else
+					throw $e;
+			}
 
-            $this->redirect('default');
-        } // if $loggedUser->isInRole('admin')
-    }
+			$this->redirect('default');
+		} // if $loggedUser->isInRole('admin')
+	}
 
-    /* ---------------------- EDITING, RENDERING USER ----------------------- */
+	/* ---------------------- EDITING, RENDERING USER ----------------------- */
 
-    public function renderProfile($id)
-    {
-        $users = $this->repositories->User;
+	public function renderProfile($id)
+	{
+		$users = $this->repositories->User;
 
-        $user = $users->find(array('id' => $id))->fetch();
+		$user = $users->find(array('id' => $id))->fetch();
 
-        $user = $user->toArray();
-        unset($user['password']);
-        $this['userForm']->setDefaults($user);
-        $this->template->user = $user;
+		$user = $user->toArray();
+		unset($user['password']);
+		$this['userForm']->setDefaults($user);
+		$this->template->user = $user;
 
-        $loggedUser = $this->getUser();
-        $this->template->hasEditingRight = ($loggedUser->isInRole('admin') || $loggedUser->getIdentity()->getId() == $user['id']);
-    }
+		$loggedUser = $this->getUser();
+		$this->template->hasEditingRight = ($loggedUser->isInRole('admin') || $loggedUser->getIdentity()->getId() == $user['id']);
+	}
 
-    public function createComponentUserForm($name)
-    {
-        $form = new \Application\Form($this, $name);
+	public function createComponentUserForm($name)
+	{
+		$form = new \Application\Form($this, $name);
 
-        $form->addHidden('id');
-        /* $form->addText('email','Email')
-          ->addRule(Form::EMAIL, 'Email is not correct.'); */
-        $form->addPassword('password', 'Password');
+		$form->addHidden('id');
+		/* $form->addText('email','Email')
+		  ->addRule(Form::EMAIL, 'Email is not correct.'); */
+		$form->addPassword('password', 'Password');
 
-        $form->addText('name', 'Name');
+		$form->addText('name', 'Name');
 
-        $form->addSubmit('save', 'Save');
-        $form->onSuccess[] = array($this, 'userFormSuccess');
-        return $form;
-    }
+		$form->addSubmit('save', 'Save');
+		$form->onSuccess[] = array($this, 'userFormSuccess');
+		return $form;
+	}
 
-    public function userFormSuccess($form)
-    {
-        $form = $form->getValues();
+	public function userFormSuccess($form)
+	{
+		$form = $form->getValues();
 
-        $hasEditingRight = ($this->getUser()->isInRole('admin') || $this->getUser()->getIdentity()->getId() == $form['id']);
+		$hasEditingRight = ($this->getUser()->isInRole('admin') || $this->getUser()->getIdentity()->getId() == $form['id']);
 
-        if ($hasEditingRight) {
+		if ($hasEditingRight) {
 
-            unset($form['email']); // Chaning an email is not possible for now, see /development_notes.txt
+			unset($form['email']); // Chaning an email is not possible for now, see /development_notes.txt
 
-            if ($form['password'] === "")
-                unset($form['password']);
-            else
-                $form['password'] = Authenticator::calculateHash($form['password'], $this->getUser()->getIdentity()->salt);
+			if ($form['password'] === "")
+				unset($form['password']);
+			else
+				$form['password'] = Authenticator::calculateHash($form['password'], $this->getUser()->getIdentity()->salt);
 
-            $users = $this->repositories->User;
-            $user = $users->find(array('id' => $form['id']))->fetch()->toArray();
-            foreach ($form as $key => $val) {
-                $user[$key] = $val;
-            }
+			$users = $this->repositories->User;
+			$user = $users->find(array('id' => $form['id']))->fetch()->toArray();
+			foreach ($form as $key => $val) {
+				$user[$key] = $val;
+			}
 
-            try {
-                $users->save($user, 'id');
-                $this->flashMessage('User data changed.');
-            } catch (Exception $e) {
-                $this->flashMessage('User data changed was not successful.');
-            }
-            $this->redirect('default');
-        }
-    }
+			try {
+				$users->save($user, 'id');
+				$this->flashMessage('User data changed.');
+			} catch (Exception $e) {
+				$this->flashMessage('User data changed was not successful.');
+			}
+			$this->redirect('default');
+		}
+	}
 
 }
