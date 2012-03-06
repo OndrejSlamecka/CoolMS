@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace AuthenticationModule;
@@ -16,7 +16,7 @@ use Backend\Authenticator;
 
 /**
  * Class responsible for handling all not logged users' requests
- * 
+ *
  * @author Ondrej Slamecka
  */
 class BackendPresenter extends \Backend\BasePresenter
@@ -33,41 +33,14 @@ class BackendPresenter extends \Backend\BasePresenter
     /**
      * Login form component factory.
      */
-    protected function createComponentLoginForm($name)
+    protected function createComponentLoginForm()
     {
-        $form = new \Application\Form($this, $name);
-        $form->getElementPrototype()->id("LoginForm");
-
-        $form->addText('email', 'Email');
-        $form->addPassword('password', 'Password');
-        $form->addSubmit('login', 'Log in');
-        $form['login']->getControlPrototype()->class('big');
-
-        // Add CSRF protection
-        $form->addProtection('Please send the form again, protection period expired.');
-
-        $form->onSuccess[] = array($this, 'loginFormSubmitted');
-
-
-        return $form;
-    }
-
-    public function loginFormSubmitted($form)
-    {
-        try {
-            $this->getUser()->setExpiration('+ 14 days', FALSE);
-            // Try to authenticate
-            $this->getUser()->login($form['email']->getValue(), $form['password']->getValue());
-
-            $this->redirect(':Dashboard:Backend:');
-        } catch (\Nette\Security\AuthenticationException $e) {
-            $form->addError($e->getMessage());
-        }
+		return new LoginForm();
     }
 
     public function renderLogin()
     {
-        //dump( Authenticator::hashPassword( 'email', 'password' ) ); // Printing for development purposes        
+        //dump( Authenticator::hashPassword( 'email', 'password' ) ); // Printing for development purposes
     }
 
     /* ------------------------------ LOGOUT -------------------------------- */
@@ -154,7 +127,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
         /*
          * Whether token is right is tested by fetching user by token
-         * It's validity is tested by Authenticator::isTokenValid() 
+         * It's validity is tested by Authenticator::isTokenValid()
          *   with token creation time provided from user's row in database
          */
 
