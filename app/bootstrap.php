@@ -14,6 +14,11 @@ $robotLoader = $configurator->createRobotLoader()
         ->addDirectory(APP_DIR)
         ->register();
 
+// Add CoolMS compiler extension
+$configurator->onCompile[] = function ($configurator, $compiler) {
+    $compiler->addExtension('coolms', new CoolmsCompilerExtension);
+};
+
 // Add configuration file to configurator and create container
 $configurator->addConfig(APP_DIR . '/config/config.neon');
 $container = $configurator->createContainer();

@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace Frontend;
@@ -15,7 +15,7 @@ use Nette\Application\Routers\Route,
 
 /**
  * Front module routing. TODO: Hard refactoring…
- * 
+ *
  * @author Ondrej Slamecka
  */
 class RouteManager extends \Nette\Object
@@ -27,7 +27,7 @@ class RouteManager extends \Nette\Object
     /** @var Nette\Caching\IStorage */
     private $cacheStorage;
 
-    /** @var Application\ModuleManager */
+    /** @var Coolms\Modules */
     private $moduleManager;
 
     /** @var Application\Repository\Menuitem */
@@ -37,7 +37,7 @@ class RouteManager extends \Nette\Object
     {
         $this->menu = $container->repositoryManager->Menuitem;
         $this->cacheStorage = $container->cacheStorage;
-        $this->moduleManager = $container->moduleManager;
+        $this->moduleManager = $container->getService('coolms.modules');
 
         $translationTable = $this->getCache()->load('translationTable');
         if ($translationTable === null) {
@@ -47,7 +47,7 @@ class RouteManager extends \Nette\Object
 
     /**
      *
-     * @param Nette\Application\Routers\RouteList $router 
+     * @param Nette\Application\Routers\RouteList $router
      */
     public function addRoutes(&$router)
     {
@@ -65,14 +65,14 @@ class RouteManager extends \Nette\Object
         );
 
         // Module: Article
-        $articleMethods = array_flip($names['methods']['Article']);
+        $articleViews = array_flip($names['views']['Article']);
 
         $router[] = new Route($modules['Article'],
                         $this->formMetadata('Article', 'default')
         );
 
         // webalize so that cool-uri will appear, not any unfriendly characters
-        $router[] = new Route($modules['Article'] . '/' . Strings::webalize($articleMethods['archive']),
+        $router[] = new Route($modules['Article'] . '/' . Strings::webalize($articleViews['archive']),
                         $this->formMetadata('Article', 'archive')
         );
 
@@ -93,7 +93,7 @@ class RouteManager extends \Nette\Object
      * @param string $module
      * @param string $action
      * @param array $args
-     * @return array 
+     * @return array
      */
     public function formMetadata($module, $action = null, $args = null)
     {
@@ -107,16 +107,9 @@ class RouteManager extends \Nette\Object
         );
 
         if ($action !== null) {
-            /* // Note to myself: 
-             * // Remove later when ensured that following 3 lines are wrong/useless/unnecessary
-             * $methods = array();
-             * foreach($transl_table['methods'][$module] as $key => $method)
-             *     $methods[ $key ] = \Nette\Utils\Strings::webalize($method);   
-             *
-             */
             $metadata += array('action' => array(
                     Route::VALUE => $action,
-                    Route::FILTER_TABLE => $transl_table['methods'][$module]
+                    Route::FILTER_TABLE => $transl_table['views'][$module]
                 )
             );
         }
@@ -135,15 +128,15 @@ class RouteManager extends \Nette\Object
     public function buildTranslationTableCache()
     {
         $moduleManager = $this->moduleManager;
-        $names = $moduleManager->getModulesInfo();
+        $names = $moduleManager->getModules();
 
         $names_filters = array();
         foreach ($names as $name => $module) {
             $names_filters['names'][strtolower($module['name'])] = $name;
 
-            $names_filters['methods'][$name] = array();
-            foreach ($module['methods'] as $method_name => $method_name_translated) {
-                $names_filters['methods'][$name][strtolower($method_name_translated)] = $method_name;
+            $names_filters['views'][$name] = array();
+            foreach ($module['views'] as $method_name => $method_name_translated) {
+                $names_filters['views'][$name][strtolower($method_name_translated)] = $method_name;
             }
         }
 

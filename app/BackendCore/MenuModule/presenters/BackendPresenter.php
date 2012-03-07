@@ -56,7 +56,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
 	public function createComponentMenuitemForm($name)
 	{
-		$moduleManager = $this->getService('moduleManager');
+		$moduleManager = $this->getService('coolms.modules');
 		$menuitemRepository = $this->getService('repositoryManager')->Menuitem;
 		return new MenuitemForm($this, $moduleManager, $menuitemRepository);
 	}

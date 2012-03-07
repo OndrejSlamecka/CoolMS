@@ -36,7 +36,7 @@ class Menuitem extends \NDBF\Repository
 
 			if ($aItem['type'] === \Application\Entity\Menuitem::TYPE_MODULE) {
 				$aItem['module_name_verbalname'] = $modulesNames[$item['module_name']]['name'];
-				$aItem['module_view_verbalname'] = $modulesNames[$item['module_name']]['methods'][$item['module_view']];
+				$aItem['module_view_verbalname'] = $modulesNames[$item['module_name']]['views'][$item['module_view']];
 			} else {
 				$children = $item->related('menuitem')->order('`order`');
 				$aItem['children'] = $this->{__FUNCTION__}($children, $modulesNames);
@@ -50,7 +50,7 @@ class Menuitem extends \NDBF\Repository
 
 	public function fetchStructured()
 	{
-		$modulesNames = $this->container->moduleManager->getModulesInfo();
+		$modulesNames = $this->container->getService('coolms.modules')->getModules();
 		$items = $this->select()->where('menuitem_id', NULL)->order('`order`');
 		$tree = $this->fetchBranch($items, $modulesNames);
 		return $tree;

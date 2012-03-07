@@ -15,7 +15,6 @@ Uses
 
 - Nette Framework (New BSD license)
 - TinyMCE (GNU LGPL)
-- Kdyby
 - Nella (GNU LGPL)
 - Silk Icons (CC BY 2.5)
 

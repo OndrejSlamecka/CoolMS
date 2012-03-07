@@ -5,6 +5,17 @@
 # http://nette.org/security-warning
 #
 common:
+	coolms:
+		modules:
+			Article:
+				publicName: Articles
+				views: {default: List, archive, detail}
+			Page:
+				publicName: Pages
+				views: {default: Detail}
+			# Optionally with no public names:
+			# Article: {default, archive, detail}
+
 	nette:
 		debugger:
 			strictMode: true
@@ -32,8 +43,6 @@ common:
 			setup:
 				- setContainer(...)
 		authenticator: Backend\Authenticator( @repositoryManager::getRepository(User) )
-		presenterTree: Kdyby\PresenterTree(...)
-		moduleManager: Application\ModuleManager(...)
 
 		userFiles: FileModel(%wwwDir%, /files)
 		userImagesCache: FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)

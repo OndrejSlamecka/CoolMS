@@ -52,8 +52,8 @@ abstract class BasePresenter extends \BasePresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $modules = $this->getService('moduleManager');
-        $this->template->modules = $modules->getLinkableModules();
+        $modules = $this->getService('coolms.modules');
+        $this->template->modules = $modules->getModulesNames();
     }
 
 }

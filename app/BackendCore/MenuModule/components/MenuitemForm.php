@@ -20,7 +20,7 @@ class MenuitemForm extends \Application\Form
 	/** @var \Nette\ComponentModel\IContainer */
 	private $parent;
 
-	/** @var \Application\ModuleManager */
+	/** @var \Coolms\Modules */
 	private $moduleManager;
 
 	/** @var \Application\Repository\Menuitem */
@@ -31,10 +31,12 @@ class MenuitemForm extends \Application\Form
 	private $menuitemType;
 
 	/**
-	 * @param \Nette\ComponentModel\IContainer
-	 * @param string
+	 *
+	 * @param IContainer $parent
+	 * @param \Coolms\Modules $moduleManager
+	 * @param \Application\Repository\Menuitem $menuitemRepository
 	 */
-	public function __construct(IContainer $parent, \Application\ModuleManager $moduleManager, \Application\Repository\Menuitem $menuitemRepository)
+	public function __construct(IContainer $parent, \Coolms\Modules $moduleManager, \Application\Repository\Menuitem $menuitemRepository)
 	{
 		$this->parent = $parent;
 		$this->moduleManager = $moduleManager;
@@ -109,7 +111,7 @@ class MenuitemForm extends \Application\Form
 	 */
 	public function addModuleViewArgumentsInput($module, $moduleView)
 	{
-		$module_view_arguments = $this->moduleManager->getModuleViewParams($module, $moduleView);
+		$module_view_arguments = $this->moduleManager->getViewParameters($module, $moduleView);
 
 		if (is_array($module_view_arguments))
 			$this->addSelect('module_view_argument', 'with argument', $module_view_arguments);
@@ -128,7 +130,7 @@ class MenuitemForm extends \Application\Form
 		$this->setDefaults(array('module_name' => $name));
 
 		// Set possible views for this module
-		$views = $this->moduleManager->getModuleViews($name);
+		$views = $this->moduleManager->getViews($name);
 		$this['module_view']->setItems($views);
 	}
 
@@ -136,13 +138,13 @@ class MenuitemForm extends \Application\Form
 
 	public function setup()
 	{
-		$linkableModules = $this->moduleManager->getLinkableModules();
+		$linkableModules = $this->moduleManager->getModulesNames();
 
 		// Default values
 		reset($linkableModules);
 		$defaultModule = key($linkableModules);
 
-		$defaultModuleViews = $this->moduleManager->getModuleViews($defaultModule);
+		$defaultModuleViews = $this->moduleManager->getViews($defaultModule);
 
 		$defaultView = array_keys($defaultModuleViews);
 		$defaultView = array_shift($defaultView);
@@ -227,12 +229,12 @@ class MenuitemForm extends \Application\Form
 				// Sets module as default in form and changes items in module_view selectbox
 				$this->chooseModule($menuitem['module_name']);
 
-				if (!in_array($menuitem['module_view'], array_keys($this->moduleManager->getModuleViews($menuitem['module_name'])))) {
+				if (!in_array($menuitem['module_view'], array_keys($this->moduleManager->getViews($menuitem['module_name'])))) {
 					/* Condition passed if module was changed (selected view is NOT in array of views of current module)
 					  (BUT condition won't be matched when two modules have the same view - but this won't make troubles) */
 
 					// Select some default view
-					$views = $this->moduleManager->getModuleViews($menuitem['module_name']); // Possible views for this module
+					$views = $this->moduleManager->getViews($menuitem['module_name']); // Possible views for this module
 					$views_keys = array_keys($views);
 					$menuitem['module_view'] = array_shift($views_keys);
 				}
