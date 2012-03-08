@@ -16,7 +16,7 @@ $robotLoader = $configurator->createRobotLoader()
 
 // Add CoolMS compiler extension
 $configurator->onCompile[] = function ($configurator, $compiler) {
-    $compiler->addExtension('coolms', new CoolmsCompilerExtension);
+    $compiler->addExtension('coolms', new Coolms\CompilerExtension);
 };
 
 // Add configuration file to configurator and create container

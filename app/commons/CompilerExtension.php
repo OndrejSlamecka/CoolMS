@@ -1,8 +1,10 @@
 <?php
 
+namespace Coolms;
+
 use \Nette\Utils\Strings;
 
-class CoolmsCompilerExtension extends \Nette\Config\CompilerExtension
+class CompilerExtension extends \Nette\Config\CompilerExtension
 {
 
 	public function loadConfiguration()
@@ -24,7 +26,6 @@ class CoolmsCompilerExtension extends \Nette\Config\CompilerExtension
 			} else {
 				$modules[$name]['name'] = Strings::firstUpper($name);
 				$cfViews = $settings;
-				;
 			}
 
 			$views = array();
