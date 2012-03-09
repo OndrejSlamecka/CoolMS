@@ -8,7 +8,7 @@
  *
  */
 
-namespace Application;
+namespace Coolms;
 
 class RepositoryManager extends \NDBF\RepositoryManager
 {

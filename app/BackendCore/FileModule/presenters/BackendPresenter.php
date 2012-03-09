@@ -34,7 +34,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     /**
      *
-     * @return FileModel
+     * @return Coolms\FileModel
      */
     public function getFileModel()
     {

@@ -39,13 +39,13 @@ common:
 		database: @nette.database.default
 
 		repositoryManager:
-			class: Application\RepositoryManager(...)
+			class: Coolms\RepositoryManager(...)
 			setup:
 				- setContainer(...)
 		authenticator: Backend\Authenticator( @repositoryManager::getRepository(User) )
 
-		userFiles: FileModel(%wwwDir%, /files)
-		userImagesCache: FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
+		userFiles: Coolms\FileModel(%wwwDir%, /files)
+		userImagesCache: Coolms\FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
 
 production < common:
 	includes:
