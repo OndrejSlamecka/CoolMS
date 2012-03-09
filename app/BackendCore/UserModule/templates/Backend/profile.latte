@@ -4,7 +4,7 @@
 <div class="floatingContentContainer">
     <h1 class="asidebutton">User {$user['email']}</h1>
     {if $loggedUser->isInRole('admin') && $loggedUser->getIdentity()->getId() != $user['id']}
-        <div class="asideheader"><a href="{link makeAdmin, $user['email']}" class="button">Give supreme administrator role</a></div>
+        <div class="asideheader"><a href="{link makeAdmin, $user['email']}" class="button">Give super administrator role</a></div>
     {/if}
 </div>
 

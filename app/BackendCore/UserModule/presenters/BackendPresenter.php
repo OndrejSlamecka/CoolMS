@@ -46,7 +46,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
 	/* -------------------------- DELETING USER ----------------------------- */
 
-	// Only supreme admin can delete user
+	// Only super admin can delete user
 
 	public function actionConfirmDelete($id)
 	{
@@ -101,9 +101,9 @@ class BackendPresenter extends \Backend\BasePresenter
 				try {
 					$users->save($admin, 'id');
 					$users->save($user, 'id');
-					$this->flashMessage('Supreme administrator is now ' . $user['email'] . '. You have to re-login now.');
+					$this->flashMessage('Super administrator is now ' . $user['email'] . '. You have to re-login now.');
 				} catch (Exception $e) {
-					$this->flashMessage('Supreme administrator change was not successful.');
+					$this->flashMessage('Super administrator change was not successful.');
 				}
 				$this->redirect('Authentication:logout');
 			}
