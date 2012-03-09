@@ -23,7 +23,7 @@ common:
 			autoStart: true
 			expiration: +14days
 		application:
-			errorPresenter: Error
+			errorPresenter: Error:Error
 		database:
 			default:
 				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
@@ -50,11 +50,16 @@ common:
 production < common:
 	includes:
 		- config.production.neon
+	nette:
+		application:
+			catchExceptions: TRUE
 
 development < common:
 	includes:
 		- config.development.neon
+	nette:
+		application:
+			catchExceptions: FALSE
 
-console < common:
-	includes:
-		- config.development.neon
+
+console < development:

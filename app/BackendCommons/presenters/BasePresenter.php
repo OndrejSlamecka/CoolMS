@@ -15,7 +15,7 @@ namespace Backend;
  *
  * @author     Ondrej Slamecka
  */
-abstract class BasePresenter extends \BasePresenter
+abstract class BasePresenter extends \Coolms\BasePresenter
 {
 
     public function createTemplate($class = NULL)

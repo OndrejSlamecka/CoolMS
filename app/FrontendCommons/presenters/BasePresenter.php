@@ -16,7 +16,7 @@ namespace Frontend;
  * @author     Ondrej Slamecka
  * @package    CoolMS
  */
-abstract class BasePresenter extends \BasePresenter
+abstract class BasePresenter extends \Coolms\BasePresenter
 {
 
     public function startup()
