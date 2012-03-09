@@ -10,7 +10,7 @@ define('APP_DIR', WWW_DIR . '/../app');
 define('LIBS_DIR', WWW_DIR . '/../libs');
 
 // uncomment this line if you must temporarily take down your site for maintenance
-// require __DIR__ . '/maintenance.html';
+// require __DIR__ . '/.maintenance.php'; die;
 
 // load bootstrap file
 require APP_DIR . '/bootstrap.php';
