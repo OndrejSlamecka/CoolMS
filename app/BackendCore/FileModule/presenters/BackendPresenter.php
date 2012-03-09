@@ -11,8 +11,7 @@
 namespace FileModule;
 
 use \Nette\Utils\Strings,
-    \Application\Utils\Files,
-    \Application\Utils\Paths;
+    \Coolms\Utils\Paths;
 
 /**
  * File manager's presenter

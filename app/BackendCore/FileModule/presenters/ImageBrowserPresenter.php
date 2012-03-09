@@ -41,7 +41,7 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
 
     public function actionCache($url)
     {
-        $url = \Application\Utils\Paths::sanitize($url);
+        $url = \Coolms\Utils\Paths::sanitize($url);
 
         try {
             $img_path = $this->fileModel->getAbsolutePath() . '/' . $url;
@@ -70,7 +70,7 @@ class ImageBrowserPresenter extends \Backend\BasePresenter
 
     public function renderDefault($path = '/')
     {
-        $path = \Application\Utils\Paths::sanitize($path);
+        $path = \Coolms\Utils\Paths::sanitize($path);
 
         $this->template->path = $path;
         $this->template->items = \Nette\Utils\Finder::find('*')

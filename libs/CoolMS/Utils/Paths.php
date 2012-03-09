@@ -8,7 +8,7 @@
  *
  */
 
-namespace Application\Utils;
+namespace Coolms\Utils;
 
 use \Nette\Utils\Strings;
 
