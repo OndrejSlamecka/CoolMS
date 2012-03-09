@@ -1,0 +1,10 @@
+coolms:
+	modules:
+		Article:
+			publicName: Articles
+			views: {default: List, archive, detail}
+		Page:
+			publicName: Pages
+			views: {default: Detail}
+		# Optionally with no public names:
+		# Article: {default, archive, detail}

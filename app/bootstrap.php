@@ -1,4 +1,5 @@
 <?php
+
 use \Nette\Application\Routers\Route;
 // Load Nette
 require LIBS_DIR . '/Nette/loader.php';

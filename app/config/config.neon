@@ -1,20 +1,19 @@
-#
-# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
-#
-# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
-# http://nette.org/security-warning
-#
+# SECURITY WARNING: http://nette.org/security-warning
 common:
-	coolms:
-		modules:
-			Article:
-				publicName: Articles
-				views: {default: List, archive, detail}
-			Page:
-				publicName: Pages
-				views: {default: Detail}
-			# Optionally with no public names:
-			# Article: {default, archive, detail}
+	includes:
+		- coolms.config.neon # Modules can be defined here
+
+	services:
+		database: @nette.database.default
+
+		repositoryManager:
+			class: Coolms\RepositoryManager(...)
+			setup:
+				- setContainer(...)
+		authenticator: Backend\Authenticator(@repositoryManager::getRepository(User))
+
+		userFiles: Coolms\FileModel(%wwwDir%, /files)
+		userImagesCache: Coolms\FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
 
 	nette:
 		debugger:
@@ -35,28 +34,18 @@ common:
 		date.timezone: Europe/Prague
 		# session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
-	services:
-		database: @nette.database.default
 
-		repositoryManager:
-			class: Coolms\RepositoryManager(...)
-			setup:
-				- setContainer(...)
-		authenticator: Backend\Authenticator( @repositoryManager::getRepository(User) )
-
-		userFiles: Coolms\FileModel(%wwwDir%, /files)
-		userImagesCache: Coolms\FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
 
 production < common:
 	includes:
-		- config.production.neon
+		- production.config.neon
 	nette:
 		application:
 			catchExceptions: TRUE
 
 development < common:
 	includes:
-		- config.development.neon
+		- development.config.neon
 	nette:
 		application:
 			catchExceptions: FALSE

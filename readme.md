@@ -8,7 +8,7 @@ Requirements
 
 - PHP 5.3+
 - MySQL 5+
-- Nette Framework 2.0 beta
+- Nette Framework 2.0
 
 Uses
 ----
