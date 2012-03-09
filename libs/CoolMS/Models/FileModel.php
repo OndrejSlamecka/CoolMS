@@ -108,7 +108,7 @@ class FileModel extends \Nette\Object
 	 * @param string $path Path within FileModel's working path (root_directory.relative_path.$path)
 	 * @return string Returns relative path to file within storage
 	 */
-	public function save(Nette\Http\FileUpload $file, $path = '/')
+	public function save(\Nette\Http\FileUpload $file, $path = '/')
 	{
 		if ($path[0] !== '/')
 			throw new \Nette\InvalidArgumentException('Given path "' . $path . '" does not start with slash.');
