@@ -14,15 +14,15 @@ class PathsTest extends \PHPUnit_Framework_TestCase
     public function testSanitize()
     {
         $path = '\\';
-        $res = Application\Utils\Paths::sanitize($path);
+        $res = Coolms\Utils\Paths::sanitize($path);
         $this->assertEquals($res, '/');
 
         $path = '/////';
-        $res = Application\Utils\Paths::sanitize($path);
+        $res = Coolms\Utils\Paths::sanitize($path);
         $this->assertEquals($res, '/');
 
         $path = '/../';
-        $res = Application\Utils\Paths::sanitize($path);
+        $res = Coolms\Utils\Paths::sanitize($path);
         $this->assertEquals($res, '/');
     }
 
