@@ -13,7 +13,7 @@ namespace UserModule;
 use Nette\Forms\Form,
 	Backend\Authenticator;
 
-class ChangeEmailForm extends \Application\Form
+class ChangeEmailForm extends \Coolms\Form
 {
 
 	/** @var \NDBF\Repository */

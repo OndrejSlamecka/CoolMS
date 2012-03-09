@@ -129,7 +129,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentFileUploadForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
         $form->getElementPrototype()->class('html5upload');
 
         //$form->addUpload('files', 'File');
@@ -173,7 +173,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentFolderCreationForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
 
         $form->addText('folder', 'Folder name');
 
@@ -199,7 +199,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentRenameForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
         $form->getElementPrototype()->class('ajax');
 
         $form->addText('new_name', 'Name');
@@ -243,7 +243,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentSearchForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
 
         $form->addText('q', 'Search');
         $form['q']->getControlPrototype()->addAttributes(array('autocomplete' => 'off'));

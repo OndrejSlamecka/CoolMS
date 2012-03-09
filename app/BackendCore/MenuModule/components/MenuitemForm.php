@@ -14,7 +14,7 @@ use \Application\Entity\Menuitem,
 	\Nette\ComponentModel\IContainer,
 	\Nette\Http\SessionSection;
 
-class MenuitemForm extends \Application\Form
+class MenuitemForm extends \Coolms\Form
 {
 
 	/** @var \Nette\ComponentModel\IContainer */

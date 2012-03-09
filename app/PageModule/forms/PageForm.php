@@ -12,7 +12,7 @@ namespace PageModule;
 
 use Nette\Forms\Form;
 
-class PageForm extends \Application\Form
+class PageForm extends \Coolms\Form
 {
 	/** @var \NDBF\Repository */
 	private $repository;

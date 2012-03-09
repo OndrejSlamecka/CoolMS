@@ -10,7 +10,7 @@
 
 namespace AuthenticationModule;
 
-class LoginForm extends \Application\Form
+class LoginForm extends \Coolms\Form
 {
 
 	public function setup()

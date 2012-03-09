@@ -13,7 +13,7 @@ namespace ArticleModule;
 use Nette\Forms\Form,
 	\Nette\Utils\Strings;
 
-class ArticleForm extends \Application\Form
+class ArticleForm extends \Coolms\Form
 {
 
 	/** @var \NDBF\Repository */

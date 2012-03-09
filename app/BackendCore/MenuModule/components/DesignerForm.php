@@ -10,7 +10,7 @@
 
 namespace MenuModule;
 
-class DesignerForm extends \Application\Form
+class DesignerForm extends \Coolms\Form
 {
 
 	/** @var \Nette\ComponentModel\IContainer */

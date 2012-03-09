@@ -16,7 +16,7 @@ use Nette\Forms\Form,
 /**
  * Following action: (email, then:) createPassword
  */
-class RequestNewPasswordForm extends \Application\Form
+class RequestNewPasswordForm extends \Coolms\Form
 {
 
 	/** @var \NDBF\Repository */

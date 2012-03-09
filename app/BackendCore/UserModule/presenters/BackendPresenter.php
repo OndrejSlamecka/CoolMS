@@ -24,11 +24,11 @@ class BackendPresenter extends \Backend\BasePresenter
 	/**
 	 * Don't call without setting onSuccess
 	 * @param type $name
-	 * @return \Application\Form
+	 * @return \Coolms\Form
 	 */
 	public function createComponentConfirmIdentityForm($name)
 	{
-		$form = new \Application\Form($this, $name);
+		$form = new \Coolms\Form($this, $name);
 		$form->addHidden('id');
 		$form->addPassword('password', 'Password');
 		$form->addSubmit('send', 'Confirm');
