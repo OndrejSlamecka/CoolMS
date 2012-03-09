@@ -3,12 +3,12 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
-namespace Application;
+namespace Coolms;
 
 use \Nette\Utils\Strings;
 
@@ -41,7 +41,7 @@ class Helpers
     /**
      * Generates thumbnail path for given path. E.g. from pic.jpg it makes pic_small.jpg
      * @param string $path
-     * @return string 
+     * @return string
      */
     public static function thumbnailpath($path)
     {
