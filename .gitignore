@@ -4,4 +4,3 @@ log/*
 temp/*
 !temp/sessions/*
 !temp/.htaccess
-libs/Nette/*
