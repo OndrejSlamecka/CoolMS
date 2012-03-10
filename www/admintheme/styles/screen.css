@@ -131,7 +131,7 @@ td input { margin:.5em 0 0 }
     input[type="radio"] { vertical-align:middle; margin:-0.2em 0.2em 0 0 }
 
     input[type="submit"].big { padding:6px 10px }
-    input[type="submit"].emphasized { vertical-align:middle; font-weight:700; width:72px; margin:0 0 6px; padding:6px 12px }
+    input[type="submit"].emphasized { vertical-align:middle; font-weight:700; min-width: 72px; margin:0 0 6px; padding:6px 10px }
     html.opera input[type="submit"].emphasized { margin-bottom:2px; padding:8px 12px }
 
 /* General elements
@@ -213,7 +213,7 @@ html.gecko #frm-menuitemForm tr.optionSubmenu th,html.gecko #frm-menuitemForm tr
 .textFormatForm input[type="text"]:hover,.textFormatForm textarea:hover { border:1px solid #888 }
 .textFormatForm textarea { padding:5px }
 .textFormatForm input[name="name"] { min-height:24px; font-size:18px; font-weight:700; margin-bottom:0.5em; width:658px }
-.textFormatForm input[name="name"].short { width:582px }
+.textFormatForm input[name="name"].short { width:519px }
 .textFormatForm textarea[name="text"] { width:734px }
 .textFormatForm h2 input[type="text"], .textFormatForm h3 input[type="text"] { height:1em }
 

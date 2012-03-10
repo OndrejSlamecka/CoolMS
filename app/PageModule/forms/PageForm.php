@@ -36,7 +36,7 @@ class PageForm extends \Coolms\Form
 		$this->addText('name_webalized', 'Name in URL', 30)
 				->getControlPrototype()->class('name_webalized');
 
-		$this->addText('name', 'Název')
+		$this->addText('name', 'Name')
 				->getControlPrototype()->class('name_webalized_source');
 
 		$this->addTextarea('text', 'Text', 60, 30);

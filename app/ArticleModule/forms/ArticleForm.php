@@ -40,13 +40,13 @@ class ArticleForm extends \Coolms\Form
 		$this->addText('name_webalized', 'Name in URL', 30)
 				->getControlPrototype()->class('name_webalized');
 
-		$this->addText('name', 'Název')
+		$this->addText('name', 'Name')
 				->getControlPrototype()->class('name_webalized_source short');
 
 		$this->addTextarea('text', 'Text', 60, 30);
 		$this['text']->getControlPrototype()->class('wysiwyg');
 
-		$this->addSubmit('save', 'Save')->getControlPrototype()->class('emphasized');
+		$this->addSubmit('save', 'Save as draft')->getControlPrototype()->class('emphasized');
 		$this->addSubmit('publish', 'Publish')->getControlPrototype()->class('emphasized');
 
 		$this->onSuccess[] = array($this, 'success');
