@@ -43,8 +43,8 @@ if (!$userImagesCache->exists())
  *    - SimpleRouter
  *
  * Development / Production mode
- *    - \Backend\RouteManager
- *    - \Frontend\RouteManager
+ *    - \Backend\Router
+ *    - \Frontend\Router
  */
 $router = $container->router;
 
@@ -53,11 +53,11 @@ if ($container->parameters['consoleMode']) {
 } else {
 
 	// Backend module
-	\Backend\RouteManager::addRoutes($router);
+	\Backend\Router::addRoutes($router);
 
 	// Frontend
-	$frontRoutemanager = new \Frontend\RouteManager($container->getService('repositoryManager')->Menuitem, $container->getService('coolms.modules'));
-	$frontRoutemanager->addRoutes($router);
+	$frontRouter = new \Frontend\Router($container->getService('repositoryManager')->Menuitem, $container->getService('coolms.modules'));
+	$frontRouter->addRoutes($router);
 }
 
 /* --- RUN THE APP --- */

@@ -8,7 +8,7 @@
  *
  */
 
-namespace Frontend;
+namespace Coolms\Frontend;
 
 use Nette\Application\Routers\Route,
 	Nette\Utils\Strings,
@@ -19,16 +19,16 @@ use Nette\Application\Routers\Route,
  *
  * @author Ondrej Slamecka
  */
-class RouteManager extends \Nette\Object
+class Router extends \Nette\Object
 {
 
 	/** @var Coolms\Modules */
-	private $modules;
+	protected $modules;
 
 	/** @var Application\Repository\Menuitem */
-	private $menu;
+	protected $menu;
 
-	function __construct(\NDBF\Repository $menuitem, \Coolms\Modules $modules)
+	public function __construct(\NDBF\Repository $menuitem, \Coolms\Modules $modules)
 	{
 		$this->menu = $menuitem;
 
@@ -37,46 +37,6 @@ class RouteManager extends \Nette\Object
 		$this->modules = $modules;
 	}
 
-	/**
-	 *
-	 * @param Nette\Application\Routers\RouteList $router
-	 */
-	public function addRoutes(&$router)
-	{
-		$modules = $this->modules->getModules();
-
-		/* FRONT ROUTES ARE EDITED HERE */
-
-		// Index
-		$router[] = new Route('', $this->getIndexMetadata());
-
-		// Module: Page
-		$router[] = new Route($modules['Page']['name'] . '/<name>',
-						$this->formMetadata('Page', 'default')
-		);
-
-		// Module: Article
-
-		$router[] = new Route($modules['Article']['name'],
-						$this->formMetadata('Article', 'default')
-		);
-
-		// webalize so that cool-uri will appear, not any unfriendly characters
-		$router[] = new Route($modules['Article']['name'] . '/' . $modules['Article']['views']['archive'],
-						$this->formMetadata('Article', 'archive')
-		);
-
-		$router[] = new Route($modules['Article']['name'] . '/<name>',
-						$this->formMetadata('Article', 'detail')
-		);
-
-		// The rest...
-		$router[] = new Route('<module>/<action>[/<name>]',
-						$this->getIndexMetadata()
-		);
-	}
-
-	/* METHODS */
 
 	/**
 	 * Forms metadata into form accepted by Nette\Application\Routers\Route. Adds translation tables
@@ -85,7 +45,7 @@ class RouteManager extends \Nette\Object
 	 * @param array $args
 	 * @return array
 	 */
-	public function formMetadata($module, $action = null, $args = null)
+	protected function formMetadata($module, $action = null, $args = null)
 	{
 		$modulesNames = $this->modules->getModulesNames();
 		$modulesNames = array_flip($modulesNames);
@@ -116,7 +76,7 @@ class RouteManager extends \Nette\Object
 
 	/* Index data */
 
-	public function getIndexViewParams()
+	protected function getIndexViewParams()
 	{
 		$index = $this->menu->getIndex();
 
@@ -137,7 +97,7 @@ class RouteManager extends \Nette\Object
 		return $viewParams;
 	}
 
-	public function getIndexMetadata()
+	protected function getIndexMetadata()
 	{
 		$index = $this->menu->getIndex();
 
