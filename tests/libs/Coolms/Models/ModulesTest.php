@@ -8,7 +8,7 @@
  * License within file license.txt in the root folder.
  *
  */
-class ModuleManagerTest extends PHPUnit_Framework_TestCase
+class ModulesTest extends PHPUnit_Framework_TestCase
 {
 
     private $instance;

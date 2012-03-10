@@ -58,4 +58,14 @@ class Modules extends \Nette\Object
 		return $presenter->$method_name();
 	}
 
+	/* --- */
+
+	/**
+	 * Don't abuse!
+	 */
+	public function setModules(array $modules)
+	{
+		$this->modules = $modules;
+	}
+
 }

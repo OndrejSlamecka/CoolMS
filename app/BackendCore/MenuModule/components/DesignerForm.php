@@ -82,8 +82,6 @@ class DesignerForm extends \Coolms\Form
 			$relations = $this->treeToArrayOfRelations($tree);
 			$this->menuitems->parentsUpdate($relations);
 
-			$this->menuitems->cleanCache();
-
 			$this->parent->flashMessage('Changes saved');
 		} catch (Exception $e) {
 			$this->parent->flashMessage('Saving of changes was not successful, please try again');

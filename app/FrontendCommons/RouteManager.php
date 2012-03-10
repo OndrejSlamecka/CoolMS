@@ -11,194 +11,152 @@
 namespace Frontend;
 
 use Nette\Application\Routers\Route,
-    Nette\Utils\Strings;
+	Nette\Utils\Strings,
+	Coolms\Utils\Arrays;
 
 /**
- * Front module routing. TODO: Hard refactoring…
+ * Front module routing.
  *
  * @author Ondrej Slamecka
  */
 class RouteManager extends \Nette\Object
 {
 
-    /** @var Nette\Caching\Cache */
-    private $cache;
+	/** @var Coolms\Modules */
+	private $modules;
 
-    /** @var Nette\Caching\IStorage */
-    private $cacheStorage;
+	/** @var Application\Repository\Menuitem */
+	private $menu;
 
-    /** @var Coolms\Modules */
-    private $moduleManager;
+	function __construct(\NDBF\Repository $menuitem, \Coolms\Modules $modules)
+	{
+		$this->menu = $menuitem;
 
-    /** @var Application\Repository\Menuitem */
-    private $menu;
+		$modules = clone $modules;
+		$modules->setModules(Arrays::mapRecursive(callback('\Nette\Utils\Strings::webalize'), $modules->getModules()));
+		$this->modules = $modules;
+	}
 
-    function __construct($container)
-    {
-        $this->menu = $container->repositoryManager->Menuitem;
-        $this->cacheStorage = $container->cacheStorage;
-        $this->moduleManager = $container->getService('coolms.modules');
+	/**
+	 *
+	 * @param Nette\Application\Routers\RouteList $router
+	 */
+	public function addRoutes(&$router)
+	{
+		$modules = $this->modules->getModules();
 
-        $translationTable = $this->getCache()->load('translationTable');
-        if ($translationTable === null) {
-            $this->buildTranslationTableCache();
-        }
-    }
+		/* FRONT ROUTES ARE EDITED HERE */
 
-    /**
-     *
-     * @param Nette\Application\Routers\RouteList $router
-     */
-    public function addRoutes(&$router)
-    {
-        $names = $this->getTranslationTable();
-        $modules = array_flip($names['names']);
+		// Index
+		$router[] = new Route('', $this->getIndexMetadata());
 
-        /* FRONT ROUTES ARE EDITED HERE */
+		// Module: Page
+		$router[] = new Route($modules['Page']['name'] . '/<name>',
+						$this->formMetadata('Page', 'default')
+		);
 
-        // Index
-        $router[] = new Route('', $this->getIndexMetadata());
+		// Module: Article
 
-        // Module: Page
-        $router[] = new Route($modules['Page'] . '/<name>',
-                        $this->formMetadata('Page', 'default')
-        );
+		$router[] = new Route($modules['Article']['name'],
+						$this->formMetadata('Article', 'default')
+		);
 
-        // Module: Article
-        $articleViews = array_flip($names['views']['Article']);
+		// webalize so that cool-uri will appear, not any unfriendly characters
+		$router[] = new Route($modules['Article']['name'] . '/' . $modules['Article']['views']['archive'],
+						$this->formMetadata('Article', 'archive')
+		);
 
-        $router[] = new Route($modules['Article'],
-                        $this->formMetadata('Article', 'default')
-        );
+		$router[] = new Route($modules['Article']['name'] . '/<name>',
+						$this->formMetadata('Article', 'detail')
+		);
 
-        // webalize so that cool-uri will appear, not any unfriendly characters
-        $router[] = new Route($modules['Article'] . '/' . Strings::webalize($articleViews['archive']),
-                        $this->formMetadata('Article', 'archive')
-        );
+		// The rest...
+		$router[] = new Route('<module>/<action>[/<name>]',
+						$this->getIndexMetadata()
+		);
+	}
 
-        $router[] = new Route($modules['Article'] . '/<name>',
-                        $this->formMetadata('Article', 'detail')
-        );
+	/* METHODS */
 
-        // The rest...
-        $router[] = new Route('<module>/<action>[/<name>]',
-                        $this->getIndexMetadata()
-        );
-    }
+	/**
+	 * Forms metadata into form accepted by Nette\Application\Routers\Route. Adds translation tables
+	 * @param string $module
+	 * @param string $action
+	 * @param array $args
+	 * @return array
+	 */
+	public function formMetadata($module, $action = null, $args = null)
+	{
+		$modulesNames = $this->modules->getModulesNames();
+		$modulesNames = array_flip($modulesNames);
 
-    /* METHODS */
+		$metadata = array('presenter' => 'Frontend',
+			'module' => array(
+				Route::VALUE => $module,
+				Route::FILTER_TABLE => $modulesNames,
+			)
+		);
 
-    /**
-     * Forms metadata into form accepted by Nette\Application\Routers\Route. Adds translation tables
-     * @param string $module
-     * @param string $action
-     * @param array $args
-     * @return array
-     */
-    public function formMetadata($module, $action = null, $args = null)
-    {
-        $transl_table = $this->getTranslationTable();
+		$moduleViews = $this->modules->getViews($module);
+		$moduleViews = array_flip($moduleViews);
 
-        $metadata = array('presenter' => 'Frontend',
-            'module' => array(
-                Route::VALUE => $module,
-                Route::FILTER_TABLE => $transl_table['names'],
-            )
-        );
+		if ($action !== null) {
+			$metadata += array('action' => array(
+					Route::VALUE => $action,
+					Route::FILTER_TABLE => $moduleViews
+				)
+			);
+		}
 
-        if ($action !== null) {
-            $metadata += array('action' => array(
-                    Route::VALUE => $action,
-                    Route::FILTER_TABLE => $transl_table['views'][$module]
-                )
-            );
-        }
+		if (is_array($args))
+			$metadata += $args;
 
-        if (is_array($args))
-            $metadata += $args;
+		return $metadata;
+	}
 
-        return $metadata;
-    }
+	/* Index data */
 
-    public function getTranslationTable()
-    {
-        return $this->getCache()->load('translationTable');
-    }
+	public function getIndexViewParams()
+	{
+		$index = $this->menu->getIndex();
 
-    public function buildTranslationTableCache()
-    {
-        $moduleManager = $this->moduleManager;
-        $names = $moduleManager->getModules();
+		if (empty($index['module_view_argument']))
+			return;
 
-        $names_filters = array();
-        foreach ($names as $name => $module) {
-            $names_filters['names'][strtolower($module['name'])] = $name;
+		$viewParams = $index['module_view_argument'];
 
-            $names_filters['views'][$name] = array();
-            foreach ($module['views'] as $method_name => $method_name_translated) {
-                $names_filters['views'][$name][strtolower($method_name_translated)] = $method_name;
-            }
-        }
+		if (!empty($viewParams)) {
+			$paramsPairs = explode(';', $viewParams);
+			$viewParams = array();
+			foreach ($paramsPairs as $pair) {
+				$pair = explode('=', $pair);
+				$viewParams[$pair[0]] = $pair[1];
+			}
+		}
 
-        $this->getCache()->save('translationTable', $names_filters);
-    }
+		return $viewParams;
+	}
 
-    /* Index data */
+	public function getIndexMetadata()
+	{
+		$index = $this->menu->getIndex();
 
-    public function getIndexViewParams()
-    {
-        $index = $this->menu->getIndex();
+		$modulesNames = $this->modules->getModulesNames();
 
-        if (empty($index['module_view_argument']))
-            return;
+		$presenter = array(
+			Route::VALUE => $index['module_name'],
+			Route::FILTER_TABLE => $modulesNames
+		);
 
-        $viewParams = $index['module_view_argument'];
+		$front_default = array(
+			'presenter' => 'Frontend',
+			'module' => $presenter,
+			'action' => $index['module_view']
+		);
 
-        if (!empty($viewParams)) {
-            $paramsPairs = explode(';', $viewParams);
-            $viewParams = array();
-            foreach ($paramsPairs as $pair) {
-                $pair = explode('=', $pair);
-                $viewParams[$pair[0]] = $pair[1];
-            }
-        }
+		$front_default += (array) $this->getIndexViewParams(); // (array) because of possible null value
 
-        return $viewParams;
-    }
-
-    public function getIndexMetadata()
-    {
-        $index = $this->menu->getIndex();
-
-        $transl_table = $this->getTranslationTable();
-
-        $presenter = array(
-            Route::VALUE => $index['module_name'],
-            Route::FILTER_TABLE => $transl_table['names']
-        );
-
-        $front_default = array(
-            'presenter' => 'Frontend',
-            'module' => $presenter,
-            'action' => $index['module_view']
-        );
-
-        $front_default += (array) $this->getIndexViewParams(); // (array) because of possible null value
-
-        return $front_default;
-    }
-
-    /* ------------- */
-
-    /**
-     * @return Nette\Caching\Cache
-     */
-    private function getCache()
-    {
-        if ($this->cache === null)
-            $this->cache = new \Nette\Caching\Cache($this->cacheStorage, 'FrontRoutesCache');
-
-        return $this->cache;
-    }
+		return $front_default;
+	}
 
 }
