@@ -207,7 +207,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
         $form->addHidden('old_name');
 
-        $form->addImage('send', $this->template->themePath . '/icons/accept.png', 'Save');
+        $form->addImage('send', $this->template->commonsPath . '/icons/accept.png', 'Save');
         $form['send']->getControlPrototype()->class('low');
 
         $form->onSuccess[] = array($this, 'renameFormSubmit');

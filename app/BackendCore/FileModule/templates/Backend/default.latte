@@ -1,7 +1,9 @@
 {block #title}File manager{/block}
 {block #head}
-<script type="text/javascript" src="/admintheme/js/jquery.sexypost.js"></script>
-<script type="text/javascript" src="/admintheme/js/coolms.filemodule.js"></script>
+<link rel="stylesheet" type="text/css" href="{$modulePath}/css/screen.css" />
+
+<script type="text/javascript" src="{$modulePath}/js/jquery.sexypost.js"></script>
+<script type="text/javascript" src="{$modulePath}/js/coolms.filemodule.js"></script>
 {/block}
 {block content}
 
@@ -50,7 +52,7 @@
                 {if $path !== '/'}
                     {? $oddOrEven = 1}
                     <tr>
-                        <td><img src="{$themePath}/icons/folder_go.png" alt="Nadřazený adresář"></td>
+                        <td><img src="{$commonsPath}/icons/folder_go.png" alt="Nadřazený adresář"></td>
                         <td class="folderabove name"><a href="{link default path => $folder_above}">..</a></td>
                     </tr>
                 {/if}
@@ -74,9 +76,9 @@
                         {* Icon *}
                         <td>
                             {if $item->isDir()}
-                                <img src="{$themePath}/icons/folder.png" alt="Adresář {$item->getFileName()}">
+                                <img src="{$commonsPath}/icons/folder.png" alt="Adresář {$item->getFileName()}">
                             {else}
-                                {*<img src="{$themePath}/icons/{$item->getFileName()|extension}.png" alt="{$item->getFileName()|extension}">*}
+                                {*<img src="{$commonsPath}/icons/{$item->getFileName()|extension}.png" alt="{$item->getFileName()|extension}">*}
                                 {$item->getFileName()|extension}
                             {/if}
                         </td>
@@ -106,8 +108,8 @@
                         </td>
 
                         {* Edit, delete *}
-                        <td><a href="{link edit! path => $fullFilename}" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Rename" title="Rename"></a></td>
-                        <td><a href="{link delete path => $fullFilename}" class="delete img confirm" title="Delete"><img src="{$themePath}/icons/delete.png" alt="Delete" title="Delete"></a></td>
+                        <td><a href="{link edit! path => $fullFilename}" class="edit img ajax"><img src="{$commonsPath}/icons/pencil.png" alt="Rename" title="Rename"></a></td>
+                        <td><a href="{link delete path => $fullFilename}" class="delete img confirm" title="Delete"><img src="{$commonsPath}/icons/delete.png" alt="Delete" title="Delete"></a></td>
                     </tr>
 
                 {/foreach}

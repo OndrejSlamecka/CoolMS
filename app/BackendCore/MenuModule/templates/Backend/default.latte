@@ -1,6 +1,8 @@
 {block #title}Menu designer{/block}
 {block #head}
-<script type="text/javascript" src="{$themePath}/js/coolms.menumodule.js"></script>
+<link rel="stylesheet" type="text/css" href="{$modulePath}/css/screen.css" />
+
+<script type="text/javascript" src="{$modulePath}/js/coolms.menumodule.js"></script>
 {/block}
 {block content}
 
@@ -22,13 +24,13 @@
 					{var $itemType = $isSubmenu ? 'Submenu' : 'Link'}
 
 					<div class="header">
-						<img src="{$themePath}/icons/{$itemType|lower}.png" alt="{$itemType}" title="{$itemType}">
+						<img src="{$commonsPath}/icons/{$itemType|lower}.png" alt="{$itemType}" title="{$itemType}">
 
 						<span class="name">{$item['name']}</span>
 
 						<span class="options">
-							<a n:href="edit!, $item['id']" class="edit img ajax"><img src="{$themePath}/icons/pencil.png" alt="Edit"></a>
-							<a n:href="delete, $item['id']" class="delete img"><img src="{$themePath}/icons/delete.png" alt="Delete"></a>
+							<a n:href="edit!, $item['id']" class="edit img ajax"><img src="{$commonsPath}/icons/pencil.png" alt="Edit"></a>
+							<a n:href="delete, $item['id']" class="delete img"><img src="{$commonsPath}/icons/delete.png" alt="Delete"></a>
 						</span>
 
 						{if !$isSubmenu}

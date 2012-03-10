@@ -1,0 +1,26 @@
+
+/* Menu Designer Control */
+#root { color:#FFF; font-weight:700; }
+#root .branch { margin: .7em 0 1.5em 3em; min-height: 1.5em }
+
+.header { border:3px #163672 solid; background:#284a89; cursor:move; margin:0 0 1em; padding:0.5em }
+.header img { vertical-align:middle }
+.header .name { margin-left: .3em }
+.header .info { float:right; display:inline; font-weight: 400 }
+.header .options { float:right; display:block; margin: -0.2em 0 0 .6em }
+.header .options img { vertical-align: -1px }
+
+.ui-highlight { height:40px; background-color:#aabeff; border:2px blue dashed; margin-bottom: 1em; }
+
+#menu-designer-control table{display:block; float: right; margin-right: 6px;}
+
+#frm-designerControlForm { margin:3em 0 2em }
+#frm-designerControlForm input { padding:6px 12px }
+
+/* Menuitem Form */
+#frm-menuitemForm td input[type="submit"], #frm-menuitemForm td input[type="text"]{margin:0}
+#frm-menuitemForm h2 { display:inline; font-weight:700; font-size:100% }
+#frm-menuitemForm tr { border-bottom:1px solid #CCC }
+html.gecko #frm-menuitemForm tr.optionSubmenu th,html.gecko #frm-menuitemForm tr.optionSubmenu td { padding-top:0.65em }
+#frm-menuitemForm td,#frm-menuitemForm th { padding-bottom:0.6em; padding-top:0.7em; text-align:left }
+#frm-menuitemForm tr:last-of-type { border-bottom:none }

@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <title>Image browser</title>
 
-    <link rel="stylesheet" type="text/css" href="{$themePath}/styles/imagebrowser.css" />
+    <link rel="stylesheet" type="text/css" href="{$modulePath}/css/imagebrowser.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{$themePath}/tiny_mce/tiny_mce_popup.js"></script>
+    <script type="text/javascript" src="{$commonsPath}/tiny_mce/tiny_mce_popup.js"></script>
     <script type="text/javascript">
     window.onload = function()
     {
@@ -63,7 +63,7 @@
     	<ul>
             <li n:if="$path !== '/'">
                     <a href="{link default, dirname($path)}" class="folder">
-                        <img src="{$themePath}/icons/folder_big.png" alt="Folder">
+                        <img src="{$commonsPath}/icons/folder_big.png" alt="Folder">
                         <span>Folder above</span>
                     </a>
             </li>
@@ -71,12 +71,12 @@
                 {? $itemUrl = ($path === '/' ? '/' : $path . '/' ) . $item->getFileName()}
                 {if $item->isDir()}
                     <a href="{link default, $itemUrl}" class="folder">
-                        <img src="{$themePath}/icons/folder_big.png" alt="Folder">
+                        <img src="{$commonsPath}/icons/folder_big.png" alt="Folder">
                         <span>{$item->getFilename()}</span>
                     </a>
                 {else}
                     <a href="{$fileModel->getRelativePath() . $itemUrl}" class="select_img"><img src="{$itemUrl|cache}" alt="{$itemUrl}"></a>
-                    <a href="{$fileModel->getRelativePath() . $itemUrl}" class="preview_icon"><img alt="Preview" src="{$themePath}/icons/zoom.png" /></a>
+                    <a href="{$fileModel->getRelativePath() . $itemUrl}" class="preview_icon"><img alt="Preview" src="{$commonsPath}/icons/zoom.png" /></a>
                 {/if}
             </li>
         </ul>

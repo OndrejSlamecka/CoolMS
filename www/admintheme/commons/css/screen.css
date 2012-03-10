@@ -35,6 +35,7 @@ p { margin:0.5em 0 2em }
 
 /* Visibility */
 .hidden { position:absolute; height:1px; width:1px; top:-9999px; left:-9999px }
+.notdisplay, div.clear hr {display:none}
 
 /* Padding */
 .nopadding { padding:0 }
@@ -43,6 +44,8 @@ p { margin:0.5em 0 2em }
 /* Floated content */
 .flright { float:right }
 .flleft { float:left }
+
+.flright th {padding-top:0}
 
 .floatingContentContainer { width:100%; overflow:hidden }
 .clearfix:before, .clearfix:after { content: "."; display: block; height: 0; overflow: hidden; }
@@ -63,18 +66,22 @@ ul { list-style-type:disc; list-style-position:inside; margin:0.5em 0 1.5em 2em 
 
 /* Links */
 a { text-decoration:underline; color:#0000ef; padding:0 0.15em }
+a:hover {text-decoration:none}
 a:active { position:relative; top:1px }
 a:visited { color:#0000d2 }
 
 a.img { margin:0 0 0 -4px; padding:5px 0.25em 0; display: inline-block; }
 table a.img { margin:0 0 0 -2px; padding:0 3px 2px }
 
+a.edit.img:hover {background-color:#FFF}
 a.delete:hover { background-color:#cd1818; color:#FFF }
 
 /* Button links, aside header links */
 a.button { background:#284a89; color:#FFF; border:1px solid #284a89; padding:4px 9px;
            text-shadow:#000 1px 1px 1px; border-radius:4px; box-shadow:1px 1px 1px #777 }
 a.button:hover { border:1px solid #536fb3 }
+
+.asidebutton{float:left}
 
 .asideheader { margin-top:9px }
 .asideheader a { margin:0 0 0 12px }
@@ -107,6 +114,7 @@ table.data td.name small { float:right; margin:3px 0 0 10px }
 
 table.data+p { text-indent:0; margin:0 0 -1em }
 
+table.data a.edit, table.data a.delete {text-decoration:none}
 table.data a.edit:hover,table.data a.delete:hover { text-decoration:underline }
 
 table.data.subtlethead{ margin-top: -1.35em; }
@@ -139,17 +147,19 @@ td input { margin:.5em 0 0 }
 -------------------*/
 html { overflow-y:scroll }
 
-body{ width:1040px; background:#4a92c0 url(body-bg.png) repeat-x; margin:0 auto }
+body{ width:1040px; background:#4a92c0 url(../img/body-bg.png) repeat-x; margin:0 auto }
 
+#header {margin:1em 0 0}
 #header .actionbar { float:right; color:#000; background:#FFF; margin:5px 10px 0 0; padding:4px 10px; text-shadow:1px 1px 1px rgba( 0, 0, 0, 0.2 ) }
 .gecko #header .actionbar { padding:3px 10px 5px }
 #header .actionbar:first-of-type { margin-right:20px }
 #header .actionbar a { color:#000 }
 
-#panel { background:#FFF url(panel-bg.png) repeat-y left; margin:0; box-shadow:0 0 5px rgba( 0,0,0, 0.75 ) }
+#panel { background:#FFF url(../img/panel-bg.png) repeat-y left; margin:0; box-shadow:0 0 5px rgba( 0,0,0, 0.75 ) }
 
 #menu { float:left; background:#284a89; list-style:none; width:160px; margin:0; padding:20px }
 #menu li { border-bottom:1px rgba( 0,0,0, 0.2 ) solid }
+#menu li:last-of-type{border:0}
 #menu a { color:#FFF; display:block; padding:0.4em 1em }
 #menu a#active { font-weight:700; text-decoration:none }
 #menu a:hover:after { float:right; content:'»' }
@@ -170,44 +180,6 @@ body{ width:1040px; background:#4a92c0 url(body-bg.png) repeat-x; margin:0 auto 
  * =======
 ----------*/
 
-/* AuthenticationModule */
-body.authentication { width:339px }
-body.authentication #snippet--requestNewPassword { display:none; margin:1em 0 -1em }
-body.authentication input[type="text"],.authentication input[type="password"] { width:160px }
-body.authentication #panel { background-image:none }
-body#createpassword #content { padding:1em 2em 2em 1.5em }
-body.authentication p { margin:1em 0 -1em }
-body.authentication p.flash { margin:0 0 0.5em }
-
-/* FileModule */
-table.files img { vertical-align:middle }
-td.folderabove { height:31px }
-#breadcrumbs a { padding: 0 .05em }
-
-/* Menu Designer Control */
-#root { color:#FFF; font-weight:700; }
-#root .branch { margin: .7em 0 1.5em 3em; min-height: 1.5em }
-
-.header { border:3px #163672 solid; background:#284a89; cursor:move; margin:0 0 1em; padding:0.5em }
-.header img { vertical-align:middle }
-.header .name { margin-left: .3em }
-.header .info { float:right; display:inline; font-weight: 400 }
-.header .options { float:right; display:block; margin: -0.2em 0 0 .6em }
-.header .options img { vertical-align: -1px }
-
-.ui-highlight { height:40px; background-color:#aabeff; border:2px blue dashed; margin-bottom: 1em; }
-
-
-#frm-designerControlForm { margin:3em 0 2em }
-#frm-designerControlForm input { padding:6px 12px }
-
-/* Menuitem Form */
-#frm-menuitemForm h2 { display:inline; font-weight:700; font-size:100% }
-#frm-menuitemForm tr { border-bottom:1px solid #CCC }
-html.gecko #frm-menuitemForm tr.optionSubmenu th,html.gecko #frm-menuitemForm tr.optionSubmenu td { padding-top:0.65em }
-#frm-menuitemForm td,#frm-menuitemForm th { padding-bottom:0.6em; padding-top:0.7em; text-align:left }
-#frm-menuitemForm tr:last-of-type { border-bottom:none }
-
 /* Text modules (Article,Page) */
 .textFormatForm input[type="text"],.textFormatForm textarea { border:1px solid #999; padding:3px 5px }
 .textFormatForm input[type="text"]:hover,.textFormatForm textarea:hover { border:1px solid #888 }
@@ -217,26 +189,15 @@ html.gecko #frm-menuitemForm tr.optionSubmenu th,html.gecko #frm-menuitemForm tr
 .textFormatForm textarea[name="text"] { width:734px }
 .textFormatForm h2 input[type="text"], .textFormatForm h3 input[type="text"] { height:1em }
 
+.toolbox{margin:1em 0 0}
 
 /* Plugins
  * =======
 ----------*/
 #confirmDialog { position:absolute; background:#fafafa; border:1px solid #90adc5; padding:0.1em 0.2em }
 
-/* HTML5 file upload progress bar - @author http://css-tricks.com/8518-css3-progress-bars/ Thanks! */
-.meter{display:none;width:50%;height:1.4em;position:relative;-moz-border-radius:25px;-webkit-border-radius:25px;border-radius:25px;border:2px solid #777;margin:1em 0}
-.meter > span{text-align:center;text-shadow:1px 1px 0 rgba(0,0,0,0.2);display:block;height:100%;
-              -webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;background-color:#2bc253;-webkit-box-shadow:inset 0 2px 9px rgba(255,255,255,0.3),inset 0 -2px 6px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 2px 9px rgba(255,255,255,0.3),inset 0 -2px 6px rgba(0,0,0,0.4);box-shadow:inset 0 2px 9px rgba(255,255,255,0.3),inset 0 -2px 6px rgba(0,0,0,0.4);position:relative;overflow:hidden}
-.meter > span:after, .animate > span > span{content:"";position:absolute;top:0;left:0;bottom:0;right:0;z-index:1;-webkit-background-size:50px 50px;-moz-background-size:50px 50px;-webkit-animation:move 2s linear infinite;-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;overflow:hidden}
-100%{background-position:50px 50px}
-.nostripes > span > span, .nostripes > span:after{-webkit-animation:none;background-image:none}
-.notdisplay, div.clear hr, .animate > span:after{display:none}
-.flleft, .asidebutton{float:left}
-a:hover, table.data a.edit, table.data a.delete{text-decoration:none}
-a.edit.img:hover, td input[type="image"]:hover{background-color:#FFF}
-table.files .name, .textFormatForm input.large, .textFormatForm textarea{width:100%}
-.flright th, #frm-languageChooseForm th{padding-top:0}
-td input.low, body.authentication #content, .textFormatForm td input, #frm-menuitemForm td input[type="submit"], #frm-menuitemForm td input[type="text"]{margin:0}
-h2 form, h2 form div, h3 form, h3 form div, #menu-designer-control table{display:block; float: right; margin-right: 6px;}
-#header, .toolbox{margin:1em 0 0}
-#menu li:last-of-type, .submitButtonRow, .submitButtonRow td{border:0}
+
+/* Various bogus; TODO: Put it where it belongs */
+.textFormatForm input.large, .textFormatForm textarea{width:100%}
+td input.low, .textFormatForm td input {margin:0}
+.submitButtonRow, .submitButtonRow td{border:0}
