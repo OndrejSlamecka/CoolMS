@@ -1,48 +1,43 @@
-    {form pageForm}
-        <h1>{$header}</h1>
+{form pageForm}
+    <h1>{$header}</h1>
 
-            {control pageForm errors}
-        
-            <p class="notdisplay errorMessage" id="continualSaveError">
-                <strong>Autosave backup is not working</strong>. Please check your internet connection.
-            </p>
+        {control pageForm errors}
 
-            <table class="textFormatForm">
+        <p class="notdisplay errorMessage" id="continualSaveError">
+            <strong>Autosave backup is not working</strong>. Please check your internet connection.
+        </p>
 
-                <tr class="required">
-                    <th class="hidden">{label name /}</th>
-                    <td>
-                        {input name}
-                        {input save}
-                    </td>
-                </tr>
+        <table class="textFormatForm">
 
+            <tr class="required">
+                <th class="hidden">{label name /}</th>
+                <td>
+                    {input name}
+                    {input save}
+                </td>
+            </tr>
+
+            <tr>
+                <th class="hidden">{label text /}</th>
+                <td>{input text}</td>
+            </tr>
+
+        </table>
+
+    <div class="toolbox">
+
+        <h2>Options</h2>
+        <div class="body">
+            <table>
                 <tr>
-                    <th class="hidden">{label text /}</th>
-                    <td>{input text}</td>
+                    <th>{label name_webalized /}</th>
+                    <td>{input name_webalized}</td>
                 </tr>
-
-            </table>                
-
-        <div class="toolbox">
-
-            <h2>Options</h2>
-            <div class="body">
-                <table>
-                    <tr>
-                        <th>{label name_webalized /}</th>
-                        <td>
-                            {input name_webalized}                  
-                            <small>If left empty, it will fill itself</small>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>{label template /}</th>
-                        <td>{input template}</td>
-                    </tr>
-                </table>
-            </div>
-        </div> <!-- /.toolbox -->
-
-    {input id} {* Fixes https://github.com/nette/nette/issues/400 TODO: Remove after issue is solved *}
-    {/form pageForm}
+                <tr>
+                    <th>{label template /}</th>
+                    <td>{input template}</td>
+                </tr>
+            </table>
+        </div>
+    </div> <!-- /.toolbox -->
+{/form pageForm}

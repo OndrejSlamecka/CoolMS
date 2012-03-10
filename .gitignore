@@ -1,4 +1,6 @@
+www/files/*
+www/imgbrowser_cached_thumbnails/*
+log/*
 temp/*
 !temp/sessions/*
 !temp/.htaccess
-libs/Nette/*

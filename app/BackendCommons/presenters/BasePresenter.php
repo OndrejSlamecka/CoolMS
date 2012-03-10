@@ -3,9 +3,9 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace Backend;
@@ -15,45 +15,49 @@ namespace Backend;
  *
  * @author     Ondrej Slamecka
  */
-abstract class BasePresenter extends \BasePresenter
+abstract class BasePresenter extends \Coolms\BasePresenter
 {
 
-    public function createTemplate($class = NULL)
-    {
-        $template = parent::createTemplate($class);
-        $template->loggedUser = $this->getUser();
-        $template->themePath = $template->basePath . '/admintheme';
+	public function createTemplate($class = NULL)
+	{
+		$template = parent::createTemplate($class);
+		$template->loggedUser = $this->getUser();
+		$template->themePath = $template->basePath . '/admintheme'; // deprecated
+		$template->commonsPath = $template->basePath . '/admintheme/commons';
 
-        return $template;
-    }
+		$module = explode(':', $this->getName());
+		$template->modulePath = $template->basePath . '/admintheme/' . $module[0] . 'Module';
 
-    public function startup()
-    {
-        parent::startup();
+		return $template;
+	}
 
-        // If user isn't signed in, redirects to AuthenticationPresenter (more restrictions will be solved there)
-        if (!$this->getUser()->isLoggedIn()) {
-            if ($this->getName() !== 'Authentication:Backend') {
-                $this->redirect(':Authentication:Backend:login');
-            }
-        } else {
+	public function startup()
+	{
+		parent::startup();
 
-            if ($this->getName() === 'Authentication:Backend' && $this->getAction() === 'createPassword')
-                $this->getUser()->logout(TRUE); // Creator and new user can use the same client
+		// If user isn't signed in, redirects to AuthenticationPresenter (more restrictions will be solved there)
+		if (!$this->getUser()->isLoggedIn()) {
+			if ($this->getName() !== 'Authentication:Backend') {
+				$this->redirect(':Authentication:Backend:login');
+			}
+		} else {
 
-            if ($this->getName() === 'Authentication:Backend' && $this->getAction() !== 'logout') {
-                $this->redirect(':Dashboard:Backend:');
-            }
-        }
+			if ($this->getName() === 'Authentication:Backend' && $this->getAction() === 'createPassword')
+				$this->getUser()->logout(TRUE); // Creator and new user can use the same client
 
-        $this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@layout.latte');
-    }
+			if ($this->getName() === 'Authentication:Backend' && $this->getAction() !== 'logout') {
+				$this->redirect(':Dashboard:Backend:');
+			}
+		}
 
-    public function beforeRender()
-    {
-        parent::beforeRender();
-        $modules = $this->getService('moduleManager');
-        $this->template->modules = $modules->getLinkableModules();
-    }
+		$this->setLayout($this->context->parameters['appDir'] . '/BackendCommons/templates/@layout.latte');
+	}
+
+	public function beforeRender()
+	{
+		parent::beforeRender();
+		$modules = $this->getService('coolms.modules');
+		$this->template->modules = $modules->getModulesNames();
+	}
 
 }

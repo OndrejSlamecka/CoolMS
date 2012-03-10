@@ -1,0 +1,10 @@
+
+/* AuthenticationModule */
+body.authentication { width:339px }
+body.authentication #snippet--requestNewPassword { display:none; margin:1em 0 -1em }
+body.authentication input[type="text"],.authentication input[type="password"] { width:160px }
+body.authentication #panel { background-image:none }
+body.authentication #content {margin:0}
+body#createpassword #content { padding:1em 2em 2em 1.5em }
+body.authentication p { margin:1em 0 -1em }
+body.authentication p.flash { margin:0 0 0.5em }

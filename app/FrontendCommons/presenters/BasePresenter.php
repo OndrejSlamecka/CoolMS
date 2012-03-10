@@ -16,7 +16,7 @@ namespace Frontend;
  * @author     Ondrej Slamecka
  * @package    CoolMS
  */
-abstract class BasePresenter extends \BasePresenter
+abstract class BasePresenter extends \Coolms\BasePresenter
 {
 
     public function startup()
@@ -38,7 +38,7 @@ abstract class BasePresenter extends \BasePresenter
     {
         /** MENU * */
         $menu = $this->repositories->Menuitem;
-        $this->template->topMenu = $menu->select()->where('menuitem_id', null)->order('`order` ASC');
+        $this->template->menuTree = $menu->select()->where('menuitem_id', null)->order('`order` ASC');
     }
 
     /* ------------------------------- MENU --------------------------------- */

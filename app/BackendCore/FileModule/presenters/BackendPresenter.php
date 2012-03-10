@@ -3,20 +3,19 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
 namespace FileModule;
 
 use \Nette\Utils\Strings,
-    \Application\Utils\Files,
-    \Application\Utils\Paths;
+    \Coolms\Utils\Paths;
 
 /**
  * File manager's presenter
- * 
+ *
  * @author Ondrej Slamecka
  */
 class BackendPresenter extends \Backend\BasePresenter
@@ -26,15 +25,6 @@ class BackendPresenter extends \Backend\BasePresenter
 
     private $mode;
 
-    /** @var FileModule/PathHandler */
-    private $pathHandler;
-
-    public function startup()
-    {
-        parent::startup();
-        $this->pathHandler = new PathHandler($this->context->parameters['wwwDir'], '/files');
-    }
-
     public function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
@@ -42,9 +32,13 @@ class BackendPresenter extends \Backend\BasePresenter
         return $template;
     }
 
-    public function getPathHandler()
+    /**
+     *
+     * @return Coolms\FileModel
+     */
+    public function getFileModel()
     {
-        return $this->pathHandler;
+        return $this->getService('userFiles');
     }
 
     public function prepareBreadcrumbs($path)
@@ -70,15 +64,15 @@ class BackendPresenter extends \Backend\BasePresenter
     {
         if ($this->mode === self::MODE_SEARCH) {
             $this->template->path = '/';
-            $this->template->fullpath = $this->pathHandler->getFullPath();
+            $this->template->fullpath = $this->fileModel->getAbsolutePath();
             $this->template->folder_above = '/';
             $this->template->breadcrumbs = null;
 
             // In search mode path is filename
-            $this->template->items = \Nette\Utils\Finder::findFiles('*' . $path . '*')->from($this->pathHandler->getFullPath());
+            $this->template->items = \Nette\Utils\Finder::findFiles('*' . $path . '*')->from($this->fileModel->getAbsolutePath());
         } else {
             $this->template->path = $path = Paths::sanitize($path);
-            $this->template->fullpath = $fullpath = $this->pathHandler->getFullPath($path);
+            $this->template->fullpath = $fullpath = $this->fileModel->getAbsolutePath() . $path;
             $this->template->folder_above = dirname($path);
             $this->template->breadcrumbs = $this->prepareBreadcrumbs($path);
             $this->template->items = \Nette\Utils\Finder::find('*')->in($fullpath);
@@ -102,20 +96,23 @@ class BackendPresenter extends \Backend\BasePresenter
     public function actionDelete($path)
     {
         $path = Paths::sanitize($path);
-        $fullpath = $this->pathHandler->getFullPath($path);
 
-
-        if (!file_exists($fullpath)) {
+        if (!$this->fileModel->exists($path)) {
             $this->flashMessage('The file or folder you are trying to delete was not found');
         } else {
 
-            if (is_file($fullpath)) {
+            if ($this->fileModel->is_file($path)) {
                 $message = 'File deleted';
             } else {
                 $message = 'Folder deleted';
             }
 
-            Files::remove($fullpath);
+            $this->fileModel->remove($path);
+
+            // Remove file from cache
+            $imagesCacheModel = $this->getService('userImagesCache');
+            if ($imagesCacheModel->exists($path))
+                $imagesCacheModel->remove($path);
 
             $this->flashMessage($message);
         }
@@ -132,7 +129,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentFileUploadForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
         $form->getElementPrototype()->class('html5upload');
 
         //$form->addUpload('files', 'File');
@@ -151,11 +148,22 @@ class BackendPresenter extends \Backend\BasePresenter
         $path = Paths::sanitize($this->getParam('path'));
         $form = $form->getValues();
 
+        if ($path === '/' && $this->fileModel->count() === 0)
+            $wasEmpty = true;
+        else
+            $wasEmpty = false;
+
         foreach ($form['files'] as $file) {
-            Files::move($this->pathHandler->getFullPath($path), $file);
+            $relativePath = $this->fileModel->save($file, $path);
+
+            if ($file->isImage()) {
+                $imagesCacheModel = $this->getService('userImagesCache');
+                if ($imagesCacheModel->exists($relativePath))
+                    $imagesCacheModel->remove($relativePath);
+            }
         }
 
-        if ($this->isAjax()) {
+        if ($this->isAjax() && !$wasEmpty) {
             // $this->invalidateControl('flash'); // Uncomment if you want to show some flash messages
             $this->invalidateControl('FileList');
         } else {
@@ -165,7 +173,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentFolderCreationForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
 
         $form->addText('folder', 'Folder name');
 
@@ -184,14 +192,14 @@ class BackendPresenter extends \Backend\BasePresenter
 
         $folder = $form['folder'];
 
-        mkdir($this->pathHandler->getFullPath($path . '/' . $form['folder']));
+        $this->fileModel->createFolder(Paths::sanitize($path . '/' . $form['folder']));
 
         $this->redirect('default', array('path' => $path));
     }
 
     public function createComponentRenameForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
         $form->getElementPrototype()->class('ajax');
 
         $form->addText('new_name', 'Name');
@@ -199,7 +207,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
         $form->addHidden('old_name');
 
-        $form->addImage('send', $this->template->themePath . '/icons/accept.png', 'Save');
+        $form->addImage('send', $this->template->commonsPath . '/icons/accept.png', 'Save');
         $form['send']->getControlPrototype()->class('low');
 
         $form->onSuccess[] = array($this, 'renameFormSubmit');
@@ -209,7 +217,6 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function renameFormSubmit($form)
     {
-        $fhandler = $this->pathHandler;
         $showpath = Paths::sanitize(dirname($this->getParam('path')));
 
         $form = $form->getValues();
@@ -217,11 +224,15 @@ class BackendPresenter extends \Backend\BasePresenter
         $newName = Paths::sanitize($form['new_name']);
         $oldName = Paths::sanitize($form['old_name']);
 
-        $newName = dirname($oldName) . '/' . $newName;
+        $newName = dirname($oldName) . $newName;
 
-        $newName = $fhandler->getFullPath($newName);
-        $oldName = $fhandler->getFullPath($oldName);
-        Files::rename($oldName, $newName);
+        $this->fileModel->rename($oldName, $newName);
+
+        // Rename file in cache
+        $imagesCacheModel = $this->getService('userImagesCache');
+        if ($imagesCacheModel->exists($oldName))
+            $imagesCacheModel->rename($oldName, $newName);
+
 
         $this->setTemplateVariables($showpath);
         $this->invalidateControl('FileList');
@@ -232,7 +243,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
     public function createComponentSearchForm($name)
     {
-        $form = new \Application\Form($this, $name);
+        $form = new \Coolms\Form($this, $name);
 
         $form->addText('q', 'Search');
         $form['q']->getControlPrototype()->addAttributes(array('autocomplete' => 'off'));
@@ -253,10 +264,6 @@ class BackendPresenter extends \Backend\BasePresenter
             $this->template->mode = self::MODE_SEARCH;
 
             $this->setTemplateVariables($form['q']);
-
-            // TODO: Implement search without AJAX
-            /* if (!$this->isAjax())
-              $this->redirect('search', array('path' => $showpath)); */
         }
 
         $this->invalidateControl('FileList');

@@ -53,13 +53,12 @@ CREATE TABLE `menuitem` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO `menuitem` (`id`, `menuitem_id`, `type`, `order`, `module_name`, `module_view`, `module_view_argument`, `strict_link_comparison`, `name`) VALUES
-(1,	NULL,	'modulelink',	3,	'Page',	'default',	'name=page-1',	1,	'Page 1'),
+(1,	NULL,	'modulelink',	2,	'Page',	'default',	'name=page-1',	1,	'Page 1'),
 (2,	NULL,	'modulelink',	1,	'Article',	'default',	'',	1,	'Articles'),
-(3,	NULL,	'modulelink',	4,	'Page',	'default',	'name=contact',	1,	'Contact page'),
-(4,	NULL,	'modulelink',	2,	'Article',	'archive',	'',	1,	'Archive'),
-(5,	NULL,	'submenu',	5,	NULL,	NULL,	'',	0,	'Sub menu'),
-(6,	5,	'modulelink',	1,	'Article',	'default',	'',	1,	'Articles list'),
-(7,	5,	'modulelink',	2,	'Page',	'default',	'name=contact',	1,	'Contact');
+(4,	8,	'modulelink',	1,	'Article',	'archive',	'',	1,	'Archive'),
+(5,	NULL,	'submenu',	3,	NULL,	NULL,	'',	0,	'Article submenu'),
+(7,	5,	'modulelink',	1,	'Page',	'default',	'name=contact',	1,	'Contact'),
+(8,	5,	'submenu',	2,	NULL,	NULL,	'',	0,	'Archive submenu');
 
 DROP TABLE IF EXISTS `page`;
 CREATE TABLE `page` (
@@ -92,4 +91,4 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `password`, `salt`, `role`, `token`, `token_created`, `name`) VALUES
 (1,	'admin@example.com',	'dad29ce262b1e6800c899b4a25366cc3fa83292ceae460b16cd758f3a8f49b82',	548268735,	'admin',	NULL,	NULL,	'Admin');
 
--- 2012-02-10 16:16:08
+-- 2012-03-05 22:06:40

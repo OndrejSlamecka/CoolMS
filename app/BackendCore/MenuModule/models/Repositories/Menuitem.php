@@ -15,186 +15,168 @@ use \Nette\Caching\Cache;
 class Menuitem extends \NDBF\Repository
 {
 
-    /** @var Nette\DI\Container */
-    private $container;
+	/** @var Nette\DI\Container */
+	private $container;
 
-    /** @var Nette\Caching\Cache */
-    private $cache;
+	/** @var Nette\Caching\Cache */
+	private $cache;
 
-    public function setContainer(\Nette\DI\Container $container)
-    {
-        $this->container = $container;
-    }
+	public function setContainer(\Nette\DI\Container $container)
+	{
+		$this->container = $container;
+	}
 
-    /* FETCHING and usual database access */
+	/* FETCHING and usual database access */
 
-    public function fetchStructured()
-    {
-        $mis = $this->find(null, '`order` ASC');
-        $structuredMis = array();
+	private function fetchBranch($items, $modulesNames)
+	{
+		$branch = array();
+		foreach ($items as $key => $item) {
+			$aItem = $item->toArray();
 
-        // I got to create new array, because when tried to modify the original one
-        // this popped up "Indirect modification of overloaded element of Nette\Database\Table\Selection has no effect"
-        // Caching
-        $modulesNames = $this->container->moduleManager->getModulesInfo();
+			if ($aItem['type'] === \Application\Entity\Menuitem::TYPE_MODULE) {
+				$aItem['module_name_verbalname'] = $modulesNames[$item['module_name']]['name'];
+				$aItem['module_view_verbalname'] = $modulesNames[$item['module_name']]['views'][$item['module_view']];
+			} else {
+				$children = $item->related('menuitem')->order('`order`');
+				$aItem['children'] = $this->{__FUNCTION__}($children, $modulesNames);
+			}
 
-        foreach ($mis as $mi) {
+			$branch[$key] = $aItem;
+		}
 
-            if ($mi['type'] === \Application\Entity\Menuitem::TYPE_MODULE) {
-                $mi['module_name_verbalname'] = $modulesNames[$mi['module_name']]['name'];
-                $mi['module_view_verbalname'] = $modulesNames[$mi['module_name']]['methods'][$mi['module_view']];
-            }
+		return $branch;
+	}
 
-            if ($mi['menuitem_id'] === null) {
-                // Is a top level item
-                // If wasn't already created (in following section), copy into final menuitems
-                if (!isset($structuredMis[$mi['id']])) {
-                    $structuredMis[$mi['id']] = $mis[$mi['id']]->toArray();
-                    $structuredMis[$mi['id']]['children'] = array();
-                }
-            } else {
-                // Is child
-                // If its parent wasn't initialized yet do:
-                if (!isset($structuredMis[$mi['menuitem_id']]['children'])) {
-                    $structuredMis[$mi['menuitem_id']] = $mis[$mi['menuitem_id']]->toArray();
-                    $structuredMis[$mi['menuitem_id']]['children'] = array();
-                }
+	public function fetchStructured()
+	{
+		$modulesNames = $this->container->getService('coolms.modules')->getModules();
+		$items = $this->select()->where('menuitem_id', NULL)->order('`order`');
+		$tree = $this->fetchBranch($items, $modulesNames);
+		return $tree;
+	}
 
-                $structuredMis[$mi['menuitem_id']]['children'][$mi['id']] = $mi;
+	public function fetchSubmenusPairs()
+	{
+		return $this->find(array('type' => \Application\Entity\Menuitem::TYPE_SUBMENU))->fetchPairs('id', 'name');
+	}
 
-                unset($mis[$mi['id']]);
-            }
-        }
+	public function save(&$mi, $table_id = 'id')
+	{
+		if (!isset($mi['order']))
+			$mi['order'] = $this->getMaxOrder($mi['menuitem_id']) + 1;
+		parent::save($mi, $table_id);
+		$this->cleanCache();
+	}
 
-        // Submenus can be written in array earlier due to two lines following after "Possible parent, create array for children".
-        uasort($structuredMis, function($itemA, $itemB) {
-                    return ( $itemA['order'] < $itemB['order'] ? -1 : 1 );
-                });
+	public function remove($conditions)
+	{
+		parent::delete($conditions);
+		$this->fixOrder();
+	}
 
-        return $structuredMis;
-    }
+	/* STRUCTURE */
 
-    public function fetchSubmenusPairs()
-    {
-        return $this->find(array('type' => \Application\Entity\Menuitem::TYPE_SUBMENU))->fetchPairs('id', 'name');
-    }
+	public function getIndex()
+	{
+		$index = $this->getCache()->load('index');
+		if ($index === null) {
+			$index = $this->find(array('menuitem_id' => null, 'order' => 1))->fetch();
+			$index = $index->toArray();
+			$this->getCache()->save('index', $index, array(Cache::TAGS => array('ApplicationFrontMenu')));
+		}
 
-    public function save(&$mi, $table_id = 'id')
-    {
-        if (!isset($mi['order']))
-            $mi['order'] = $this->getMaxOrder($mi['menuitem_id']) + 1;
-        parent::save($mi, $table_id);
-        $this->cleanCache();
-    }
+		return $index;
+	}
 
-    public function remove($conditions)
-    {
-        parent::delete($conditions);
-        $this->fixOrder();
-    }
+	/**
+	 * Orders all menuitems
+	 */
+	private function fixOrder()
+	{
+		$mis = $this->fetchStructured();
+		$this->recursiveOrderFixer($mis);
+	}
 
-    /* STRUCTURE */
+	/**
+	 * Fixes order numbers, e.g. from order [2,3,4] it makes [1,2,3]
+	 * @param array Given array has to be SORTED
+	 */
+	private function recursiveOrderFixer($mis)
+	{
+		$i = 1;
+		$orders = array();
+		foreach ($mis as $id => $mi) {
+			$orders[$id] = $i;
 
-    public function getIndex()
-    {
-        $index = $this->getCache()->load('index');
-        if ($index === null) {
-            $index = $this->find(array('menuitem_id' => null, 'order' => 1))->fetch();
-            $index = $index->toArray();
-            $this->getCache()->save('index', $index, array(Cache::TAGS => array('ApplicationFrontMenu')));
-        }
+			if (isset($mi['children'])) {
+				$this->recursiveOrderFixer($mi['children']);
+			}
 
-        return $index;
-    }
+			$i++;
+		}
+		$this->orderUpdate($orders);
+	}
 
-    /**
-     * Orders all menuitems
-     */
-    private function fixOrder()
-    {
-        $mis = $this->fetchStructured();
-        $this->recursiveOrderFixer($mis);
-    }
+	/**
+	 * Updates menuitems' order
+	 * @param array array( menuitem id => order)
+	 */
+	public function orderUpdate($orders)
+	{
+		$this->db->beginTransaction();
 
-    /**
-     * Fixes order numbers, e.g. from order [2,3,4] it makes [1,2,3]
-     * @param array Given array has to be SORTED
-     */
-    private function recursiveOrderFixer($mis)
-    {
-        $i = 1;
-        $orders = array();
-        foreach ($mis as $id => $mi) {
-            $orders[$id] = $i;
+		foreach ($orders as $id => $order) {
+			$record = array('order' => $order);
+			$this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
+		}
 
-            if (isset($mi['children'])) {
-                $this->recursiveOrderFixer($mi['children']);
-            }
+		$this->db->commit();
+	}
 
-            $i++;
-        }
-        $this->orderUpdate($orders);
-    }
+	/**
+	 * Updates menuitems' parents
+	 * @param array array( menuitem id => its parent id)
+	 */
+	public function parentsUpdate($parents)
+	{
+		$this->db->beginTransaction();
 
-    /**
-     * Updates menuitems' order
-     * @param array array( menuitem id => order)
-     */
-    public function orderUpdate($orders)
-    {
-        $this->db->beginTransaction();
+		foreach ($parents as $id => $parent) {
+			$record = array('menuitem_id' => $parent);
+			$this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
+		}
 
-        foreach ($orders as $id => $order) {
-            $record = array('order' => $order);
-            $this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
-        }
+		$this->db->commit();
+	}
 
-        $this->db->commit();
-    }
+	/**
+	 *
+	 * @param integer $parent Parent id
+	 * @return integer
+	 */
+	public function getMaxOrder($parent)
+	{
+		if ($parent === NULL)
+			return $this->table()->max('`order`');
+		else
+			return $this->table()->where('menuitem_id', $parent)->max('`order`');
+	}
 
-    /**
-     * Updates menuitems' parents
-     * @param array array( menuitem id => its parent id)
-     */
-    public function parentsUpdate($parents)
-    {
-        $this->db->beginTransaction();
+	/**
+	 * @return Nette\Caching\Cache
+	 */
+	private function getCache()
+	{
+		if ($this->cache === null)
+			$this->cache = new Cache($this->container->cacheStorage, 'Application.Front.Menu');
 
-        foreach ($parents as $id => $parent) {
-            $record = array('menuitem_id' => $parent);
-            $this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
-        }
+		return $this->cache;
+	}
 
-        $this->db->commit();
-    }
-
-    /**
-     *
-     * @param integer $parent Parent id
-     * @return integer
-     */
-    public function getMaxOrder($parent)
-    {
-        if ($parent === NULL)
-            return $this->table()->max('`order`');
-        else
-            return $this->table()->where('menuitem_id', $parent)->max('`order`');
-    }
-
-    /**
-     * @return Nette\Caching\Cache
-     */
-    private function getCache()
-    {
-        if ($this->cache === null)
-            $this->cache = new Cache($this->container->cacheStorage, 'Application.Front.Menu');
-
-        return $this->cache;
-    }
-
-    public function cleanCache()
-    {
-        $this->getCache()->clean(array(Cache::TAGS => array('ApplicationFrontMenu')));
-    }
+	public function cleanCache()
+	{
+		$this->getCache()->clean(array(Cache::TAGS => array('ApplicationFrontMenu')));
+	}
 
 }

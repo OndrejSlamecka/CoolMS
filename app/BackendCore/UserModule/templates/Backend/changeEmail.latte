@@ -1,0 +1,10 @@
+{block #title}Change your email{/block}
+{block content}
+
+<h1>Changing your email</h1>
+
+{if $user}
+    {control changeEmailForm}
+{else}
+    <p>User was not found.</p>
+{/if}
