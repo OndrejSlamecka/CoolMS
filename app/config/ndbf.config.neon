@@ -1,7 +1,0 @@
-ndbf:
-	repositories:
-		#Menuitem: Application\Repository\Menuitem
-		Menuitem:
-			class: Application\Repository\Menuitem
-			setup:
-				- setContainer(...)

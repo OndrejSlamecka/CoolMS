@@ -2,7 +2,6 @@
 common:
 	includes:
 		- coolms.config.neon # Modules can be defined here
-		- ndbf.config.neon # Modules can be defined here
 
 	services:
 		authenticator: Backend\Authenticator(@ndbf.repositoryManager::getRepository(User))
@@ -30,6 +29,13 @@ common:
 		# session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
 
+	ndbf:
+		repositories:
+			#Menuitem: Application\Repository\Menuitem # The same as below but without setup
+			Menuitem:
+				class: Application\Repository\Menuitem
+				setup:
+					- setContainer(...)
 
 production < common:
 	includes:
