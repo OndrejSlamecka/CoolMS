@@ -24,7 +24,7 @@ class BackendPresenter extends \Backend\BasePresenter
 	{
 		$menuitems = $this->repositories->Menuitem;
 
-		$item = $menuitems->find(array('id' => $id))->fetch();
+		$item = $menuitems->select()->where('id', $id)->fetch();
 
 		if (!$item) {
 			$this->flashMessage('Item was not found');
@@ -57,7 +57,7 @@ class BackendPresenter extends \Backend\BasePresenter
 	public function createComponentMenuitemForm($name)
 	{
 		$moduleManager = $this->getService('coolms.modules');
-		$menuitemRepository = $this->getService('repositoryManager')->Menuitem;
+		$menuitemRepository = $this->getService('ndbf.repositoryManager')->Menuitem;
 		return new MenuitemForm($this, $moduleManager, $menuitemRepository);
 	}
 
@@ -65,7 +65,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
 	public function createComponentDesignerControlForm($name)
 	{
-		return new DesignerForm($this, $name, $this->getService('repositoryManager')->Menuitem);
+		return new DesignerForm($this, $name, $this->getService('ndbf.repositoryManager')->Menuitem);
 	}
 
 }

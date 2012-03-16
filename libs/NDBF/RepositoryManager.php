@@ -13,57 +13,46 @@ namespace NDBF;
 class RepositoryManager
 {
 
-    /** @var Nette\Database\Connection */
-    private $connection;
+	/** @var Nette\DI\Container */
+	private $container;
 
-    /** @var array */
-    private $instantiated_repositories;
+	/** @var array */
+	private $instantiatedRepositories;
 
-    /* ------------------------ CONSTRUCTOR, DESIGN ------------------------- */
 
-    public function __construct(\Nette\Database\Connection $connection)
-    {
-        $this->connection = $connection;
-    }
+	/* ------------------------ CONSTRUCTOR, DESIGN ------------------------- */
 
-    /**
-     * Returns instance of Application\Repository\<$repository> if exists else instance of NDBF\Repository
-     * @param string Repository name
-     * @return NDBF\Repository
-     */
-    public function getRepository($name)
-    {
-        if (empty($this->instantiated_repositories) || !in_array($name, array_keys($this->instantiated_repositories))) {
-            $class = 'Application\\Repository\\' . $name;
+	public function __construct(\Nette\DI\Container $container)
+	{
+		$this->container = $container;
+	}
 
-            if (class_exists($class)) {
-                $instance = new $class($this, $this->connection, $name);
-            } else {
-                $instance = new Repository($this, $this->connection, $name);
-            }
-            $this->instantiated_repositories[$name] = $instance;
-            $this->onRepositoryCreated($instance);
-        }
-        return $this->instantiated_repositories[$name];
-    }
+	/**
+	 * Returns instance of Application\Repository\<$repository> if exists else instance of NDBF\Repository
+	 * @param string Repository name
+	 * @return NDBF\Repository
+	 */
+	public function getRepository($name)
+	{
+		if ($this->container->hasService('ndbf.repositories.' . $name)) {
+			return $this->container->getService('ndbf.repositories.' . $name);
+		} else {
+			if (empty($this->instantiatedRepositories) || !in_array($name, array_keys($this->instantiatedRepositories))) {
+				$instance = new Repository($this->container->getByType('Nette\Database\Connection'), $name);
+				$this->instantiatedRepositories[$name] = $instance;
+			}
+			return $this->instantiatedRepositories[$name];
+		}
+	}
 
-    /**
-     * Getter and shortuct for getRepository()
-     * @param string Repository name
-     * @return NDBF\Repository
-     */
-    public function __get($name)
-    {
-        return $this->getRepository($name);
-    }
-
-    /**
-     * Called after repository was created
-     * @param Repository $instance
-     */
-    protected function onRepositoryCreated(Repository $instance)
-    {
-
-    }
+	/**
+	 * Getter and shortuct for getRepository()
+	 * @param string Repository name
+	 * @return NDBF\Repository
+	 */
+	public function __get($name)
+	{
+		return $this->getRepository($name);
+	}
 
 }

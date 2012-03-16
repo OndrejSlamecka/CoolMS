@@ -15,15 +15,19 @@ use \Nette\Caching\Cache;
 class Menuitem extends \NDBF\Repository
 {
 
-	/** @var Nette\DI\Container */
-	private $container;
+	/** @var \Coolms\Modules */
+	private $modules;
 
-	/** @var Nette\Caching\Cache */
+	/** @var \Nette\Caching\IStorage */
+	private $cacheStorage;
+
+	/** @var \Nette\Caching\Cache */
 	private $cache;
 
-	public function setContainer(\Nette\DI\Container $container)
+	public function setContainer(\Coolms\Modules $modules, \Nette\Caching\IStorage $cacheStorage)
 	{
-		$this->container = $container;
+		$this->modules = $modules;
+		$this->cacheStorage = $cacheStorage;
 	}
 
 	/* FETCHING and usual database access */
@@ -50,7 +54,7 @@ class Menuitem extends \NDBF\Repository
 
 	public function fetchStructured()
 	{
-		$modulesNames = $this->container->getService('coolms.modules')->getModules();
+		$modulesNames = $this->modules->getModules();
 		$items = $this->select()->where('menuitem_id', NULL)->order('`order`');
 		$tree = $this->fetchBranch($items, $modulesNames);
 		return $tree;
@@ -58,7 +62,7 @@ class Menuitem extends \NDBF\Repository
 
 	public function fetchSubmenusPairs()
 	{
-		return $this->find(array('type' => \Application\Entity\Menuitem::TYPE_SUBMENU))->fetchPairs('id', 'name');
+		return $this->select()->where('type', \Application\Entity\Menuitem::TYPE_SUBMENU)->fetchPairs('id', 'name');
 	}
 
 	public function save(&$mi, $table_id = 'id')
@@ -81,7 +85,7 @@ class Menuitem extends \NDBF\Repository
 	{
 		$index = $this->getCache()->load('index');
 		if ($index === null) {
-			$index = $this->find(array('menuitem_id' => null, 'order' => 1))->fetch();
+			$index = $this->select()->where(array('menuitem_id' => null, 'order' => 1))->fetch();
 			$index = $index->toArray();
 			$this->getCache()->save('index', $index, array(Cache::TAGS => array('ApplicationFrontMenu')));
 		}
@@ -124,14 +128,14 @@ class Menuitem extends \NDBF\Repository
 	 */
 	public function orderUpdate($orders)
 	{
-		$this->db->beginTransaction();
+		$this->connection->beginTransaction();
 
 		foreach ($orders as $id => $order) {
 			$record = array('order' => $order);
-			$this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
+			$this->connection->exec('UPDATE ' . $this->tableName . ' SET ? WHERE id = ?', $record, $id);
 		}
 
-		$this->db->commit();
+		$this->connection->commit();
 	}
 
 	/**
@@ -140,14 +144,14 @@ class Menuitem extends \NDBF\Repository
 	 */
 	public function parentsUpdate($parents)
 	{
-		$this->db->beginTransaction();
+		$this->connection->beginTransaction();
 
 		foreach ($parents as $id => $parent) {
 			$record = array('menuitem_id' => $parent);
-			$this->db->exec('UPDATE ' . $this->table_name . ' SET ? WHERE id = ?', $record, $id);
+			$this->connection->exec('UPDATE ' . $this->tableName . ' SET ? WHERE id = ?', $record, $id);
 		}
 
-		$this->db->commit();
+		$this->connection->commit();
 	}
 
 	/**
@@ -169,7 +173,7 @@ class Menuitem extends \NDBF\Repository
 	private function getCache()
 	{
 		if ($this->cache === null)
-			$this->cache = new Cache($this->container->cacheStorage, 'Application.Front.Menu');
+			$this->cache = new Cache($this->cacheStorage, 'Application.Front.Menu');
 
 		return $this->cache;
 	}

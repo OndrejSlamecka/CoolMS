@@ -83,7 +83,7 @@ class MenuitemForm extends \Coolms\Form
 		$this->toggleEditingMode();
 
 		/* Settings specific for the item being edited */
-		$menuitem = $this->menuitems->find(array('id' => $id))->fetch();
+		$menuitem = $this->menuitems->select()->where('id', $id)->fetch();
 
 		if ($menuitem['type'] === Menuitem::TYPE_MODULE) { // Module link
 			$menuitem['module_caption'] = $menuitem['name'];

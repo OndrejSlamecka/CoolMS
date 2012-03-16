@@ -25,7 +25,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 		else
 			$articles = $this->repositories->Article;
 
-		$article = $articles->find(array('id' => $id))->fetch();
+		$article = $articles->select()->where('id', $id)->fetch();
 
 		if (!$article) {
 			$this->flashMessage('Article not found');
@@ -78,7 +78,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 		else
 			$articles = $this->repositories->Article;
 
-		$article = $articles->find(array('id' => $id))->fetch();
+		$article = $articles->select()->where('id', $id)->fetch();
 
 		$this->template->article = $article;
 
@@ -98,10 +98,10 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 	public function renderDefault()
 	{
 		$articles = $this->repositories->Article;
-		$this->template->articles = $articles->find();
+		$this->template->articles = $articles->select();
 
 		$articles_drafts = $this->repositories->Article_draft;
-		$this->template->articles_drafts = $articles_drafts->find();
+		$this->template->articles_drafts = $articles_drafts->select();
 	}
 
 	public function createComponentArticleForm($name)

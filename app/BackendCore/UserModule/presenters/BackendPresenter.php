@@ -54,7 +54,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
 		if ($this->getUser()->isInRole('admin')) {
 			$users = $this->repositories->User;
-			$this->template->user = $users->find(array('id' => $id))->fetch();
+			$this->template->user = $users->select()->where('id', $id)->fetch();
 			$this['confirmIdentityForm']->setDefaults(array('id' => $id));
 			$this['confirmIdentityForm']->onSuccess[] = array($this, 'confirmDeleteFormSuccess');
 		}
@@ -88,8 +88,8 @@ class BackendPresenter extends \Backend\BasePresenter
 		if ($this->getUser()->isInRole('admin')) {
 			$users = $this->repositories->User;
 
-			$user = $users->find(array('id' => $id))->fetch();
-			$admin = $users->find(array('id' => $this->getUser()->getIdentity()->getId()))->fetch();
+			$user = $users->select()->where('id', $id)->fetch();
+			$admin = $users->select()->where('id', $this->getUser()->getIdentity()->getId())->fetch();
 
 			if ($user) {
 				$user = $user->toArray();
@@ -114,7 +114,7 @@ class BackendPresenter extends \Backend\BasePresenter
 
 	public function renderDefault()
 	{
-		$this->template->users = $user = $this->repositories->User->find();
+		$this->template->users = $user = $this->repositories->User->select();
 	}
 
 	/* --------------------------- CREATING USER ---------------------------- */
@@ -130,7 +130,7 @@ class BackendPresenter extends \Backend\BasePresenter
 	{
 		$users = $this->repositories->User;
 
-		$user = $users->find(array('id' => $id))->fetch();
+		$user = $users->select()->where('id', $id)->fetch();
 
 		$user = $user->toArray();
 		unset($user['password']);

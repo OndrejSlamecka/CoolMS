@@ -2,15 +2,10 @@
 common:
 	includes:
 		- coolms.config.neon # Modules can be defined here
+		- ndbf.config.neon # Modules can be defined here
 
 	services:
-		database: @nette.database.default
-
-		repositoryManager:
-			class: Coolms\RepositoryManager(...)
-			setup:
-				- setContainer(...)
-		authenticator: Backend\Authenticator(@repositoryManager::getRepository(User))
+		authenticator: Backend\Authenticator(@ndbf.repositoryManager::getRepository(User))
 
 		userFiles: Coolms\FileModel(%wwwDir%, /files)
 		userImagesCache: Coolms\FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)

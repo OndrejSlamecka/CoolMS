@@ -11,4 +11,4 @@ parameters:
 		host: localhost
 		dbname: cms
 		user: root
-		password: root
+		password: toor

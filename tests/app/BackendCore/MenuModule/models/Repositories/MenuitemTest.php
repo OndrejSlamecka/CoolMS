@@ -13,7 +13,7 @@ class MenuitemTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $container = \Nette\Environment::getContext();
-        $this->instance = $container->repositoryManager->Menuitem;
+        $this->instance = $container->getService('ndbf.repositoryManager')->Menuitem;
     }
 
     /**

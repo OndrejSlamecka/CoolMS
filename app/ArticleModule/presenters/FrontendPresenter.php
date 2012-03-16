@@ -15,8 +15,7 @@ class FrontendPresenter extends \Frontend\BasePresenter
 
 	public function renderDefault()
 	{
-		$articles = $this->repositories->Article;
-		$this->template->articles = $articles->find();
+		$this->template->articles = $this->repositories->Article->select();
 	}
 
 	public function getDefaultViewPossibleParams()
@@ -30,7 +29,7 @@ class FrontendPresenter extends \Frontend\BasePresenter
 		$archive = array();
 
 		// Make sure AS is upper case - required by Nette\Database
-		$selection = $articles->find(null, 'date DESC');
+		$selection = $articles->select()->order('date DESC');
 		foreach ($selection as $article) {
 			$archive[$article['date']->format('F Y')][$article['id']] = $article;
 		}
@@ -46,7 +45,7 @@ class FrontendPresenter extends \Frontend\BasePresenter
 	public function renderDetail($name)
 	{
 		$articles = $this->repositories->Article;
-		$this->template->article = $articles->find(array('name_webalized' => $name))->fetch();
+		$this->template->article = $articles->select()->where('name_webalized', $name)->fetch();
 	}
 
 	public function getDetailViewPossibleParams()
