@@ -8,7 +8,7 @@
  *
  */
 
-namespace Application\Repository;
+namespace Coolms\Repository;
 
 use \Nette\Caching\Cache;
 
@@ -38,7 +38,7 @@ class Menuitem extends \NDBF\Repository
 		foreach ($items as $key => $item) {
 			$aItem = $item->toArray();
 
-			if ($aItem['type'] === \Application\Entity\Menuitem::TYPE_MODULE) {
+			if ($aItem['type'] === \Coolms\Entity\Menuitem::TYPE_MODULE) {
 				$aItem['module_name_verbalname'] = $modulesNames[$item['module_name']]['name'];
 				$aItem['module_view_verbalname'] = $modulesNames[$item['module_name']]['views'][$item['module_view']];
 			} else {
@@ -62,7 +62,7 @@ class Menuitem extends \NDBF\Repository
 
 	public function fetchSubmenusPairs()
 	{
-		return $this->select()->where('type', \Application\Entity\Menuitem::TYPE_SUBMENU)->fetchPairs('id', 'name');
+		return $this->select()->where('type', \Coolms\Entity\Menuitem::TYPE_SUBMENU)->fetchPairs('id', 'name');
 	}
 
 	public function save(&$mi, $table_id = 'id')

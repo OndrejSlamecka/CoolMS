@@ -20,7 +20,7 @@
 				<li><!-- Drop here --></li>
 			{else}
 				<li n:foreach="$items as $item" id="mi-{$item['id']}">
-					{var $isSubmenu = $item['type'] === \Application\Entity\Menuitem::TYPE_SUBMENU}
+					{var $isSubmenu = $item['type'] === Coolms\Entity\Menuitem::TYPE_SUBMENU}
 					{var $itemType = $isSubmenu ? 'Submenu' : 'Link'}
 
 					<div class="header">

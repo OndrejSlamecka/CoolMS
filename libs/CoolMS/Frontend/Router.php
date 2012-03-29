@@ -25,7 +25,7 @@ class Router extends \Nette\Object
 	/** @var Coolms\Modules */
 	protected $modules;
 
-	/** @var Application\Repository\Menuitem */
+	/** @var Coolms\Repository\Menuitem */
 	protected $menu;
 
 	public function __construct(\NDBF\Repository $menuitem, \Coolms\Modules $modules)

@@ -47,7 +47,7 @@
 					{block #menu}
 					<ul class="nav nav-list">
 						{foreach $menuTree as $item}
-						{var $isSubmenu = $item->type === \Application\Entity\Menuitem::TYPE_SUBMENU}
+						{var $isSubmenu = $item->type === \Coolms\Entity\Menuitem::TYPE_SUBMENU}
 						<li n:class="$presenter->isMenuLinkCurrent($item) ? active, $isSubmenu ? nav-header">
 
 							{if $isSubmenu}

@@ -3,12 +3,12 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
-namespace Application\Entity;
+namespace Coolms\Entity;
 
 class Menuitem extends \Nette\Object
 {

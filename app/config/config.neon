@@ -31,9 +31,8 @@ common:
 
 	ndbf:
 		repositories:
-			#Menuitem: Application\Repository\Menuitem # The same as below but without setup
 			Menuitem:
-				class: Application\Repository\Menuitem
+				class: Coolms\Repository\Menuitem
 				setup:
 					- setContainer(...)
 
