@@ -22,7 +22,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 	{
 		$pages = $this->repositories->Page;
 
-		$page = $pages->find(array('id' => $id))->fetch();
+		$page = $pages->select()->where('id', $id)->fetch();
 
 		if (!$page) {
 			$this->flashMessage('Page not found');
@@ -67,7 +67,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 		if ($autosave)
 			$page = $this->sessionSection->autosave;
 		else
-			$page = $pages->find(array('id' => $id))->fetch();
+			$page = $pages->select()->where('id', $id)->fetch();
 
 		$this->template->page = $page;
 
@@ -85,7 +85,7 @@ class BackendPresenter extends \Backend\BaseItemPresenter
 	public function renderDefault()
 	{
 		$pages = $this->repositories->Page;
-		$this->template->pages = $pages->find();
+		$this->template->pages = $pages->select();
 		$this->template->autosave = $this->sessionSection->autosave;
 	}
 

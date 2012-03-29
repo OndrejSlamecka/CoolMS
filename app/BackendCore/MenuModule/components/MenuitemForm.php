@@ -10,7 +10,7 @@
 
 namespace MenuModule;
 
-use \Application\Entity\Menuitem,
+use \Coolms\Entity\Menuitem,
 	\Nette\ComponentModel\IContainer,
 	\Nette\Http\SessionSection;
 
@@ -23,7 +23,7 @@ class MenuitemForm extends \Coolms\Form
 	/** @var \Coolms\Modules */
 	private $moduleManager;
 
-	/** @var \Application\Repository\Menuitem */
+	/** @var \Coolms\Repository\Menuitem */
 	private $menuitems;
 
 	/**/
@@ -34,9 +34,9 @@ class MenuitemForm extends \Coolms\Form
 	 *
 	 * @param IContainer $parent
 	 * @param \Coolms\Modules $moduleManager
-	 * @param \Application\Repository\Menuitem $menuitemRepository
+	 * @param \Coolms\Repository\Menuitem $menuitemRepository
 	 */
-	public function __construct(IContainer $parent, \Coolms\Modules $moduleManager, \Application\Repository\Menuitem $menuitemRepository)
+	public function __construct(IContainer $parent, \Coolms\Modules $moduleManager, \Coolms\Repository\Menuitem $menuitemRepository)
 	{
 		$this->parent = $parent;
 		$this->moduleManager = $moduleManager;
@@ -83,7 +83,7 @@ class MenuitemForm extends \Coolms\Form
 		$this->toggleEditingMode();
 
 		/* Settings specific for the item being edited */
-		$menuitem = $this->menuitems->find(array('id' => $id))->fetch();
+		$menuitem = $this->menuitems->select()->where('id', $id)->fetch();
 
 		if ($menuitem['type'] === Menuitem::TYPE_MODULE) { // Module link
 			$menuitem['module_caption'] = $menuitem['name'];

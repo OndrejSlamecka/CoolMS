@@ -3,7 +3,7 @@
 use \Nette\Application\Routers\Route;
 
 // Load Nette
-require LIBS_DIR . '/Nette/Nette/loader.php';
+require LIBS_DIR . '/pear-nette/nette/Nette/loader.php';
 
 // Set up configurator and debugging
 $configurator = new \Nette\Config\Configurator();
@@ -16,9 +16,10 @@ $robotLoader = $configurator->createRobotLoader()
 		->addDirectory(APP_DIR)
 		->register();
 
-// Add CoolMS compiler extension
+// Add CoolMS and NDBF compiler extension
 $configurator->onCompile[] = function ($configurator, $compiler) {
 			$compiler->addExtension('coolms', new Coolms\CompilerExtension);
+			$compiler->addExtension('ndbf', new NDBF\CompilerExtension);
 		};
 
 // Add configuration file to configurator and create container
@@ -56,7 +57,7 @@ if ($container->parameters['consoleMode']) {
 	\Backend\Router::addRoutes($router);
 
 	// Frontend
-	$frontRouter = new \Frontend\Router($container->getService('repositoryManager')->Menuitem, $container->getService('coolms.modules'));
+	$frontRouter = new \Frontend\Router($container->getService('ndbf.repositoryManager')->Menuitem, $container->getService('coolms.modules'));
 	$frontRouter->addRoutes($router);
 }
 

@@ -8,9 +8,10 @@
  *
  */
 
-namespace Coolms;
+namespace Coolms\Entity;
 
-class Form extends \Nella\Forms\Form
+class Menuitem extends \Nette\Object
 {
-
+    const TYPE_SUBMENU = 'submenu';
+    const TYPE_MODULE = 'modulelink';
 }

@@ -16,14 +16,14 @@ class DesignerForm extends \Coolms\Form
 	/** @var \Nette\ComponentModel\IContainer */
 	private $parent;
 
-	/** @var \Application\Repository\Menuitem */
+	/** @var \Coolms\Repository\Menuitem */
 	private $menuitems;
 
 	/**
 	 * @param \Nette\ComponentModel\IContainer
 	 * @param string
 	 */
-	public function __construct(\Nette\ComponentModel\IContainer $parent, $name, \Application\Repository\Menuitem $menuitemRepository)
+	public function __construct(\Nette\ComponentModel\IContainer $parent, $name, \Coolms\Repository\Menuitem $menuitemRepository)
 	{
 		$this->parent = $parent;
 		$this->menuitems = $menuitemRepository;

@@ -7,94 +7,94 @@
 class MenuitemTest extends \PHPUnit_Framework_TestCase
 {
 
-    private $instance;
+	private $instance;
 
-    public function setUp()
-    {
-        parent::setUp();
-        $container = \Nette\Environment::getContext();
-        $this->instance = $container->repositoryManager->Menuitem;
-    }
+	public function setUp()
+	{
+		parent::setUp();
+		$container = \Nette\Environment::getContext();
+		$this->instance = $container->getService('ndbf.repositoryManager')->Menuitem;
+	}
 
-    /**
-     * @covers Application/Repository/Menuitem::fetchStructured()
-     */
-    public function testFetchStructured()
-    {
-        $res = $this->instance->fetchStructured();
+	/**
+	 * @covers Application/Repository/Menuitem::fetchStructured()
+	 */
+	public function testFetchStructured()
+	{
+		$res = $this->instance->fetchStructured();
 
-        /*
-          // Create a stub for the SomeClass class.
-          $stub = $this->getMock('SomeClass');
+		/*
+		  // Create a stub for the SomeClass class.
+		  $stub = $this->getMock('SomeClass');
 
-          // Configure the stub.
-          $stub->expects($this->any())
-          ->method('doSomething')
-          ->will($this->returnValue('foo'));
+		  // Configure the stub.
+		  $stub->expects($this->any())
+		  ->method('doSomething')
+		  ->will($this->returnValue('foo'));
 
-          // Calling $stub->doSomething() will now return
-          // 'foo'.
-          $this->assertEquals('foo', $stub->doSomething());
-         */
+		  // Calling $stub->doSomething() will now return
+		  // 'foo'.
+		  $this->assertEquals('foo', $stub->doSomething());
+		 */
 
-        // TODO: Check if children has key parent (probably use STUBBING... we need to fake database output from NDBF\Repository to Menuitem)
+		// TODO: Check if children has key parent (probably use STUBBING... we need to fake database output from NDBF\Repository to Menuitem)
 
-        self::assertInternalType('array', $res);
-        self::assertTrue(array_key_exists('id', array_shift($res)));
-    }
+		self::assertInternalType('array', $res);
+		self::assertTrue(array_key_exists('id', array_shift($res)));
+	}
 
-    /**
-     * @covers {className}::{origMethodName}
-     * @todo Implement testSave().
-     */
-    public function testSave()
-    {
-        // TODO: Test if max order +1 is set
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testSave().
+	 */
+	public function testSave()
+	{
+		// TODO: Test if max order +1 is set
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+				'This test has not been implemented yet.'
+		);
+	}
 
-    /**
-     * @covers {className}::{origMethodName}
-     * @todo Implement testRemove().
-     */
-    public function testRemove()
-    {
-        // TODO: Test if fixOrder is called
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testRemove().
+	 */
+	public function testRemove()
+	{
+		// TODO: Test if fixOrder is called
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+				'This test has not been implemented yet.'
+		);
+	}
 
-    /**
-     * @covers {className}::{origMethodName}
-     * @todo Implement testGetIndex().
-     */
-    public function testGetIndex()
-    {
-        // TODO: This method should always find something (at order number 1),
-        // but saving under correct order is responsibility of other methods. What to do?
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testGetIndex().
+	 */
+	public function testGetIndex()
+	{
+		// TODO: This method should always find something (at order number 1),
+		// but saving under correct order is responsibility of other methods. What to do?
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+				'This test has not been implemented yet.'
+		);
+	}
 
-    /**
-     * @covers {className}::{origMethodName}
-     * @todo Implement testGetIndex().
-     */
-    public function testRecursiveOrderFixer()
-    {
-        // TODO: Given array of required structure, it should fix it and its children
-        // Method is private, so use http://sebastian-bergmann.de/archives/881-Testing-Your-Privates.html
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testGetIndex().
+	 */
+	public function testRecursiveOrderFixer()
+	{
+		// TODO: Given array of required structure, it should fix it and its children
+		// Method is private, so use http://sebastian-bergmann.de/archives/881-Testing-Your-Privates.html
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+				'This test has not been implemented yet.'
+		);
+	}
 
 }

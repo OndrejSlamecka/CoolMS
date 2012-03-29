@@ -3,15 +3,14 @@
  * Part of CoolMS Content Management System
  *
  * @copyright (c) 2011 Ondrej Slamecka (http://www.slamecka.cz)
- * 
+ *
  * License within file license.txt in the root folder.
- * 
+ *
  */
 
-namespace Application\Entity;
+namespace Coolms;
 
-class Menuitem extends \Nette\Object
+class Form extends \Nella\NetteAddons\Forms\Form
 {
-    const TYPE_SUBMENU = 'submenu';
-    const TYPE_MODULE = 'modulelink';
+
 }

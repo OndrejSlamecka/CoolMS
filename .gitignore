@@ -4,3 +4,8 @@ log/*
 temp/*
 !temp/sessions/*
 !temp/.htaccess
+vendor
+!vendor/Coolms
+!vendor/.htaccess
+composer.lock
+composer.phar

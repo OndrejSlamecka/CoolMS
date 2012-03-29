@@ -16,7 +16,7 @@ class FrontendPresenter extends \Frontend\BasePresenter
 	public function renderDefault($name)
 	{
 		$pages = $this->repositories->Page;
-		$this->template->page = $pages->find(array('name_webalized' => $name))->fetch();
+		$this->template->page = $pages->select()->where('name_webalized', $name)->fetch();
 
 
 		/* Set template and prepare it if page has it's own */
@@ -38,7 +38,7 @@ class FrontendPresenter extends \Frontend\BasePresenter
 	public function getDefaultViewPossibleParams()
 	{
 		$pages = $this->repositories->Page;
-		$pages = $pages->find()->fetchPairs('name_webalized', 'name');
+		$pages = $pages->select()->fetchPairs('name_webalized', 'name');
 
 		foreach ($pages as $nw => $n) {
 			unset($pages[$nw]);

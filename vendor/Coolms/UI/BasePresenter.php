@@ -39,7 +39,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 	final public function getRepositories()
 	{
-		return $this->getService('repositoryManager');
+		return $this->getService('ndbf.repositoryManager');
 	}
 
 	/**

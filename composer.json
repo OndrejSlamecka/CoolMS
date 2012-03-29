@@ -1,0 +1,13 @@
+{
+	"repositories": [
+		{
+			"type": "pear",
+			"url": "http://pear.nette.org"
+		}
+	],
+	"require": {
+		"pear-nette/Nette": "2.0.1",
+		"nella/nette-addon-forms": "*",
+		"slamecka/ndbf": "0.3"
+	}
+}

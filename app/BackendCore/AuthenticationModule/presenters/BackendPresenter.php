@@ -68,7 +68,7 @@ class BackendPresenter extends \Backend\BasePresenter
 		if (!$this['newPassword']->isSubmitted()) {
 
 			$users = $this->repositories->User;
-			$user = $users->find(array('token' => $token))->fetch();
+			$user = $users->select()->where('token', $token)->fetch();
 
 			if (!$user) {
 				$this->flashMessage('Verification failure. Please check if you have copied the link right.');
