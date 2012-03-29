@@ -3,7 +3,7 @@
 use \Nette\Application\Routers\Route;
 
 // Load Nette
-require LIBS_DIR . '/Nette/Nette/loader.php';
+require LIBS_DIR . '/pear-nette/nette/Nette/loader.php';
 
 // Set up configurator and debugging
 $configurator = new \Nette\Config\Configurator();

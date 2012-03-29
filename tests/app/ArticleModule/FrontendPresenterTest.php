@@ -8,8 +8,8 @@ class ArticlePresenterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $presenter = new \ArticleModule\FrontendPresenter();
-		$presenter->setContext(\Nette\Environment::getContext());
+        $presenter = new \ArticleModule\FrontendPresenter(\Nette\Environment::getContext());
+		//$presenter->setContext(\Nette\Environment::getContext());
         $presenter->autoCanonicalize = FALSE;
 		$this->instance = $presenter;
     }

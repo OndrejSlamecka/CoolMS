@@ -10,7 +10,7 @@
 
 namespace Coolms;
 
-class Form extends \Nella\Forms\Form
+class Form extends \Nella\NetteAddons\Forms\Form
 {
 
 }
