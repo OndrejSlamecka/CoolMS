@@ -138,6 +138,8 @@ class MenuitemForm extends \Coolms\Form
 
 	public function setup()
 	{
+		$this->getElementPrototype()->class('menuitemForm');
+		
 		$linkableModules = $this->moduleManager->getModulesNames();
 
 		// Default values

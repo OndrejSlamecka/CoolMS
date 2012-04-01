@@ -14,13 +14,13 @@
 
 #menu-designer-control table{display:block; float: right; margin-right: 6px;}
 
-#frm-designerControlForm { margin:3em 0 2em }
-#frm-designerControlForm input { padding:6px 12px }
+.designerControlForm { margin:3em 0 2em }
+.designerControlForm input { padding:6px 12px }
 
 /* Menuitem Form */
-#frm-menuitemForm td input[type="submit"], #frm-menuitemForm td input[type="text"]{margin:0}
-#frm-menuitemForm h2 { display:inline; font-weight:700; font-size:100% }
-#frm-menuitemForm tr { border-bottom:1px solid #CCC }
-html.gecko #frm-menuitemForm tr.optionSubmenu th,html.gecko #frm-menuitemForm tr.optionSubmenu td { padding-top:0.65em }
-#frm-menuitemForm td,#frm-menuitemForm th { padding-bottom:0.6em; padding-top:0.7em; text-align:left }
-#frm-menuitemForm tr:last-of-type { border-bottom:none }
+.menuitemForm td input[type="submit"], .menuitemForm td input[type="text"]{margin:0}
+.menuitemForm h2 { display:inline; font-weight:700; font-size:100% }
+.menuitemForm tr { border-bottom:1px solid #CCC }
+html.gecko .menuitemForm tr.optionSubmenu th, html.gecko .menuitemForm tr.optionSubmenu td { padding-top:0.65em }
+.menuitemForm td, .menuitemForm th { padding-bottom:0.6em; padding-top:0.7em; text-align:left }
+.menuitemForm tr:last-of-type { border-bottom:none }
