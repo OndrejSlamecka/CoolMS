@@ -6,8 +6,15 @@ common:
 	services:
 		authenticator: Backend\Authenticator(@ndbf.repositoryManager::getRepository(User))
 
-		userFiles: Coolms\FileModel(%wwwDir%, /files)
-		userImagesCache: Coolms\FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
+		userFiles:
+			class: Coolms\FileModel(%wwwDir%, /files)
+			setup:
+				- createFolder()
+
+		userImagesCache:
+			class: Coolms\FileModel(%wwwDir%, /imgbrowser_cached_thumbnails)
+			setup:
+				- createFolder()
 
 	nette:
 		debugger:
