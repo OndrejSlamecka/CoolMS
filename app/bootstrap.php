@@ -9,7 +9,7 @@ $configurator->setTempDirectory(__DIR__ . '/../temp')
 		->enableDebugger(__DIR__ . '/../log');
 
 // (Auto)Load _ALL_ the classes
-$robotLoader = $configurator->createRobotLoader()
+$configurator->createRobotLoader()
 		->addDirectory(LIBS_DIR)
 		->addDirectory(__DIR__) // appDir
 		->register();
@@ -23,9 +23,6 @@ $configurator->onCompile[] = function ($configurator, $compiler) {
 // Add configuration file to configurator and create container
 $configurator->addConfig(__DIR__ . '/config/config.neon');
 $container = $configurator->createContainer();
-
-// Register RobotLoader as a service
-$container->addService('robotLoader', $robotLoader);
 
 
 /* --- ROUTING --- */
