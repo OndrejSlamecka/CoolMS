@@ -3,12 +3,12 @@
 // Load Nette
 require LIBS_DIR . '/nette/nette/Nette/loader.php';
 
-// Set up configurator and debugging
+// Set up configurator, temporary files dir and debugging
 $configurator = new \Nette\Config\Configurator();
 $configurator->setTempDirectory(__DIR__ . '/../temp')
 		->enableDebugger(__DIR__ . '/../log');
 
-// (Auto)Load _ALL_ the classes
+// Autoload _ALL_ the classes
 $configurator->createRobotLoader()
 		->addDirectory(LIBS_DIR)
 		->addDirectory(__DIR__) // appDir
@@ -27,12 +27,9 @@ $container = $configurator->createContainer();
 
 /* --- ROUTING --- */
 /*
- * Console mode
- *    - SimpleRouter
- *
  * Development / Production mode
- *    - \Backend\Router
- *    - \Frontend\Router
+ *    - \Backend\Router located in BackendCommons/Router.php
+ *    - \Frontend\Router located in FrontendCommons/Router.php
  */
 $router = $container->router;
 
