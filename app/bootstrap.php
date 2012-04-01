@@ -1,19 +1,17 @@
 <?php
 
-use \Nette\Application\Routers\Route;
-
 // Load Nette
 require LIBS_DIR . '/nette/nette/Nette/loader.php';
 
 // Set up configurator and debugging
 $configurator = new \Nette\Config\Configurator();
-$configurator->setTempDirectory(APP_DIR . '/../temp');
-$configurator->enableDebugger(__DIR__ . '/../log');
+$configurator->setTempDirectory(__DIR__ . '/../temp')
+		->enableDebugger(__DIR__ . '/../log');
 
 // (Auto)Load _ALL_ the classes
 $robotLoader = $configurator->createRobotLoader()
 		->addDirectory(LIBS_DIR)
-		->addDirectory(APP_DIR)
+		->addDirectory(__DIR__) // appDir
 		->register();
 
 // Add CoolMS and NDBF compiler extension
@@ -23,7 +21,7 @@ $configurator->onCompile[] = function ($configurator, $compiler) {
 		};
 
 // Add configuration file to configurator and create container
-$configurator->addConfig(APP_DIR . '/config/config.neon');
+$configurator->addConfig(__DIR__ . '/config/config.neon');
 $container = $configurator->createContainer();
 
 // Register RobotLoader as a service

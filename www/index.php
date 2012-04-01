@@ -1,16 +1,10 @@
 <?php
 
-// absolute filesystem path to this web root
-define('WWW_DIR', __DIR__);
-
-// absolute filesystem path to the application root
-define('APP_DIR', WWW_DIR . '/../app');
-
 // absolute filesystem path to the libraries
-define('LIBS_DIR', WWW_DIR . '/../vendor');
+define('LIBS_DIR', __DIR__ . '/../vendor');
 
 // uncomment this line if you must temporarily take down your site for maintenance
 // require __DIR__ . '/.maintenance.php'; die;
 
 // load bootstrap file
-require APP_DIR . '/bootstrap.php';
+require __DIR__ . '/../app/bootstrap.php';
