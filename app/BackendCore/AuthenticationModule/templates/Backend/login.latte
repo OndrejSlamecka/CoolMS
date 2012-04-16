@@ -1,10 +1,10 @@
 {block #title}Log in{/block}
 {block #head}
 <script type="text/javascript" n:syntax="off">
-    $(document).ready(function(){        
-        $("#requestNewPasswordToggleButton").click(function(){                        
-            $("#snippet--requestNewPassword").toggle( 'fast' );            
-            $("#frmrequestNewPasswordForm-email").val( $("#frmloginForm-email").val() );            
+    $(document).ready(function(){
+        $("#requestNewPasswordToggleButton").click(function(){
+            $("#snippet--requestNewPassword").toggle( 'fast' );
+            $("#frmrequestNewPasswordForm-email").val( $("#frmloginForm-email").val() );
             return false;
         });
     });
@@ -14,8 +14,8 @@
     {control loginForm}
 
     <p><a href="{link Authentication:requestPasswordReset}" id="requestNewPasswordToggleButton">I forgot my password</a></p>
-    
-    {snippet requestNewPassword} 
+
+    {snippet requestNewPassword}
         {if $presenter->getParam('do') === 'requestNewPasswordForm-submit'}
             {if $emailSendingSuccessful}
                 <p class="flash msg">Please confirm the action in your inbox.</p>
@@ -26,6 +26,6 @@
             {control requestNewPasswordForm}
         {/if}
     {/snippet}
-    
+
 
 {/block}

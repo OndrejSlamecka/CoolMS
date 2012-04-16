@@ -5,7 +5,7 @@
     <p>There are no articles yet.</p>
 {else}
     <h1>Archive</h1>
-    
+
     <ul n:if="$archive">
     {foreach $archive as $month => $month_articles}
         <li><h2>{$month}</h2>
@@ -17,5 +17,5 @@
         </li>
     {/foreach}
     </ul>
-    
+
 {/if}

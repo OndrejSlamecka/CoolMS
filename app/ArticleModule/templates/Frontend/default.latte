@@ -14,7 +14,7 @@
         </div>
 
         <ul class="postmeta double">
-            <li>Published: {$article->date|date:'%d. %m. %Y'}</li>            
+            <li>Published: {$article->date|date:'%d. %m. %Y'}</li>
             <li>Author: {$article->ref('user')->name}</li>
         </ul>
 
@@ -22,5 +22,5 @@
 
     {sep}<hr >{/sep}
     {/foreach}
-    
+
 {/if}

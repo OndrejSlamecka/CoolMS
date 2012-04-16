@@ -33,7 +33,7 @@ class DesignerForm extends \Coolms\Form
 	public function setup()
 	{
 		$this->getElementPrototype()->class('designerControlForm');
-		
+
 		$this->addHidden('structure');
 		$this->addSubmit('save', 'Save menu order');
 

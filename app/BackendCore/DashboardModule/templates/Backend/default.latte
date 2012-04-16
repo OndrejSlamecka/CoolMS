@@ -17,7 +17,7 @@
 <ul>
     <li>Number of articles: {$nArticles}</li>
     {if $lastArticle}
-        <li>Last article: 
+        <li>Last article:
             <a href="{link :Article:Frontend:detail, name => $lastArticle['name_webalized']}">{$lastArticle['name']}</a>
             (<a href="{link :Article:Backend:edit id => $lastArticle['id']}" class="nopadding">edit</a>)
         </li>
