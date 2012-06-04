@@ -140,13 +140,20 @@ class Configurator extends Nette\Object
 	/**
 	 * @return Nette\Loaders\RobotLoader
 	 */
-	public function createRobotLoader()
+	public function createRobotLoader(Nette\Caching\IStorage $storage = NULL)
 	{
-		if (!($cacheDir = $this->getCacheDirectory())) {
-			throw new Nette\InvalidStateException("Set path to temporary directory using setTempDirectory().");
-		}
 		$loader = new Nette\Loaders\RobotLoader;
-		$loader->setCacheStorage(new Nette\Caching\Storages\FileStorage($cacheDir));
+
+		if ($storage === NULL) {
+			if (!($cacheDir = $this->getCacheDirectory())) {
+				throw new Nette\InvalidStateException("Set path to temporary directory using setTempDirectory().");
+			}
+
+			$loader->setCacheStorage(new Nette\Caching\Storages\FileStorage($cacheDir));
+		} else {
+			$loader->setCacheStorage($storage);
+		}
+			
 		$loader->autoRebuild = $this->parameters['debugMode'];
 		return $loader;
 	}
