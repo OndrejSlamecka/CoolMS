@@ -1,12 +1,9 @@
+Please note that it is over a year old and no longer maintained.
+
 CoolMS - Cool Web Management System
 ===================================
 
 CoolMS is a cool content management system. It offers a set of prepared functions, which can be easily extended. CoolMS is primarily aimed to developers with knowledge of Nette Framework.
-
-Demo
-----
-
-Try it on the [demo page](http://coolmsdemo.slamecka.cz)!
 
 Requirements
 ------------
